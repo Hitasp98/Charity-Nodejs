@@ -1,0 +1,76 @@
+body {
+  background-color: beige;
+}
+table {
+  width: 100%;
+}
+th,
+td {
+  padding: 10px;
+  border: 1px solid black;
+  border-collapse: collapse;
+  border: 2px solid gray;
+}
+table,
+th {
+  width: 500px;
+  padding: 6px;
+  border-collapse: collapse;
+  border: 1px solid gray;
+  border-collapse: collapse;
+}
+.tablewhere {
+  flex: display;
+  flex-direction: row;
+  width: 500px;
+  height: auto;
+  margin-left: 40%;
+  margin-top: 10%;
+  border-style: groove;
+}
+button {
+  margin-left: 20%;
+  padding-left: -100px;
+  width: 150px;
+  height: 100px;
+  background-color: #ffffff;
+  border: 2px solid gray;
+}
+button:hover {
+  background-color: brown;
+}
+#vsave {
+  margin-top: -50px;
+  visibility: hidden;
+  /* visibility: inherit; */
+}
+#vsave1 {
+  margin-top: -350px;
+  visibility: hidden;
+  /* visibility: inherit; */
+}
+#vsave2 {
+  margin-top: -350px;
+
+  visibility: hidden;
+  /* visibility: inherit; */
+}
+#save {
+  width: 800px;
+  margin-left: 30%;
+  margin-top: 80px;
+  padding: 20px;
+  height: 50px;
+  block-size: 100px;
+  border: 2px solid gray;
+}
+#save label {
+  margin-left: 20px;
+}
+
+#save input {
+  padding-left: 40px;
+  height: 60px;
+  margin-left: 70px;
+  align-content: flex-end;
+}
