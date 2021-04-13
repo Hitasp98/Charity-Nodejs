@@ -36,7 +36,7 @@ async function Chritytb () {
     //     return
     //   }
     let table = []
-    table.push(
+  table.push(
       'CREATE TABLE tblCommonBaseType (CommonBaseTypeId INT  PRIMARY KEY NOT NULL, BaseTypeTitle VARCHAR(800) UNIQUE NOT NULL, BaseTypeCode VARCHAR(3) UNIQUE)'
     )
     table.push(
@@ -64,6 +64,22 @@ async function Chritytb () {
     table.push(
       'CREATE TABLE tblPayment( PaymentId INT PRIMARY KEY NOT NULL, DonatorId INT, CashAssistanceDetailId INT NOT NULL, PaymentPrice DECIMAL(19, 3) NOT NULL, PaymentGatewayId VARCHAR(10), PaymentDate DATE NOT NULL, PaymentTime TIME NOT NULL, PaymentStatus VARCHAR(500) NOT NULL, SourceAccoutNumber VARCHAR(10), TargetAccountNumber VARCHAR(10) NOT NULL, CharityAccountId INT NOT NULL, FollowCode VARCHAR(10), NeedyId INT, CONSTRAINT Fk_PaymentDonator FOREIGN KEY(DonatorId) REFERENCES tblPersonal(PersonId), CONSTRAINT Fk_PaymentNeedy FOREIGN KEY(NeedyId) REFERENCES tblPersonal(PersonId), CONSTRAINT Fk_PaymenyCashAssistance FOREIGN KEY(CashAssistanceDetailId) REFERENCES tblCashAssistanceDetail(CashAssistanceDetailId), CONSTRAINT Fk_PaymentCharityAccount FOREIGN KEY(CharityAccountId) REFERENCES tblcharityaccounts(CharityAccountId) )'
     )
+    table.push(
+      'CREATE UNIQUE INDEX  IUtblCommonBaseData_BaseCode_CommonBaseTypeId ON tblCommonBaseData (BaseCode,CommonBaseTypeId)'
+    )
+    table.push(
+      'CREATE UNIQUE INDEX  IUtblNeedyAccounts_NeedyId_AccountNumber ON tblNeedyAccounts (NeedyId,AccountNumber)'
+    )
+    table.push(
+      'CREATE UNIQUE INDEX  IUtblplans_PlanName_PlanNature_ParentPlanId ON tblPlans (PlanName,PlanNature,ParentPlanId)'
+    )
+    table.push(
+      'CREATE UNIQUE INDEX  IUtbltblAssignNeedyToPlans_PlanId_NeedyId ON tblAssignNeedyToPlans  (NeedyId,PlanId)'
+    )
+    table.push(
+      'CREATE UNIQUE INDEX  IUtblCashAssistanceDetail_AssignNeedyPlanId_PlanId ON tblCashAssistanceDetail (AssignNeedyPlanId,PlanId)'
+    )
+
     for (i = 0; i < 9; i++) {
       let Chritytd
       Chritytd = await pool.request().query(table[i])
