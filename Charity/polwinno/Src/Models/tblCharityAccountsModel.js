@@ -65,9 +65,6 @@ async function insertTblCharityAccounts(findRequest){
     try{
         let pool = await sql.connect(config)
        
-    
-        let getRequest = []
-      
         let value = ''
 
             for(x in findRequest){
@@ -84,17 +81,11 @@ async function insertTblCharityAccounts(findRequest){
 
             value = value.slice(0,-1)
             
-             getRequest = await getTblCharityAccounts(findRequest)
-             
-             if (getRequest[0] == null){
                 let insertTblCharityAccounts = await pool.request().query(`INSERT INTO tblCharityAccounts (BankId,BranchName,OwnerName,CardNumber,AccountNumber,AccountName)
                 VALUES (`+ value +`)`)
                 let getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.CharityAccountId from tblCharityAccounts where AccountNumber =`+ '\''+ findRequest["AccountNumber"] +'\'')
                 return getTblCharityAccounts.recordsets;
-            }else if (getRequest[0] != null){
-               let getTblCharityAccounts = {recordsets:[]}
-                return getTblCharityAccounts.recordsets;
-        }
+           
        
     }
     catch (error){
@@ -148,13 +139,13 @@ async function deleteTblCharityAccounts(findRequest){
         let pool = await sql.connect(config)
         
             let deleteTblCharityAccounts
-            let getTblCharityAccounts = await pool.request().query(`select * from tblCharityAccounts where CharityAccountId =  ${findRequest.CharityAccountId};`)
+            
            
-                if(getTblCharityAccounts != null){
                 
-                    deleteTblCharityAccounts = await pool.request().query(`DELETE FROM tblCharityAccounts WHERE CharityAccountId = ${findRequest.CharityAccountId};`)
+                
+            deleteTblCharityAccounts = await pool.request().query(`DELETE FROM tblCharityAccounts WHERE CharityAccountId = ${findRequest.CharityAccountId};`)
                    
-                }
+                
                
                 return deleteTblCharityAccounts.rowsAffected[0];
         
