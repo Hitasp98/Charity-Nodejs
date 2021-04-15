@@ -10,7 +10,7 @@ async function check(findRequest) {
     let pool = await sql.connect(config);
 
     let tblPersonal;
-    // console.log(findRequest);
+
     if (
       findRequest[0].PersonId == null &&
       findRequest[0].Name == null &&
@@ -25,6 +25,7 @@ async function check(findRequest) {
     ) {
       return "the was empty";
     } else {
+      
       console.log(findRequest[0]);
       let whereclause = "";
 
@@ -40,31 +41,35 @@ async function check(findRequest) {
             "'" +
             findRequest[0][String(x)] +
             "'" +
-            ` AND`;
+            ` AND `;
         } else if (typeof findRequest[0][String(x)] == "number") {
+          if(x=='PersonType'){
+            whereclause = whereclause +` ${x} =`+" HASHBYTES('SHA2_256','" + `${findRequest[0][String(x)]}` + `') AND`;
+             console.log('need hash1'+whereclause)
+             let PersonType =await pool.request().query("SELECT *  FROM [CharityDB].[dbo].[tblPersonal] where [PersonType]= HASHBYTES('SHA2_256','" + findRequest[0][String(x)]+"')")
+             if(PersonType==null){
+              whereclause=1
+              console.log(whereclause+"is hash whereclause")
+               break
+             }
+           } else {
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[0][String(x)]}` + ` AND`;
+            whereclause + " " + `${x} =  ${findRequest[0][String(x)]}` + ` AND`;}
         } else if (findRequest[0][String(x)] == null) {
-          // Todo:for in Needly give the null value
-          break;
+          whereclause + " " + `${x}is null AND`;
+          // break;
         }
       }
-      whereclause = whereclause.slice(0, -3);
+      whereclause = whereclause.slice(0, -4);
       console.log(whereclause + "this whereclause");
 
       tblPersonal = await pool
         .request()
         .query(`SELECT * FROM CharityDB.dbo.tblPersonal WHERE ` + whereclause);
-      let s = [];
-      s.push(tblPersonal[0]);
-      console.log(tblPersonal.recordsets[0]);
-      if (tblPersonal.recordsets[0].length != 0) {
-        console.log(tblPersonal.recordsets[0].length);
+    
+   
         return tblPersonal.recordsets[0];
-      } else {
-        console.log("null");
-        return null;
-      }
+    
     }
   } catch (error) {
     console.log(error.message);
@@ -76,7 +81,7 @@ async function ws_loadPersonal(findRequest) {
     let pool = await sql.connect(config);
 
     let tblPersonal;
-    // console.log(findRequest);
+
     if (
       findRequest[0].PersonId == null &&
       findRequest[0].Name == null &&
@@ -100,7 +105,6 @@ async function ws_loadPersonal(findRequest) {
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
       for (x in findRequest) {
-        //getTblCommonBaseData = await pool.request().query(`select * from tblCommonBaseData where `+ `BaseTypeCode = `+ '\''+ findRequest["BaseTypeCode"] +'\''+`and `+`BaseTypeTitle = `+'\''+ findRequest["BaseTypeTitle"] +'\'' +`and `+`CommonBaseTypeId =  ${findRequest['CommonBaseTypeId']}`)
         if (typeof findRequest[0][String(x)] == "string") {
           console.log(findRequest[0][String(x)]);
           whereclause =
@@ -112,6 +116,7 @@ async function ws_loadPersonal(findRequest) {
             "'" +
             ` AND`;
         } else if (typeof findRequest[String(x)] == "number") {
+          
           whereclause =
             whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
@@ -124,11 +129,11 @@ async function ws_loadPersonal(findRequest) {
       tblPersonal = await pool
         .request()
         .query(`SELECT * FROM CharityDB.dbo.tblPersonal WHERE ` + whereclause);
-      console.log(tblPersonal.recordsets[0]);
+   
       if (tblPersonal == "") {
         return null;
       } else {
-        console.log(tblPersonal.recordsets[0]);
+       
         return tblPersonal.recordsets[0];
       }
     }
@@ -148,16 +153,21 @@ async function ws_createPersonal(findRequest) {
         findRequest[0][String(x)] == null ||
         typeof findRequest[0][String(x)] == "number"
       ) {
+        if(x=='PersonType'){
+         value = value + "HASHBYTES('SHA2_256','" + `${findRequest[0][String(x)]}` + `'),`;
+  
+        } else{
         value = value + " " + `${findRequest[0][String(x)]}` + `,`;
+     }
       } else {
+        
         value = value + " " + `` + "'" + findRequest[0][String(x)] + "'" + `,`;
       }
     }
 
     value = value.slice(0, -1);
-    // console.log(value)
-
-    let insertTblPersonal = await pool.request().query(
+    console.log('finsh '+value)
+    let insertTblPersonal =await pool.request().query(
       `INSERT INTO [CharityDB].[dbo].[tblPersonal]
                       (  PersonId
                         ,NAME
@@ -179,19 +189,54 @@ async function ws_createPersonal(findRequest) {
     let tblPersonal = await pool
       .request()
       .query(
-        `SELECT * FROM [CharityDB].[dbo].[tblPersonal] where PersonId=` +
-          "'" +
-          findRequest["PersonId "] +
-          "'"
-      );
-    
-    return tblPersonal.PersonId[0]
+        'SELECT * FROM [CharityDB].[dbo].[tblPersonal] where PersonId=' + number);
+    // console.log(tblPersonal.recordsets + "tblPersonal.recordsets");
+    console.log(tblPersonal.PersonId)
+    return number;
   } catch (error) {
     console.log(error.message);
   }
 }
 async function ws_updatePersonal(findRequest) {
   try {
+    try{
+      let updateTblPersonal
+      let pool = await sql.connect(config)
+
+
+      let value = ''
+
+      for(x in findRequest[0]){
+          if(x == "PersonId" ){
+
+             }
+          else if( findRequest[0][String(x)] == null || typeof(findRequest[0][String(x)])=="number" ){
+           
+            value = value + " "+` ${x} = ${findRequest[0][String(x)]}`+`,`
+             
+          }else{
+              value = value + " "+`${x} = `+ '\''+ findRequest[0][String(x)] +'\''+`,`
+              
+          }
+           
+      }
+
+      value = value.slice(0,-1)   
+      console.log(value)                 
+      updateTblPersonal = await pool.request().query(`UPDATE [dbo].[tblPersonal]
+      SET  `+ value +
+      ` WHERE PersonId = ${findRequest[0].PersonId};`)
+
+      
+      console.log(findRequest[0]+"findRequest[PersonId]")            
+      updateTblPersonal = await pool.request().query(`SELECT * FROM [CharityDB].[dbo].[tblPersonal] where PersonId=` + findRequest[0].PersonId )   
+      return updateTblPersonal.recordsets;
+         
+  }
+  catch (error){
+      console.log(error.message);
+      
+  }
   } catch (error) {
     console.log(error.message);
   }

@@ -1,62 +1,72 @@
 const PersonalModels = require("../Models/PersonalModels");
 var express = require("express");
 var bodyParser = require("body-parser");
+var md5 = require("md5");
+var createHash = require('hash-generator');
+
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-module.exports.getPersonalController = function(request, response) {
-  let findRequest = { ...request.body };
+module.exports.getPersonalController = async function(request, response) {
+  try {
+    let findRequest = { ...request.body };
 
-  PersonalModels.ws_loadPersonal(findRequest).then(result => {
-    if (result == null) {
-      response.json({ error: "هیچ رکوردی موجود نیست" });
-    } else {
-      response.json(result);
-    }
-  });
+    await PersonalModels.ws_loadPersonal(findRequest).then(result => {
+      if (result == null) {
+        response.json({ error: "هیچ رکوردی موجود نیست" });
+      } else {
+        response.json(result);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
-module.exports.insertPersonalController =async function(request, response) {
-  let findRequest = { ...request.body };
-  //  findRequest[0].PersonId=number
-
-  PersonalModels.check(findRequest).then(result => {
-    console.log(result+" this res")
-    if (result == null) {      
-          console.log("this PersonId ")
-      PersonalModels.ws_createPersonal(findRequest)
+module.exports.insertPersonalController = async function(request, response) {
+  try {
+    let findRequest = { ...request.body };
+    // findRequest[0].PersonType = createHash(findRequest[0].PersonType);
+    // console.log(findRequest[0].PersonType);
+    let checked = await PersonalModels.check(findRequest);
+    if (checked[0] == null) {
+      console.log("this PersonId ");
+      await PersonalModels.ws_createPersonal(findRequest)
         .then(result => {
-          console.log(findRequest[0].PersonId+"this PersonId ")
-          if (result[0].PersonId== null) {
+          if (result == null) {
             response.json({ error: "عملیات درج با موفقیت انجام نشد" });
           } else {
-            response.json(result[0].PersonId);
+            response.json(result);
           }
         })
         .catch(error => response.json({ error: "رکورد مورد نظر ثبت نمیشود" }));
     } else {
       response.json("قبلا درج شده");
     }
-  });
+  } catch (error) {
+    response.json({ error: "کد نوع را وارد کنید" });
+  }
 };
 
-module.exports.updatePersonalController = function(request, response) {
-  let findRequest = { ...request.body };
-  PersonalModels.ws_loadPersonal(findRequest).then(result => {
-    if (result == null) {
-      response.json({ error: "هیچ رکوردی موجود نیست" });
-      PersonalModels.ws_updatePersonal(findRequest).then(result => {
+module.exports.updatePersonalController = async function(request, response) {
+  try {
+    let findRequest = { ...request.body };
+    let checked = await PersonalModels.check(findRequest);
+    if (checked != null) {
+      await PersonalModels.ws_updatePersonal(findRequest).then(result => {
         if (result == null) {
           response.json({ error: "عملیات ویرایش با موفقیت انجام نشد" });
         } else {
-          response.json(result[0][0]);
+          response.json(result);
         }
       });
     } else {
-      response.json(result);
+      response.json(checked[0].PersonId + "1عملیات ویرایش با موفقیت انجام نشد");
     }
-  });
+  } catch (error) {
+    response.json({ error: "کد نوع را وارد کنید" });
+  }
 };
 
 module.exports.deletePersonalController = function(request, response) {
