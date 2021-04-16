@@ -1,18 +1,19 @@
-var config = require("../Utils/config");
-const sql = require("mssql");
-const { request } = require("express");
-var bodyParser = require("body-parser");
-const fs = require("fs");
-const { json } = require("body-parser");
-var fnGetRandomString = require("../Utils/Randomnumber");
+var config = require('../Utils/config')
+const sql = require('mssql')
+const { request } = require('express')
+var bodyParser = require('body-parser')
+const fs = require('fs')
+const { json } = require('body-parser')
+var fnGetRandomString = require('../Utils/Randomnumber')
+//checking a null or full or repit a insert  of updadat
+//Todo:Because not work mvc check here
 async function check(findRequest) {
   try {
-    let pool = await sql.connect(config);
+    let pool = await sql.connect(config)
 
-    let tblPersonal;
+    let tblPersonal
 
-    if (
-      findRequest[0].PersonId == null &&
+    if (findRequest[0].PersonId == null &&
       findRequest[0].Name == null &&
       findRequest[0].Family == null &&
       findRequest[0].NationalCode == null &&
@@ -21,136 +22,153 @@ async function check(findRequest) {
       findRequest[0].BirthPlace == null &&
       findRequest[0].PersonType == null &&
       findRequest[0].PersonPhoto == null &&
-      findRequest[0].SecretCode == null
-    ) {
-      return "the was empty";
+      findRequest[0].SecretCode == null) {
+      //error null
+      return 'the was empty'
     } else {
-      console.log(findRequest[0]);
-      let whereclause = "";
+      console.log(findRequest[0])
+      let whereclause = ''
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
       for (x in findRequest[0]) {
-        if (typeof findRequest[0][String(x)] == "string") {
-          console.log(findRequest[0][String(x)]);
+        //?check value for insert string or number 
+        if (typeof findRequest[0][String(x)] == 'string') {
+          console.log(findRequest[0][String(x)])
+          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[0][String(x)] + "'" + ` AND `
+        } else if (typeof findRequest[0][String(x)] == 'number') {
           whereclause =
-            whereclause +
-            " " +
-            `${x} = ` +
-            "'" +
-            findRequest[0][String(x)] +
-            "'" +
-            ` AND `;
-        } else if (typeof findRequest[0][String(x)] == "number") {
-          whereclause =
-            whereclause + " " + `${x} =  ${findRequest[0][String(x)]}` + ` AND`;
+            whereclause + ' ' + `${x} =  ${findRequest[0][String(x)]}` + ` AND`
         } else if (findRequest[0][String(x)] == null) {
-          whereclause + " " + `${x}is null AND`;
+          whereclause + ' ' + `${x}is null AND`
           // break;
         }
       }
-      whereclause = whereclause.slice(0, -4);
-      console.log(whereclause + "this whereclause");
-
+      whereclause = whereclause.slice(0, -4)
+      console.log(whereclause + 'this whereclause')
+//check query
       tblPersonal = await pool
         .request()
         .query(
           `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ` +
-            whereclause
-        );
+          whereclause
+        )
 
-      return tblPersonal.recordsets[0];
+      return tblPersonal.recordsets[0]
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
+// this function is check one Request exampel shaba or passhash
+async function checker(namefinder, find) {
+  try {
+    let pool = await sql.connect(config)
+    let checker = await pool.request().query(`
+SELECT [${namefinder}]
+  FROM [dbo].[tblNeedyAccounts]
+  where ${namefinder}=${find}`)
 
+    return checker.recordsets[0]
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+//TODO: select tblNeedyAccounts
 async function ws_loadNeedyAccount(findRequest) {
   try {
-    let pool = await sql.connect(config);
+    //check connection
+    let pool = await sql.connect(config)
 
-    let tblPersonal;
+    let tblPersonal
 
     if (
-      findRequest[0].PersonId == null &&
-      findRequest[0].Name == null &&
-      findRequest[0].Family == null &&
-      findRequest[0].NationalCode == null &&
-      findRequest[0].IdNumber == null &&
-      findRequest[0].Sex == null &&
-      findRequest[0].BirthPlace == null &&
-      findRequest[0].PersonType == null &&
-      findRequest[0].PersonPhoto == null &&
-      findRequest[0].SecretCode == null
+      findRequest[0].NeedyId == null &&
+      findRequest[0].NeedyAccountId == null
     ) {
-      tblPersonal = await pool
-        .request()
-        .query(`SELECT * FROM CharityDB.dbo.tblPersonal`);
+      //!!joining tb tblPersonal & tblCommonBaseData & tblCommonBaseType
+      tblPersonal = await pool.request()
+        .query(`SELECT [tblNeedyAccounts].*,tblPersonal.NAME ,tblPersonal.Family,tblPersonal.NationalCode,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeTitle
+        FROM [dbo].[tblNeedyAccounts] 
+            join tblPersonal
+            on tblNeedyAccounts.AccountName=tblPersonal.NAME 
+            AND tblNeedyAccounts.AccountName=tblPersonal.Family
+            AND tblNeedyAccounts.AccountName=tblPersonal.NationalCode
+            join tblCommonBaseData
+            on tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseCode
+            AND tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseValue
+            join tblCommonBaseType
+            on tblNeedyAccounts.AccountNumber=tblCommonBaseType.BaseTypeTitle
+ GO
+ `)
 
-      return tblPersonal.recordsets[0];
+      return tblPersonal.recordsets[0]
     } else {
       let whereclause =
-        ` PersonId =N` + "'" + findRequest[0].PersonId + "'" + ` AND`;
+        ` NeedyId =N` + "'" + findRequest[0].NeedyId + "'" + ` AND`
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
       for (x in findRequest) {
-        if (typeof findRequest[0][String(x)] == "string") {
-          console.log(findRequest[0][String(x)]);
+        if (typeof findRequest[0][String(x)] == 'string') {
+          console.log(findRequest[0][String(x)])
           whereclause =
             whereclause +
-            " " +
+            ' ' +
             `${x} = N` +
             "'" +
             findRequest[0][String(x)] +
             "'" +
-            ` AND`;
-        } else if (typeof findRequest[String(x)] == "number") {
+            ` AND`
+        } else if (typeof findRequest[String(x)] == 'number') {
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + ' ' + `${x} =  ${findRequest[String(x)]}` + ` AND`
         } else if (findRequest[String(x)] == null) {
           // Todo:for in Needly give the null value
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + ' ' + `${x} =  ${findRequest[String(x)]}` + ` AND`
         }
       }
-      whereclause = whereclause.slice(0, -3);
+      //!!whereclause have 'AND' need delete 
+      whereclause = whereclause.slice(0, -3)
       tblPersonal = await pool
         .request()
         .query(
           `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ` +
-            whereclause
-        );
+          whereclause
+        )
 
-      if (tblPersonal == "") {
-        return null;
+      if (tblPersonal == '') {
+        return null
       } else {
-        return tblPersonal.recordsets[0];
+        return tblPersonal.recordsets[0]
       }
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
+//TODO : insert tblNeedyAccounts
 async function ws_createNeedyAccount(findRequest) {
   try {
-    let number = fnGetRandomString.fnGetRandomString(3);
-    number = parseInt(number);
-    let pool = await sql.connect(config);
-    let value = "";
-    value = value + "" + number + ",";
+    let number = fnGetRandomString.fnGetRandomString(3)
+    number = parseInt(number)
+    let pool = await sql.connect(config)
+    let value = ''
+    value = value + '' + number + ','
     for (x in findRequest[0]) {
+      //? check typeof value for query
       if (
         findRequest[0][String(x)] == null ||
-        typeof findRequest[0][String(x)] == "number"
+        typeof findRequest[0][String(x)] == 'number'
       ) {
-        value = value + " " + `${findRequest[0][String(x)]}` + `,`;
+        value = value + ' ' + `${findRequest[0][String(x)]}` + `,`
       } else {
-        value = value + " " + `` + "'" + findRequest[0][String(x)] + "'" + `,`;
+        value = value + ' ' + `` + "'" + findRequest[0][String(x)] + "'" + `,`
       }
     }
+//!! end value have ',' delete
+    value = value.slice(0, -1)
 
-    value = value.slice(0, -1);
-    console.log("finsh " + value);
+    console.log('finsh ' + value)
     let insertTblPersonal = await pool.request().query(
       `INSERT INTO [CharityDB].[dbo].[tblNeedyAccounts]
                       (   [NeedyAccountId]
@@ -164,82 +182,84 @@ async function ws_createNeedyAccount(findRequest) {
                       )
                 VALUES
                       (` +
-        value +
-        `)`
-    );
+      value +
+      `)`
+    )
     let tblPersonal = await pool
       .request()
       .query(
-        "SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=" +
-          number
-      );
+        'SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=' +
+        number
+      )
     // console.log(tblPersonal.recordsets + "tblPersonal.recordsets");
-    console.log(tblPersonal.PersonId);
-    return number;
+    console.log(tblPersonal.PersonId)
+    return number
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
 async function ws_UpdateNeedyAccount(findRequest) {
   try {
     try {
-      let updateTblPersonal;
-      let pool = await sql.connect(config);
+      //is  like ws_createNeedyAccount
+      let updateTblPersonal
+      let pool = await sql.connect(config)
 
-      let value = "";
+      let value = ''
 
       for (x in findRequest[0]) {
-        if (x == "PersonId") {
+        if (x == 'PersonId') {
         } else if (
           findRequest[0][String(x)] == null ||
-          typeof findRequest[0][String(x)] == "number"
+          typeof findRequest[0][String(x)] == 'number'
         ) {
-          value = value + " " + ` ${x} = ${findRequest[0][String(x)]}` + `,`;
+          value = value + ' ' + ` ${x} = ${findRequest[0][String(x)]}` + `,`
         } else {
           value =
             value +
-            " " +
+            ' ' +
             `${x} = ` +
             "'" +
             findRequest[0][String(x)] +
             "'" +
-            `,`;
+            `,`
         }
       }
 
-      value = value.slice(0, -1);
-      console.log(value);
+      value = value.slice(0, -1)
+      console.log(value)
       updateTblPersonal = await pool.request().query(
         `UPDATE [CharityDB].[dbo].[tblNeedyAccounts]
       SET  ` +
-          value +
-          ` WHERE PersonId = ${findRequest[0].PersonId};`
-      );
+        value +
+        ` WHERE PersonId = ${findRequest[0].PersonId};`
+      )
 
       updateTblPersonal = await pool
         .request()
         .query(
           `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=` +
-            findRequest[0].NeedyAccountId
-        );
-      return updateTblPersonal.recordsets;
+          findRequest[0].NeedyAccountId
+        )
+      return updateTblPersonal.recordsets
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message)
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
 async function ws_deleteNeedyAccount(findRequest) {
   try {
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
 }
 module.exports = {
   ws_loadNeedyAccount: ws_loadNeedyAccount,
   check: check,
+  checker: checker,
   ws_createNeedyAccount: ws_createNeedyAccount,
   ws_UpdateNeedyAccount: ws_UpdateNeedyAccount,
-  ws_deleteNeedyAccount: ws_deleteNeedyAccount,
-};
+  ws_deleteNeedyAccount: ws_deleteNeedyAccount
+}

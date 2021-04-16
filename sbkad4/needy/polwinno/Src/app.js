@@ -11,6 +11,7 @@ app.use(bodyParser.json())
 
 //app.use('/api', router)
 app.use('/Personal', require('./Routes/Personal'))
+app.use('/NeedyAccounts', require('./Routes/NeedyAccounts'))
 
 
 
