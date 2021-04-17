@@ -14,19 +14,24 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
 
-module.exports.getTblCharityAccountsController = function(request,response){
+module.exports.getTblCharityAccountsController = async function(request,response){
+    try{
         let findRequest = {...request.body}
         
-    tblCharityAccountsModel.getTblCharityAccounts(findRequest).then(result =>{ 
-        
+        await tblCharityAccountsModel.getTblCharityAccounts(findRequest).then(result =>{ 
             
-                if(result == null){
-                    response.json({error:"هیچ رکوردی موجود نیست"})
-                }else{
-                    response.json(result)
-                }
-        })
-    }
+                
+                    if(result[0] == null){
+                        response.json({error:"هیچ رکوردی موجود نیست"})
+                    }else{
+                        response.json(result)
+                    }
+            })
+    }catch (error){
+            response.json({error:"کد نوع را وارد کنید"})
+        }
+       
+}
 
 
     module.exports.insertTblCharityAccountsController = async function(request,response){
