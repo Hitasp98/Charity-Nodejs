@@ -9,7 +9,8 @@ var app = express()
 
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//get controller
 module.exports.getTblCommonBaseTypeController = function(request,response){
     try{
 
@@ -29,15 +30,14 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         response.json({error:"رکورد مورد نظر یافت نشد"})
         } 
     }
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//insert controller
     module.exports.insertTblCommonBaseTypeController = async function(request,response){
         try{
             let findRequest = {...request.body}
-
+//for checking mandatory
        if(findRequest.BaseTypeTitle != null){
-
-       
+//first get for cecking index property
         let resultGet = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
    
             if(resultGet == null){
@@ -60,11 +60,13 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         response.json({error:"رکورد مورد نظر ثبت نشد"})
         }  
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//update controller
     module.exports.updateTblCommonBaseTypeController = async function(request,response){
         let findRequest = {...request.body}
-      
+     //for checking mandatory 
         if(findRequest.BaseTypeTitle != null && findRequest.BaseTypeCode.trim().length == 3 && findRequest.CommonBaseTypeId !=null){
+     //for checking indexes        
             let findGet = []
                 findGet[0] = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
                 
@@ -89,28 +91,29 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         }
 
     }
-
-    module.exports.deleteTblCommonBaseTypeController = async function(request,response){
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
+//delete controller
+    module.exports.deleteTblCommonBaseTypeController =  function(request,response){
 
         
         let findRequest = {...request.body}
         
         
        
-          
-        await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+         // request for checking Fk in others table 
+         requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
             
-
+             
                 if (await JSON.parse(body).CommonBaseTypeId == findRequest.CommonBaseTypeId){
                     response.json({error : "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است"})
                 }else{
                    
-                    tblCommonBaseTypeModel.deleteTblCommonBaseType(findRequest).then(result =>{
+                 await tblCommonBaseTypeModel.deleteTblCommonBaseType(findRequest).then(result =>{
 
                         if (result == 1 ){
                             response.json({message:"عملیات حذف با موفقیت انجام شد"})
                         }else{
-                            response.json({error : "رکورد مورد نظر قبلا حذف شده"})
+                            response.json({error : "رکورد مورد نظر موجود نیست"})
                         }
                         
                         })
@@ -118,10 +121,6 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
                
 
             })
-        
-         
-        
-        
         
 
     }
