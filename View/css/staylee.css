@@ -1,0 +1,86 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 20px;
+  border-style: solid;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+.sizeTable {
+  width: 600px;
+  height: 500px;
+  margin-left: 40%;
+  margin-top: 10%;
+}
+button {
+  width: 100px;
+  height: 40px;
+  margin-left: 90px;
+  border-radius: 5px;
+  background-color: chartreuse;
+}
+.border1{
+  margin: 50px;
+margin-left: -180px;
+  width: 1000px;
+  border-style: solid;
+border-radius:10px ;
+padding: 10px;
+}
+select{
+  width: 100px;
+  height: 30px;
+  font-size: 30px;
+
+}
+.basebord{
+  padding-right: 10px;
+}
+.basebord label{
+  padding-right:30px ;
+  margin-right:90px;
+}
+.basebord input{
+  margin-top: 40px;
+}
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.example button:hover {
+  background: #0b7dda;
+}
+
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
