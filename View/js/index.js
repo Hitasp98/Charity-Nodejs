@@ -169,9 +169,9 @@ function ws_CreateBaseType(BaseTypeCode, BaseTypeTitle) {
         console.log(data)
         // for (row of data) {
         //     console.log(row.IdNumber)
-           
+
         // }
-    },
+      },
     })
   }
 }
@@ -211,51 +211,34 @@ btnInsert.addEventListener('click', () => {
   const vcode = document.getElementById('codeone').value
   ws_CreateBaseType(vcode, vname)
 })
+const CommonBaseTypeId = document.querySelector('#CommonBaseTypeId')
 
 btnUpdate.addEventListener('click', () => {
-  const vname = document.getElementById('nameone1').value
-  const vcode = document.getElementById('codeone1').value
+  const BaseTypeTitle = document.getElementById('nameone1').value
+  const BaseTypeCode = document.getElementById('codeone1').value
+  const CommonBaseTypeId = document.getElementById('CommonBaseTypeId').value
+
   var code
   var sumBaseTypeTitle = []
   // //TODO:Give a BaseTypeCode
   $.ajax({
-    type: 'POST',
-    url: '/productcommonbasetype/searchTbBasetype',
+    type: 'PUT',
+    url: '/tblCommonBaseType/updateTblCommonBaseType',
     contentType: 'application/json',
     data: JSON.stringify({
       doc_id_msgs: $('#doct_id').val(),
+      BaseTypeTitle: BaseTypeTitle,
+      BaseTypeCode: BaseTypeCode,
+      CommonBaseTypeId:CommonBaseTypeId
+    }),
+    dataType: 'json',
+    success: function (data) {
+      console.log(data)
+    }
+  })
+  //Todo : check data for uqiun 
+  // ws_UpdateBaseType(vcode, vname, code)
 
-      BaseTypeCode: vcode
-    }),
-    dataType: 'json',
-    success: function (data) {
-      for (row of data) {
-        code = row.CommonBaseTypeId
-      }
-    }
-  })
-  //Todo : check data for uqiun
-  $.ajax({
-    type: 'POST',
-    url: '/productcommonbasetype/searchTbBaseTypeTitle',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      doc_id_msgs: $('#doct_id').val(),
-      //Todo : send BaseTypeTitle
-      BaseTypeTitle: vname
-    }),
-    dataType: 'json',
-    success: function (data) {
-      for (row of data) {
-        sumBaseTypeTitle += row
-      }
-    }
-  })
-  if (sumBaseTypeTitle === 0) {
-    ws_UpdateBaseType(vcode, vname, code)
-  } else {
-    alert('was insert ')
-  }
 })
 
 btnDel.addEventListener('click', () => {
@@ -264,23 +247,21 @@ btnDel.addEventListener('click', () => {
   if (CommonBaseTypeId == '') {
     alert('epmty')
   } else {
-    // $.ajax({
-    //     type: 'POST',
-    //     url: '/productcommonbasetype/searchTbBasetype',
-    //     contentType: 'application/json',
-    //     data: JSON.stringify({
-    //         doc_id_msgs: $('#doct_id').val(),
+    $.ajax({
+        type: 'Delete',
+        url: '/tblCommonBaseType/deleteTblCommonBaseType',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            doc_id_msgs: $('#doct_id').val(),
 
-    //         BaseTypeCode: vcode
-    //     }),
-    //     dataType: 'json',
-    //     success: function (data) {
-    //         for (row of data) {
-    //             code = row.CommonBaseTypeId
-    //         }
-    //     }
-    // })
-    ws_DeleteBaseType(CommonBaseTypeId)
+            CommonBaseTypeId: CommonBaseTypeId
+        }),
+        dataType: 'json',
+        success: function (data) {
+        console.log(data)
+        }
+    })
+    // ws_DeleteBaseType(CommonBaseTypeId)
   }
 })
 
@@ -302,8 +283,7 @@ function ws_createBaseValue(BaseValue, BaseCode, CommonBaseTypeId) {
 function ws_updateBaseValue(
   BaseCode,
   BaseValue,
-  CommonBaseTypeId,
-  CommonBaseDataId
+
 ) {
   $.ajax({
     type: 'patch',
@@ -312,8 +292,8 @@ function ws_updateBaseValue(
     data: JSON.stringify({
       BaseCode: BaseCode,
       BaseValue: BaseValue,
-      CommonBaseTypeId: CommonBaseTypeId,
-      CommonBaseDataId: CommonBaseDataId
+      CommonBaseTypeId: null,
+      CommonBaseDataId: null
     }),
     dataType: 'json'
   })
@@ -377,7 +357,7 @@ btnUpdateTwo.addEventListener('click', () => {
       ins += randnumber[j]
     }
     ins += random
-    ws_updateBaseValue(vname, vcode, CommonBaseTypeId, ins)
+    ws_updateBaseValue(vname, vcode)
     location.reload()
   }
 })

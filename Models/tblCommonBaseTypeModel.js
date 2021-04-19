@@ -70,6 +70,8 @@ async function insertTblCommonBaseType(findRequest){
 
 
 async function updateTblCommonBaseType(findRequest){
+    console.log(findRequest)
+
     let CommonBaseTypeValue
     try{
         let pool = await sql.connect(config)
@@ -102,7 +104,7 @@ async function deleteTblCommonBaseType(findRequest){
             let deleteTblCommonBaseType
             let getTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where CommonBaseTypeId =  ${findRequest.CommonBaseTypeId};`)
             
-            
+            console.log(findRequest)
             
 
             if(getTblCommonBaseType != null){
