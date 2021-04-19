@@ -17,11 +17,10 @@ app.use(bodyParser.json())
 module.exports.getTblCharityAccountsController = async function(request,response){
     try{
         let findRequest = {...request.body}
-        
         await tblCharityAccountsModel.getTblCharityAccounts(findRequest).then(result =>{ 
             
                 
-                    if(result[0] == null){
+                    if(result== null){
                         response.json({error:"هیچ رکوردی موجود نیست"})
                     }else{
                         response.json(result)
@@ -37,7 +36,8 @@ module.exports.getTblCharityAccountsController = async function(request,response
     module.exports.insertTblCharityAccountsController = async function(request,response){
         try{
             let findRequest = {...request.body}
-        
+            console.log(findRequest)
+
        let findIndex = {
            AccountNumber : findRequest.AccountNumber,
            BaseTypeCode : findRequest.BaseTypeCode
@@ -65,6 +65,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
     module.exports.updateTblCharityAccountsController = async function(request,response){
         try{
             let findRequest = {...request.body}
+            console.log(findRequest)
 
             let findIndex = {
                 AccountNumber : findRequest.AccountNumber,
@@ -97,7 +98,8 @@ module.exports.getTblCharityAccountsController = async function(request,response
     module.exports.deleteTblCharityAccountsController = async function(request,response){
         try {
             let findRequest = {...request.body}
-            
+            console.log(findRequest)
+
 
             let findIndex = {
                 CharityAccountId : findRequest.CharityAccountId,

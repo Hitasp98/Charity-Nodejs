@@ -12,7 +12,7 @@ function getmsgs1() {
         contentType: "application/json",
         data: JSON.stringify({
             doc_id_msgs: $("#doct_id").val(),
-           
+
         }),
         dataType: "json",
         success: function (data) {
@@ -53,24 +53,17 @@ btnnew.addEventListener('click', () => {
     // let IdNumber=parseInt(IdNumbere)
     // // const SecretCode = "admin"
     // let SecretCode=parseInt(SecretCodee)
-    let PersonType=parseInt(PersonTypee)
+    let PersonType = parseInt(PersonTypee)
     let male = document.getElementById('male').checked;
     let female = document.getElementById('female').checked;
-    var checked; 
+    var checked;
     if (male == true) {
         checked = true
     } else {
         checked = false
     }
-    let PersonId = '610422'
-    for (let i = 0; i < 6; i++) {
-        var rnadom = Math.floor(Math.random() * 0) + 9;
 
-        PersonId += rnadom.toString()
-    }
-    PersonId += '5298'
-    let rand = Math.floor(Math.random() * 10) + 100
-    if (Name == "" || Family == "" && PersonType == "" && NationalCode == "" && BirthDate == "" && BirthPlace == "" && SecretCode == "" ) {
+    if (Name == "" || Family == "" && PersonType == "" && NationalCode == "" && BirthDate == "" && BirthPlace == "" && SecretCode == "") {
         alert("epmty")
     } else {
         $.ajax({
@@ -78,7 +71,7 @@ btnnew.addEventListener('click', () => {
             url: "/Personal/insertPersonal",
             contentType: "application/json",
             data: JSON.stringify({
-         
+
                 Name: Name,
                 Family: Family,
                 NationalCode: NationalCode,
@@ -87,21 +80,22 @@ btnnew.addEventListener('click', () => {
                 BirthPlace: BirthPlace,
                 PersonType: PersonType,
                 PersonPhoto: null,
-                SecretCode:SecretCode,
-                BirthDate:BirthDate
+                SecretCode: SecretCode,
+                BirthDate: BirthDate
             }),
             dataType: "json",
             success: function (data) {
                 console.log(data)
                 // for (row of data) {
                 //     console.log(row.IdNumber)
-                   
+
                 // }
             },
         });
         // location.reload();
 
     }
+    check()
 })
 btnEdit.addEventListener('click', () => {
     console.log('test edit')
@@ -115,11 +109,11 @@ btnEdit.addEventListener('click', () => {
     const PersonPhoto = document.getElementById("PersonPhoto").value;
     const SecretCode = document.getElementById("SecretCode").value;
     const IdNumber = document.getElementById("IdNumber").value;
-    if (Name == "" || Family == "" && PersonType == "" && NationalCode == "" && BirthDate == "" && BirthPlace == "" && SecretCode == "" ) {
+    if (Name == "" || Family == "" && PersonType == "" && NationalCode == "" && BirthDate == "" && BirthPlace == "" && SecretCode == "") {
 
         alert("epmty")
     } else {
-        let PersonType=parseInt(PersonTypee)
+        let PersonType = parseInt(PersonTypee)
         let male = document.getElementById('male').checked;
         let female = document.getElementById('female').checked;
         var checked;
@@ -133,7 +127,7 @@ btnEdit.addEventListener('click', () => {
             url: "/Personal/updatePersonal",
             contentType: "application/json",
             data: JSON.stringify({
-                PersonId:PersonId,
+                PersonId: PersonId,
                 Name: Name,
                 Family: Family,
                 NationalCode: NationalCode,
@@ -142,21 +136,22 @@ btnEdit.addEventListener('click', () => {
                 BirthPlace: BirthPlace,
                 PersonType: PersonType,
                 PersonPhoto: null,
-                SecretCode:SecretCode,
-                BirthDate:BirthDate
+                SecretCode: SecretCode,
+                BirthDate: BirthDate
             }),
             dataType: "json",
             success: function (data) {
                 console.log(data)
                 // for (row of data) {
                 //     console.log(row.IdNumber)
-                   
+
                 // }
             },
         });
         // location.reload();
 
     }
+    check()
 })
 btnDelete.addEventListener('click', () => {
     const PersonId = document.getElementById("PersonId").value;
@@ -178,14 +173,35 @@ btnDelete.addEventListener('click', () => {
                 console.log(data)
                 // for (row of data) {
                 //     console.log(row.IdNumber)
-                   
+
                 // }
             },
         });
         // location.reload();
 
     }
+    check()
 })
+function check() {
+    var xhr = new XMLHttpRequest();
+    var file = "http://localhost:8090/tblCharityAccounts";
+    var randomNum = Math.round(Math.random() * 10000);
+
+    xhr.open('HEAD', file + "?rand=" + randomNum, true);
+    xhr.send();
+
+    xhr.addEventListener("readystatechange", processRequest, false);
+
+    function processRequest(e) {
+        if (xhr.readyState == 4) {
+            if (xhr.status >= 200 && xhr.status < 304) {
+                alert("connection exists!");
+            } else {
+                alert("connection doesn't exist!");
+            }
+        }
+    }
+}
 // btnSearch.addEventListener('click', () => {
 //     const inputSearch = document.getElementById("inputSearch").value;
 //     console.log(inputSearch)

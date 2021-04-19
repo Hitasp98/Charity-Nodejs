@@ -209,7 +209,12 @@ function ws_DeleteBaseType(CommonBaseTypeId) {
 btnInsert.addEventListener('click', () => {
   const vname = document.getElementById('nameone').value
   const vcode = document.getElementById('codeone').value
-  ws_CreateBaseType(vcode, vname)
+  if (vname == '' || vcode == '') {
+    alert('epmty')
+  } else {
+    ws_CreateBaseType(vcode, vname)
+  }
+  check()
 })
 const CommonBaseTypeId = document.querySelector('#CommonBaseTypeId')
 
@@ -217,27 +222,32 @@ btnUpdate.addEventListener('click', () => {
   const BaseTypeTitle = document.getElementById('nameone1').value
   const BaseTypeCode = document.getElementById('codeone1').value
   const CommonBaseTypeId = document.getElementById('CommonBaseTypeId').value
-
-  var code
-  var sumBaseTypeTitle = []
-  // //TODO:Give a BaseTypeCode
-  $.ajax({
-    type: 'PUT',
-    url: '/tblCommonBaseType/updateTblCommonBaseType',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      doc_id_msgs: $('#doct_id').val(),
-      BaseTypeTitle: BaseTypeTitle,
-      BaseTypeCode: BaseTypeCode,
-      CommonBaseTypeId:CommonBaseTypeId
-    }),
-    dataType: 'json',
-    success: function (data) {
-      console.log(data)
-    }
-  })
+  if (BaseTypeTitle != '' || BaseTypeCode != '' || CommonBaseTypeId != '') {
+    var code
+    var sumBaseTypeTitle = []
+    // //TODO:Give a BaseTypeCode
+    $.ajax({
+      type: 'PUT',
+      url: '/tblCommonBaseType/updateTblCommonBaseType',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        doc_id_msgs: $('#doct_id').val(),
+        BaseTypeTitle: BaseTypeTitle,
+        BaseTypeCode: BaseTypeCode,
+        CommonBaseTypeId: CommonBaseTypeId
+      }),
+      dataType: 'json',
+      success: function (data) {
+        console.log(data)
+      }
+    })
+  }
+  else {
+    alert('empty')
+  }
   //Todo : check data for uqiun 
   // ws_UpdateBaseType(vcode, vname, code)
+  check()
 
 })
 
@@ -248,28 +258,28 @@ btnDel.addEventListener('click', () => {
     alert('epmty')
   } else {
     $.ajax({
-        type: 'Delete',
-        url: '/tblCommonBaseType/deleteTblCommonBaseType',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            doc_id_msgs: $('#doct_id').val(),
+      type: 'Delete',
+      url: '/tblCommonBaseType/deleteTblCommonBaseType',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        doc_id_msgs: $('#doct_id').val(),
 
-            CommonBaseTypeId: CommonBaseTypeId
-        }),
-        dataType: 'json',
-        success: function (data) {
+        CommonBaseTypeId: CommonBaseTypeId
+      }),
+      dataType: 'json',
+      success: function (data) {
         console.log(data)
-        }
+      }
     })
     // ws_DeleteBaseType(CommonBaseTypeId)
   }
 })
 
 //table two
-function ws_createBaseValue(BaseValue, BaseCode, CommonBaseTypeId) {
+function ws_createBaseValue(BaseValue, BaseCode) {
   $.ajax({
     type: 'POST',
-    url: '/tblCommonBaseData/addBasedata',
+    url: '/tblCommonBaseData/insertTblCommonBaseData',
     contentType: 'application/json',
     data: JSON.stringify({
       BaseValue: BaseValue,
@@ -278,7 +288,7 @@ function ws_createBaseValue(BaseValue, BaseCode, CommonBaseTypeId) {
     }),
     dataType: 'json'
   })
-  location.reload()
+  // location.reload()
 }
 function ws_updateBaseValue(
   BaseCode,
@@ -286,8 +296,8 @@ function ws_updateBaseValue(
 
 ) {
   $.ajax({
-    type: 'patch',
-    url: '/tblCommonBaseData/UpdateBasedata',
+    type: 'PUT',
+    url: '/tblCommonBaseData/updateTblCommonBaseData',
     contentType: 'application/json',
     data: JSON.stringify({
       BaseCode: BaseCode,
@@ -300,8 +310,8 @@ function ws_updateBaseValue(
 }
 function ws_deleteBaseValue(CommonBaseDataId) {
   $.ajax({
-    type: 'delete',
-    url: '/tblCommonBaseData/DeleteBasedata',
+    type: 'Delete',
+    url: '/tblCommonBaseData/deleteTblCommonBaseData',
     contentType: 'application/json',
     data: JSON.stringify({
       CommonBaseDataId: CommonBaseDataId
@@ -312,26 +322,13 @@ function ws_deleteBaseValue(CommonBaseDataId) {
 btnInsertTwo.addEventListener('click', () => {
   const vname = document.getElementById('nameoneTwo').value
   const vcode = document.getElementById('codeoneTwo').value
-  sNumber = vcode.toString()
-  randnumber = []
-  insertnumber = []
-  for (var i = 0, len = sNumber.length; i < len; i += 1) {
-    randnumber.push(+sNumber.charAt(i))
-  }
 
-  var rand = Math.floor(Math.random() * 999) + 100
-  var random = rand.toString()
-  console.log(random)
-  var ins = ''
-  for (let j = 0; j < 3; j++) {
-    ins += randnumber[j]
-  }
-  ins += random
   if (vname == '' || vcode == '') {
     alert('epmty')
   } else {
-    ws_createBaseValue(vname, vcode, ins)
+    ws_createBaseValue(vname, vcode)
   }
+  check()
 })
 
 btnUpdateTwo.addEventListener('click', () => {
@@ -342,24 +339,11 @@ btnUpdateTwo.addEventListener('click', () => {
   if (vname == '' || vcode == '') {
     alert('epmty')
   } else {
-    sNumber = vcode.toString()
-    randnumber = []
-    insertnumber = []
-    for (var i = 0, len = sNumber.length; i < len; i += 1) {
-      randnumber.push(+sNumber.charAt(i))
-    }
 
-    var rand = Math.floor(Math.random() * 999) + 100
-    var random = rand.toString()
-    console.log(random)
-    var ins = ''
-    for (let j = 0; j < 3; j++) {
-      ins += randnumber[j]
-    }
-    ins += random
     ws_updateBaseValue(vname, vcode)
-    location.reload()
+    // location.reload()
   }
+  check()
 })
 
 btnDeTow.addEventListener('click', () => {
@@ -368,8 +352,9 @@ btnDeTow.addEventListener('click', () => {
     alert('epmty')
   } else {
     ws_deleteBaseValue(vcode)
-    location.reload()
+    // location.reload()
   }
+  check()
 })
 
 //!serach
