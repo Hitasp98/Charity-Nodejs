@@ -48,9 +48,8 @@ margin-top: -270px;
 }
 .main{
     display: flex;
-    flex-direction: row-reverse;
-
-    margin-left: 400px;
+    flex-direction: row-reverse;    
+    margin-left: 100px;
     margin-top: 200px;
     /* width: 400px; */
 }
