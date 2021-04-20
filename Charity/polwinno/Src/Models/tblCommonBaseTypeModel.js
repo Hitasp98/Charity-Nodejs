@@ -34,6 +34,7 @@ async function getTblCommonBaseType(findRequest){
                 }
               }
               whereclause = whereclause.slice(0, -3)
+              
               getTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where`+ whereclause)
               return getTblCommonBaseType.recordsets[0][0];
         }      

@@ -3,6 +3,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 const requestApi = require('request');
+const { json } = require('body-parser');
 
 var app = express()
 
@@ -65,63 +66,76 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
     module.exports.updateTblCommonBaseTypeController = async function(request,response){
         let findRequest = {...request.body}
      //for checking mandatory 
-        if(findRequest.BaseTypeTitle != null && findRequest.BaseTypeCode.trim().length == 3 && findRequest.CommonBaseTypeId !=null){
+        if(findRequest.BaseTypeTitle != null  && findRequest.CommonBaseTypeId !=null){
      //for checking indexes        
             let findGet = []
                 findGet[0] = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
                 
-                findGet[1] = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeCode : findRequest.BaseTypeCode})
+              
            
-                    if ((findGet[0] == null || (findGet[0].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[0] != null) ) && ( findGet[1] == null || (findGet[1].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[1] != null ))){
-                        tblCommonBaseTypeModel.updateTblCommonBaseType(findRequest).then(result =>{
-                
-                            if(result==null){
-                                response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
+                    if ((findGet[0] == null || (findGet[0].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[0] != null) ) && ( findGet[1] == null )){
+                        tblCommonBaseTypeModel.updateTblCommonBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId,
+                        BaseTypeTitle : findRequest.BaseTypeTitle  
+                        }).then(result =>{
+                            
+                            if(result[0][0]==null){
+                                response.json({error:"رکوردی برای ویرایش یافت نشد"})
                             }else{
                     
                             response.json(result[0])
                             }
                             
-                        })
+                        }).catch (error=>
+                
+                            response.json({error:"رکورد مورد نظر ویرایش نشد"})
+                         )
             }else{
-                response.json({error:"رکورد ویرایش شده در عنوان یا کد یکتا نیست"})
+                response.json({error:"رکورد ویرایش شده در عنوان  یکتا نیست"})
             }
         }else{
-            response.json({error:"فیلدهای اجباری را با در نظر گرفتن کد سه حرفی پر کنید"})
+            response.json({error:"فیلدهای اجباری را پر کنید"})
         }
 
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
 //delete controller
-    module.exports.deleteTblCommonBaseTypeController =  function(request,response){
+    module.exports.deleteTblCommonBaseTypeController = async function(request,response){
 
         
         let findRequest = {...request.body}
         
-        
-       
-         // request for checking Fk in others table 
-         requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
-            
-             
-                if (await JSON.parse(body).CommonBaseTypeId == findRequest.CommonBaseTypeId){
-                    response.json({error : "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است"})
-                }else{
-                   
-                 await tblCommonBaseTypeModel.deleteTblCommonBaseType(findRequest).then(result =>{
-
-                        if (result == 1 ){
-                            response.json({message:"عملیات حذف با موفقیت انجام شد"})
-                        }else{
-                            response.json({error : "رکورد مورد نظر موجود نیست"})
-                        }
+      // request for checking Fk in others table   
+       if(findRequest.CommonBaseTypeId != null){
+            let findGet = await tblCommonBaseTypeModel.getTblCommonBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId})
+              
+                if(findGet != null){
+                    await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+                    
+                        if (await JSON.parse(body)[0].CommonBaseTypeId == findRequest.CommonBaseTypeId){
+                            response.json({error : "امکان حذف بدليل وابستگي امکان پذير نمي باشد"})
                         
-                        })
+                        }else{
+                    
+                            await tblCommonBaseTypeModel.deleteTblCommonBaseType(findRequest).then(result =>{
+
+                                if (result == 1 ){
+                                    response.json({message:"عملیات حذف با موفقیت انجام شد"})
+                                }else{
+                                    response.json({error : "دوباره سعی کنید عملیات حذف انجام نشد"})
+                                }
+                                
+                            })
+                        }   
+                
+
+                    })
+                }else{
+                     response.json({error:"چنین رکوردی موجود نیست"}) 
                 }
-               
-
-            })
-        
-
+            }else{
+                response.json({error:"فیلدهای اجباری را پر کنید"})
+            }
+                       
+                
     }
 
