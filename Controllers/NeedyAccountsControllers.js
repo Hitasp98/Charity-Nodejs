@@ -17,14 +17,18 @@ module.exports.getNeedyAccountsController = async function (request, response) {
     let findRequest = {
       ...request.body
     };
+    // console.log(findRequest)
 
     await NeedyAccountsModels.ws_loadNeedyAccount(findRequest).then(result => {
+      // console.log(result)
       if (result == null) {
+     
         response.json({
           error: "هیچ رکوردی موجود نیست"
         });
       } else {
-        response.json(result);
+        response.json(result[0]);
+        // return result
       }
     });
   } catch (error) {
@@ -34,26 +38,40 @@ module.exports.getNeedyAccountsController = async function (request, response) {
 
 module.exports.insertNeedyAccountsController = async function (request, response) {
   try {
+    let findRequest = {
+      ...request.body
+    };
+    console.log(findRequest)
     if (
-      findRequest[0].NeedyId == null &&
-      findRequest[0].BankId == null &&
-      findRequest[0].OwnerName == null &&
-      findRequest[0].CardNumber == null &&
-      findRequest[0].AccountNumber == null &&
-      findRequest[0].AccountName == null &&
-      findRequest[0].ShebaNumber == null) {
+      findRequest.NeedyId == null &&
+      findRequest.BankId == null &&
+      findRequest.OwnerName == null &&
+      findRequest.CardNumber == null &&
+      findRequest.AccountNumber == null &&
+      findRequest.AccountName == null &&
+      findRequest.ShebaNumber == null) {
       response.json("ورودی ها خالی است");
+      console.log('not null')
+
     } else {
-      console.log("this PersonId ");
+      console.log('not null')
+
+      // console.log("this PersonId ");
       let loadNeedyAccount = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest)
-      if (loadNeedyAccount[0] == null) {
+      console.log(loadNeedyAccount[0][0])
+      if (loadNeedyAccount[0][0] == null) {
+        console.log('not null2')
+
         await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
           .then(result => {
-            if (result == null) {
+            if (result == '') {
+              console.log('not insert')
+
               response.json({
                 error: "عملیات درج با موفقیت انجام نشد"
               });
             } else {
+              console.log('insert')
               response.json(result);
             }
           })
@@ -75,15 +93,17 @@ module.exports.insertNeedyAccountsController = async function (request, response
 module.exports.updateNeedyAccountsController = async function (request, response) {
   try {
     let findRequest = { ...request.body };
+    console.log(findRequest)
+
     if (
-      findRequest[0].NeedyAccountId == null &&
-      findRequest[0].NeedyId == null &&
-      findRequest[0].BankId == null &&
-      findRequest[0].OwnerName == null &&
-      findRequest[0].CardNumber == null &&
-      findRequest[0].AccountNumber == null &&
-      findRequest[0].AccountName == null &&
-      findRequest[0].ShebaNumber == null) {
+      findRequest.NeedyAccountId == null &&
+      findRequest.NeedyId == null &&
+      findRequest.BankId == null &&
+      findRequest.OwnerName == null &&
+      findRequest.CardNumber == null &&
+      findRequest.AccountNumber == null &&
+      findRequest.AccountName == null &&
+      findRequest.ShebaNumber == null) {
       response.json("ورودی ها خالی است");
     } else {
       let checked = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest);
@@ -94,7 +114,7 @@ module.exports.updateNeedyAccountsController = async function (request, response
               error: "عملیات ویرایش با موفقیت انجام نشد"
             });
           } else {
-            response.json(result);
+            response.json(result[0]);
           }
         });
       } else {
@@ -112,10 +132,12 @@ module.exports.updateNeedyAccountsController = async function (request, response
 module.exports.deleteNeedyAccountsController = function (request, response) {
   try {
     let findRequest = { ...request.body }
+    console.log(findRequest)
+
     if (
-      findRequest[0].NeedyAccountId == null &&
-      findRequest[0].NeedyId   == null &&
-      findRequest[0].AccountNumber == null 
+      findRequest.NeedyAccountId == null &&
+      findRequest.NeedyId   == null &&
+      findRequest.AccountNumber == null 
     ) {
       response.json("ورودی ها خالی است");
     }

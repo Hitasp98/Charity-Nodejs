@@ -37,28 +37,29 @@ button {
   justify-content: flex-end;
   width: 500px;
   margin: 50px;
-  
 }
 .left {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-margin-left: -300px;
-margin-top: -270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-left: -300px;
+  margin-top: -270px;
 }
-.main{
-    display: flex;
-    flex-direction: row-reverse;    
-    margin-left: 100px;
-    margin-top: 200px;
-    /* width: 400px; */
+.main {
+  display: flex;
+   flex-direction: row-reverse;
+  justify-self: end;
+  margin-left: 600px;
+  width: 1100px;
+  margin-top: 200px;
+  /* width: 400px; */
 }
-input{
-    margin: 25px;
-    height: 20px;
+input {
+  margin: 25px;
+  height: 20px;
 }
-select{
-    height: 50px;
-font-size: 18px;
-padding: 11px;
+select {
+  height: 50px;
+  font-size: 18px;
+  padding: 11px;
 }

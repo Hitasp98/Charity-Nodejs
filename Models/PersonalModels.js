@@ -172,7 +172,7 @@ async function ws_createPersonal(findRequest) {
 }
 async function ws_updatePersonal(findRequest) {
   try {
-    console.log('test edit1')
+    console.log('test edit1'  )
 
       let updateTblPersonal
       let pool = await sql.connect(config)

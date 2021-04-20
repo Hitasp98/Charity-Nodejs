@@ -13,38 +13,38 @@ async function check(findRequest) {
 
     let tblPersonal
 
-    if (findRequest[0].PersonId == null &&
-      findRequest[0].Name == null &&
-      findRequest[0].Family == null &&
-      findRequest[0].NationalCode == null &&
-      findRequest[0].IdNumber == null &&
-      findRequest[0].Sex == null &&
-      findRequest[0].BirthPlace == null &&
-      findRequest[0].PersonType == null &&
-      findRequest[0].PersonPhoto == null &&
-      findRequest[0].SecretCode == null) {
+    if (findRequest.PersonId == null &&
+      findRequest.Name == null &&
+      findRequest.Family == null &&
+      findRequest.NationalCode == null &&
+      findRequest.IdNumber == null &&
+      findRequest.Sex == null &&
+      findRequest.BirthPlace == null &&
+      findRequest.PersonType == null &&
+      findRequest.PersonPhoto == null &&
+      findRequest.SecretCode == null) {
       //error null
       return 'the was empty'
     } else {
-      console.log(findRequest[0])
+      // console.log(findRequest)
       let whereclause = ''
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
-      for (x in findRequest[0]) {
+      for (x in findRequest) {
         //?check value for insert string or number 
-        if (typeof findRequest[0][String(x)] == 'string') {
-          console.log(findRequest[0][String(x)])
-          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[0][String(x)] + "'" + ` AND `
-        } else if (typeof findRequest[0][String(x)] == 'number') {
+        if (typeof findRequest[String(x)] == 'string') {
+          // console.log(findRequest[0][String(x)])
+          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[String(x)] + "'" + ` AND `
+        } else if (typeof findRequest[String(x)] == 'number') {
           whereclause =
-            whereclause + ' ' + `${x} =  ${findRequest[0][String(x)]}` + ` AND`
-        } else if (findRequest[0][String(x)] == null) {
+            whereclause + ' ' + `${x} =  ${findRequest[String(x)]}` + ` AND`
+        } else if (findRequest[String(x)] == null) {
           whereclause + ' ' + `${x}is null AND`
           // break;
         }
       }
       whereclause = whereclause.slice(0, -4)
-      console.log(whereclause + 'this whereclause')
+      // console.log(whereclause + 'this whereclause')
       //check query
       tblPersonal = await pool
         .request()
@@ -82,45 +82,52 @@ async function ws_loadNeedyAccount(findRequest) {
     let tblPersonal
 
     if (
-      findRequest[0].NeedyId == null &&
-      findRequest[0].NeedyAccountId == null
+(      findRequest.NeedyId == null &&
+      findRequest.NeedyAccountId == null)||
+      (findRequest.NeedyId == undefined &&
+      findRequest.NeedyAccountId == undefined)
     ) {
       //!!joining tb tblPersonal & tblCommonBaseData & tblCommonBaseType
       tblPersonal = await pool.request()
-        .query(`SELECT [tblNeedyAccounts].*,tblPersonal.NAME ,tblPersonal.Family,tblPersonal.NationalCode,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeTitle
-        FROM [dbo].[tblNeedyAccounts] 
-            join tblPersonal
-            on tblNeedyAccounts.AccountName=tblPersonal.NAME 
-            AND tblNeedyAccounts.AccountName=tblPersonal.Family
-            AND tblNeedyAccounts.AccountName=tblPersonal.NationalCode
-            join tblCommonBaseData
-            on tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseCode
-            AND tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseValue
-            join tblCommonBaseType
-            on tblNeedyAccounts.AccountNumber=tblCommonBaseType.BaseTypeTitle
-           where BaseTypeCode =N ${findRequest['BaseTypeCode']}`)
+        // .query(`SELECT [tblNeedyAccounts].*,tblPersonal.NAME ,tblPersonal.Family,tblPersonal.NationalCode,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeTitle
+        // FROM [dbo].[tblNeedyAccounts] 
+        //     join tblPersonal
+        //     on tblNeedyAccounts.AccountName=tblPersonal.NAME 
+        //     AND tblNeedyAccounts.AccountName=tblPersonal.Family
+        //     AND tblNeedyAccounts.AccountName=tblPersonal.NationalCode
+        //     join tblCommonBaseData
+        //     on tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseCode
+        //     AND tblNeedyAccounts.AccountNumber=tblCommonBaseData.BaseValue
+        //     join tblCommonBaseType
+        //     on tblNeedyAccounts.AccountNumber=tblCommonBaseType.BaseTypeTitle
+        //    where BaseTypeCode =N ${findRequest.BaseTypeCode}`)
+.query(`SELECT *
+FROM [dbo].[tblNeedyAccounts]
+GO
 
-      return tblPersonal.recordsets[0]
+`)
+// console.log(tblPersonal.recordsets)
+      return tblPersonal.recordsets
     } else {
-      console.log(findRequest[0])
+      // console.log(findRequest)
       let whereclause = ''
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
-      for (x in findRequest[0]) {
+      for (x in findRequest) {
         //?check value for insert string or number 
-        if (typeof findRequest[0][String(x)] == 'string') {
-          console.log(findRequest[0][String(x)])
-          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[0][String(x)] + "'" + ` AND `
-        } else if (typeof findRequest[0][String(x)] == 'number') {
+        if (typeof findRequest[String(x)] == 'string') {
+          // console.log(findRequest[String(x)])
+          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[String(x)] + "'" + ` AND `
+        } else if (typeof findRequest[String(x)] == 'number') {
           whereclause =
             whereclause + ' ' + `${x} =  ${findRequest[0][String(x)]}` + ` AND`
-        } else if (findRequest[0][String(x)] == null) {
+        } else if (findRequest[String(x)] == null) {
           whereclause + ' ' + `${x}is null AND`
           // break;
         }
       }
       whereclause = whereclause.slice(0, -4)
-      console.log(whereclause + 'this whereclause')
+      // console.log(whereclause + 'this whereclause')
       //check query
       tblNeedyAccounts = await pool
         .request()
@@ -128,16 +135,16 @@ async function ws_loadNeedyAccount(findRequest) {
           `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ` +
           whereclause
         )
-      if (tblNeedyAccounts.recordsets[0] == null) {
+      if (tblNeedyAccounts.recordsets== null) {
         ShebaNumber = await pool
           .request()
           .query(
             `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ShebaNumber=${findRequest[0].ShebaNumber}`)
 
-        return ShebaNumber.recordsets[0]
+        return ShebaNumber.recordsets
 
       } else {
-        return tblNeedyAccounts.recordsets[0]
+        return tblNeedyAccounts.recordsets
       }
     }
   } catch (error) {
@@ -147,25 +154,26 @@ async function ws_loadNeedyAccount(findRequest) {
 //TODO : insert tblNeedyAccounts
 async function ws_createNeedyAccount(findRequest) {
   try {
-    let number = findRequest[0].AccountNumber + findRequest[0].NeedyId
+    console.log('ws_createNeedyAccount')
+    let number = findRequest.AccountNumber + findRequest.NeedyId
     let pool = await sql.connect(config)
     let value = ''
     value = value + '' + number + ','
-    for (x in findRequest[0]) {
+    for (x in findRequest) {
       //? check typeof value for query
       if (
-        findRequest[0][String(x)] == null ||
-        typeof findRequest[0][String(x)] == 'number'
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == 'number'
       ) {
-        value = value + ' ' + `${findRequest[0][String(x)]}` + `,`
+        value = value + ' ' + `${findRequest[String(x)]}` + `,`
       } else {
-        value = value + ' ' + `` + "'" + findRequest[0][String(x)] + "'" + `,`
+        value = value + ' ' + `` + "'" + findRequest[String(x)] + "'" + `,`
       }
     }
     //!! end value have ',' delete
     value = value.slice(0, -1)
 
-    console.log('finsh ' + value)
+    // console.log('finsh ' + value)
     let insertTblPersonal = await pool.request().query(
       `INSERT INTO [CharityDB].[dbo].[tblNeedyAccounts]
                       (   [NeedyAccountId]
@@ -182,6 +190,7 @@ async function ws_createNeedyAccount(findRequest) {
       value +
       `)`
     )
+    console.log(number,'=>number')
     let tblNeedyAccounts = await pool
       .request()
       .query(
@@ -189,7 +198,9 @@ async function ws_createNeedyAccount(findRequest) {
         number
       )
     // console.log(tblPersonal.recordsets + "tblPersonal.recordsets");
-    console.log(tblNeedyAccounts.NeedyAccountId)
+    // console.log(tblNeedyAccounts.NeedyAccountId)
+    console.log(tblNeedyAccounts.recordsets,'=>tblNeedyAccounts')
+
     return number
   } catch (error) {
     console.log(error.message)
@@ -204,39 +215,39 @@ async function ws_UpdateNeedyAccount(findRequest) {
 
       let value = ''
 
-      for (x in findRequest[0]) {
+      for (x in findRequest) {
         if (x == 'PersonId') {
         } else if (
-          findRequest[0][String(x)] == null ||
-          typeof findRequest[0][String(x)] == 'number'
+          findRequest[String(x)] == null ||
+          typeof findRequest[String(x)] == 'number'
         ) {
-          value = value + ' ' + ` ${x} = ${findRequest[0][String(x)]}` + `,`
+          value = value + ' ' + ` ${x} = ${findRequest[String(x)]}` + `,`
         } else {
           value =
             value +
             ' ' +
             `${x} = ` +
             "'" +
-            findRequest[0][String(x)] +
+            findRequest[String(x)] +
             "'" +
             `,`
         }
       }
 
       value = value.slice(0, -1)
-      console.log(value)
+      // console.log(value)
       updateTblPersonal = await pool.request().query(
         `UPDATE [CharityDB].[dbo].[tblNeedyAccounts]
       SET  ` +
         value +
-        ` WHERE NeedyId = ${findRequest[0].NeedyId};`
+        ` WHERE NeedyId = ${findRequest.NeedyId};`
       )
 
       updateTblPersonal = await pool
         .request()
         .query(
           `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=` +
-          findRequest[0].NeedyAccountId
+          findRequest.NeedyAccountId
         )
       return updateTblPersonal.recordsets
     } catch (error) {
