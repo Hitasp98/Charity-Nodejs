@@ -109,12 +109,12 @@ module.exports.updateNeedyAccountsController = async function (request, response
       let checked = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest);
       if (checked[0] != ' ') {
         await NeedyAccountsModels.ws_UpdateNeedyAccount(findRequest).then(result => {
-          if (result == null) {
+          if (result == '') {
             response.json({
               error: "عملیات ویرایش با موفقیت انجام نشد"
             });
           } else {
-            response.json(result[0]);
+            response.json(result);
           }
         });
       } else {

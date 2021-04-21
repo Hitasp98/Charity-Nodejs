@@ -224,18 +224,25 @@ return tblNeedyAccounts.recordsets[0][0]
 async function ws_UpdateNeedyAccount(findRequest) {
   try {
     try {
+      let number = findRequest.AccountNumber + findRequest.NeedyId
+
       //is  like ws_createNeedyAccount
       let updateTblPersonal
       let pool = await sql.connect(config)
 
       let value = ''
+     
 
       for (x in findRequest) {
-        if (x == 'PersonId') {
-        } else if (
+        if(x=='NeedyAccountId'){
+          value = value + ' ' + ` ${x} =${number}` + `,`
+
+        }
+        if (
           findRequest[String(x)] == null ||
           typeof findRequest[String(x)] == 'number'
         ) {
+      
           value = value + ' ' + ` ${x} = ${findRequest[String(x)]}` + `,`
         } else {
           value =
@@ -252,7 +259,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
       value = value.slice(0, -1)
       // console.log(value)
       updateTblPersonal = await pool.request().query(
-        `UPDATE [CharityDB].[dbo].[tblNeedyAccounts]
+        `UPDATE [tblNeedyAccounts]
       SET  ` +
         value +
         ` WHERE NeedyId = ${findRequest.NeedyId};`
@@ -261,7 +268,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
       updateTblPersonal = await pool
         .request()
         .query(
-          `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=` +
+          `SELECT * FROM [tblNeedyAccounts] where [NeedyAccountId]=` +
           findRequest.NeedyAccountId
         )
       return updateTblPersonal.recordsets
