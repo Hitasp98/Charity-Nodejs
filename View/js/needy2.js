@@ -95,13 +95,17 @@ btnnew.addEventListener('click', () => {
 })
 btnEdit.addEventListener('click', () => {
     const AccountNumber = document.getElementById("AccountNumber").value;
-    const BankId = document.getElementById("BankId").value;
+    const BankIdd = document.getElementById("BankId").value;
     const OwnerName = document.getElementById("OwnerName").value;
     const CardNumber = document.getElementById("CardNumber").value;
     const AccountName = document.getElementById("AccountName").value;
     const numberAccountshaba = document.getElementById("numberAccountshaba").value;
+    const NeedyIdd = document.getElementById("NeedyId").value;  
     const NeedyAccountId = document.getElementById("NeedyAccountId").value;
 
+    let NeedyId = parseInt(NeedyIdd)
+    
+    let BankId = parseInt(BankIdd)
     if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" || numberAccountshaba == "" || NeedyAccountId == "") {
 
         alert("epmty")
@@ -111,13 +115,14 @@ btnEdit.addEventListener('click', () => {
             url: "/NeedyAccounts/updateNeedyAccounts",
             contentType: "application/json",
             data: JSON.stringify({
-                AccountNumber: AccountNumber,
+                NeedyAccountId:NeedyAccountId,
                 BankId: BankId,
+                NeedyId: NeedyId,
                 OwnerName: OwnerName,
                 CardNumber: CardNumber,
+                AccountNumber: AccountNumber,              
                 AccountName: AccountName,
-                numberAccountshaba: numberAccountshaba,
-                NeedyAccountId: NeedyAccountId
+                ShebaNumber: numberAccountshaba,
             }),
             dataType: "json",
         });
