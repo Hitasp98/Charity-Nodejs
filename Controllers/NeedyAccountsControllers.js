@@ -1,5 +1,15 @@
+//NeedAccountsControllers
+// it's connect on db NeedAccounts
+//have get , insert , update and delete
+
+
+
+
 const NeedyAccountsModels = require("../Models/NeedyAccountsModels");
-const PersonalModels = require("../Models/NeedyAccountsModels");
+
+  
+
+
 
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -7,41 +17,54 @@ var bodyParser = require("body-parser");
 
 
 var app = express();
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+
+
+
 
 module.exports.getNeedyAccountsController = async function (request, response) {
   try {
-    let findRequest = {
-      ...request.body
-    };
-    // console.log(findRequest)
+    let findRequest = {...request.body};
+ 
 
     await NeedyAccountsModels.ws_loadNeedyAccount(findRequest).then(result => {
-      // console.log(result)
+      
       if (result == null) {
 
-        response.json({
-          error: "هیچ رکوردی موجود نیست"
-        });
+
+        response.json({error: "هیچ رکوردی موجود نیست"});
+
+
       } else {
+
+
         response.json(result[0]);
-        // return result
+   
+        
+
       }
     });
   } catch (error) {
+
+
     console.log(error.message);
+
+
   }
 };
 
+
+
+
+
 module.exports.insertNeedyAccountsController = async function (request, response) {
   try {
-    let findRequest = {
-      ...request.body
-    };
-    console.log(findRequest)
+    let findRequest = {...request.body};
+
+
+
     if (
       findRequest.NeedyId == null &&
       findRequest.BankId == null &&
@@ -50,46 +73,73 @@ module.exports.insertNeedyAccountsController = async function (request, response
       findRequest.AccountNumber == null &&
       findRequest.AccountName == null &&
       findRequest.ShebaNumber == null) {
+
+
+
       response.json("ورودی ها خالی است");
-      // console.log('not null')
 
+
+
+      
     } else {
-      console.log('not null')
 
-      // console.log("this PersonId ");
+
+      
       let loadNeedyAccount = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest)
+
+
       if (loadNeedyAccount == '') {
-        console.log('not null2')
+
+
 
         await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
           .then(result => {
             console.log(result+ ' is insert')
             if (result == '') {
            
+              response.json({ error: "عملیات درج با موفقیت انجام نشد" });
 
-              response.json({
-                error: "عملیات درج با موفقیت انجام نشد"
-              });
+
+
             } else {
-              console.log('insert')
+
+
+        
+              
               response.json(result.NeedyAccountId);
+
+
+
             }
           })
       } else {
+
+
+
         response.json("قبلا درج شده");
+
+
       }
+
 
 
     }
 
 
   } catch (error) {
-    response.json({
-      error: "کد نوع را وارد کنید"
-    });
+
+
+    response.json({ error: "کد نوع را وارد کنید" });
+
+
 
   };
 }
+
+
+
+
+
 module.exports.updateNeedyAccountsController = async function (request, response) {
   try {
     let findRequest = { ...request.body };
@@ -129,15 +179,18 @@ module.exports.updateNeedyAccountsController = async function (request, response
   }
 };
 
+
+
+
+
 module.exports.deleteNeedyAccountsController = function (request, response) {
   try {
     let findRequest = { ...request.body }
-    console.log(findRequest)
+
+ 
 
     if (
-      findRequest.NeedyAccountId == null &&
-      findRequest.NeedyId == null &&
-      findRequest.AccountNumber == null
+      findRequest.NeedyAccountId == null 
     ) {
       response.json("ورودی ها خالی است");
     }
@@ -147,7 +200,7 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
       // request for checking Fk in others table 
       requestApi.post({ url: 'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: { findRequest: findRequest } }, async function (err, res, body) {
 
-        if (await JSON.parse(body).NeedyId == findRequest[0].NeedyId) {
+        if (await JSON.parse(body).NeedyId == findRequest.NeedyAccountId) {
 
           response.json({ error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است" })
         } else {
@@ -157,7 +210,7 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
 
             await NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(result => {
 
-              if (result == 1) {
+              if (result == '') {
                 response.json({ message: "عملیات حذف با موفقیت انجام شد" })
               } else {
                 response.json({ error: "رکورد مورد نظر موجود نیست" })

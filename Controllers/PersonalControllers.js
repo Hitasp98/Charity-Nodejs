@@ -1,77 +1,106 @@
-const PersonalModels = require("../Models/PersonalModels");
-var express = require("express");
-var bodyParser = require("body-parser");
+const PersonalModels  = require("../Models/PersonalModels");
+var express           = require("express");
+var bodyParser        = require("body-parser");
 
-const requestApi = require('request');
+const requestApi      = require('request');
 
-var app = express();
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
+
+
+var app               = express();
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+
+
 
 module.exports.getPersonalController = async function (request, response) {
   try {
-    let findRequest = {
-      ...request.body
-    };
+    let findRequest = {...request.body};
+
+
+
 
     await PersonalModels.ws_loadPersonal(findRequest).then(result => {
       if (result == '') {
-        console.log(result + 'result')
-        response.json({
-          error: "هیچ رکوردی موجود نیست"
-        });
+
+
+        response.json({error: "هیچ رکوردی موجود نیست"});
+
+
       } else {
-        console.log(result)
+
+  
 
         response.json(result);
+
+
       }
+
     });
   } catch (error) {
+
+
     console.log(error.message);
+
+
   }
 };
 
 module.exports.insertPersonalController = async function (request, response) {
   try {
     let findRequest = { ...request.body };
-    // findRequest[0].PersonType = createHash(findRequest[0].PersonType);
- 
+   
 
-let NationalCode=findRequest.NationalCode
-if(NationalCode.length<10||NationalCode.length>10){
+
+
+    let NationalCode=findRequest.NationalCode
+
+
+if(NationalCode.length<10||
+   NationalCode.length>10){
 console.log('error NationalCode')
 }else{
-  console.log(findRequest)
       let loadPersonal = await PersonalModels.ws_loadPersonal(findRequest);
       console.log(loadPersonal + 'loadPersonal')
-      if (loadPersonal== '') {
-        console.log("this PersonId");
+      if (loadPersonal  == '') {
+ 
         await PersonalModels.ws_createPersonal(findRequest)
           .then(result => {
             if (result == '') {
               response.json({
+
+
                 error: "عملیات درج با موفقیت انجام نشد"
+
+
               });
             } else {
+
+
               response.json(result);
+
+
             }
           })
-          .catch(error => response.json({
-            error: "رکورد مورد نظر ثبت نمیشود"
-          }));
+
+          .catch(error => response.json({ error: "رکورد مورد نظر ثبت نمیشود" }));
       }
       else {
 
         response.json("قبلا درج شده");
+
       }
 
     
   }
   } catch (error) {
     response.json({
+
+
       error: "کد نوع را وارد کنید"
+
+
     });
   }
 };
@@ -82,22 +111,24 @@ module.exports.updatePersonalController = async function (request, response) {
       ...request.body
     };
     if (
-      findRequest.PersonId == null &&
-      findRequest.Name == null &&
-      findRequest.Family == null &&
+      findRequest.PersonId     == null &&
+      findRequest.Name         == null &&
+      findRequest.Family       == null &&
       findRequest.NationalCode == null &&
-      findRequest.IdNumber == null &&
-      findRequest.Sex == null &&
-      findRequest.BirthPlace == null &&
-      findRequest.PersonType == null &&
-      findRequest.PersonPhoto == null &&
-      findRequest.SecretCode == null &&
-      findRequest.BirthDate == null
+      findRequest.IdNumber     == null &&
+      findRequest.Sex          == null &&
+      findRequest.BirthPlace   == null &&
+      findRequest.PersonType   == null &&
+      findRequest.PersonPhoto  == null &&
+      findRequest.SecretCode   == null &&
+      findRequest.BirthDate    == null
     ) {
+
+
       response.json("ورودی ها خالی است");
+
+
     } else {
-      // console,log(findRequest.PersonId)
-      console.log('test edit2')
 
       let checked = await PersonalModels.ws_loadPersonal(findRequest);
       if (checked != ' ') {
@@ -123,7 +154,7 @@ module.exports.updatePersonalController = async function (request, response) {
 
 module.exports.deletePersonalController = function (request, response) {
   try {
-    let findRequest = { ...request.body }
+    let findRequest = {...request.body }
     if (
       findRequest.PersonId == null 
  

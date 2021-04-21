@@ -6,12 +6,9 @@ function check() {
     var xhr = new XMLHttpRequest();
     var file = "http://localhost:8090/tblCharityAccounts";
     var randomNum = Math.round(Math.random() * 10000);
-
     xhr.open('HEAD', file + "?rand=" + randomNum, true);
     xhr.send();
-
     xhr.addEventListener("readystatechange", processRequest, false);
-
     function processRequest(e) {
         if (xhr.readyState == 4) {
             if (xhr.status >= 200 && xhr.status < 304) {
@@ -22,7 +19,9 @@ function check() {
         }
     }
 }
-function getmsgs1() {
+function getmsgs1() { 
+
+
     $.ajax({
         type: "POST",
         url: "/NeedyAccounts/getNeedyAccounts",
@@ -32,10 +31,13 @@ function getmsgs1() {
             NeedyId: null,
             NeedyAccountId: null
         }),
+
         dataType: "json",
+
         success: function (data) {
-            console.log('ss')
-            console.log(data + ' BaseTypeCode')
+     
+           
+
             for (row of data) {
 
                 $("#msg_q").append(
@@ -58,7 +60,7 @@ function getmsgs1() {
 getmsgs1();
 
 btnnew.addEventListener('click', () => {
-    console.log('hi')
+
     const AccountNumber = document.getElementById("AccountNumber").value;
     const BankIdd = document.getElementById("BankId").value;
     const OwnerName = document.getElementById("OwnerName").value;
@@ -67,7 +69,13 @@ btnnew.addEventListener('click', () => {
     const numberAccountshaba = document.getElementById("numberAccountshaba").value;
     const NeedyIdd = document.getElementById("NeedyAccountId").value;
 
-    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" || numberAccountshaba == "") {
+
+    if ( AccountNumber       == "" ||
+         BankId              == "" || 
+         OwnerName           == "" || 
+         CardNumber          == "" || 
+         AccountName         == "" || 
+         numberAccountshaba  == "") {
         alert("epmty")
     } else {
         let NeedyId = parseInt(NeedyIdd)
@@ -77,13 +85,13 @@ btnnew.addEventListener('click', () => {
             url: "/NeedyAccounts/insertNeedyAccounts",
             contentType: "application/json",
             data: JSON.stringify({
-                BankId: BankId,
-                NeedyId: NeedyId,
-                OwnerName: OwnerName,
-                CardNumber: CardNumber,
+                BankId:        BankId,
+                NeedyId:       NeedyId,
+                OwnerName:     OwnerName,
+                CardNumber:    CardNumber,
                 AccountNumber: AccountNumber,              
-                AccountName: AccountName,
-                ShebaNumber: numberAccountshaba,
+                AccountName:   AccountName,
+                ShebaNumber:   numberAccountshaba,
 
             }),
             dataType: "json",
@@ -94,19 +102,29 @@ btnnew.addEventListener('click', () => {
     check()
 })
 btnEdit.addEventListener('click', () => {
-    const AccountNumber = document.getElementById("AccountNumber").value;
-    const BankIdd = document.getElementById("BankId").value;
-    const OwnerName = document.getElementById("OwnerName").value;
-    const CardNumber = document.getElementById("CardNumber").value;
-    const AccountName = document.getElementById("AccountName").value;
+
+
+    const AccountNumber      = document.getElementById("AccountNumber").value;
+    const BankIdd            = document.getElementById("BankId").value;
+    const OwnerName          = document.getElementById("OwnerName").value;
+    const CardNumber         = document.getElementById("CardNumber").value;
+    const AccountName        = document.getElementById("AccountName").value;
     const numberAccountshaba = document.getElementById("numberAccountshaba").value;
-    const NeedyIdd = document.getElementById("NeedyId").value;  
-    const NeedyAccountId = document.getElementById("NeedyAccountId").value;
+    const NeedyIdd           = document.getElementById("NeedyId").value;  
+    const NeedyAccountIdd    = document.getElementById("NeedyAccountId").value;
+
+
 
     let NeedyId = parseInt(NeedyIdd)
-    
+    let NeedyAccountId=parseInt(NeedyAccountIdd)
     let BankId = parseInt(BankIdd)
-    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" || numberAccountshaba == "" || NeedyAccountId == "") {
+    if (AccountNumber      == "" ||
+        BankId             == "" ||
+        OwnerName          == "" || 
+        CardNumber         == "" || 
+        AccountName        == "" || 
+        numberAccountshaba == "" ||
+        NeedyAccountId     == "") {
 
         alert("epmty")
     } else {
@@ -115,14 +133,14 @@ btnEdit.addEventListener('click', () => {
             url: "/NeedyAccounts/updateNeedyAccounts",
             contentType: "application/json",
             data: JSON.stringify({
-                NeedyAccountId:NeedyAccountId,
-                BankId: BankId,
-                NeedyId: NeedyId,
-                OwnerName: OwnerName,
-                CardNumber: CardNumber,
-                AccountNumber: AccountNumber,              
-                AccountName: AccountName,
-                ShebaNumber: numberAccountshaba,
+                NeedyAccountId:  NeedyAccountId,
+                BankId:          BankId,
+                NeedyId:         NeedyId,
+                OwnerName:       OwnerName,
+                CardNumber:      CardNumber,
+                AccountNumber:   AccountNumber,              
+                AccountName:     AccountName,
+                ShebaNumber:     numberAccountshaba,
             }),
             dataType: "json",
         });
@@ -132,12 +150,14 @@ btnEdit.addEventListener('click', () => {
     check()
 })
 btnDelete.addEventListener('click', () => {
-    const numberAccountshaba = document.getElementById("numberAccountshaba").value;
+    const NeedyAccountIdd = document.getElementById("NeedyAccountId").value;
 
-    if (numberAccountshaba == "") {
+    if (NeedyAccountIdd == "") {
 
         alert("epmty")
     } else {
+        let NeedyAccountId=parseInt(NeedyAccountIdd)
+
         $.ajax({
             type: "Delete",
             url: "/NeedyAccounts/deleteNeedyAccounts",
