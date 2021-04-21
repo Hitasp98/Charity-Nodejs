@@ -22,7 +22,7 @@ module.exports.getNeedyAccountsController = async function (request, response) {
     await NeedyAccountsModels.ws_loadNeedyAccount(findRequest).then(result => {
       // console.log(result)
       if (result == null) {
-     
+
         response.json({
           error: "هیچ رکوردی موجود نیست"
         });
@@ -51,28 +51,28 @@ module.exports.insertNeedyAccountsController = async function (request, response
       findRequest.AccountName == null &&
       findRequest.ShebaNumber == null) {
       response.json("ورودی ها خالی است");
-      console.log('not null')
+      // console.log('not null')
 
     } else {
       console.log('not null')
 
       // console.log("this PersonId ");
       let loadNeedyAccount = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest)
-      console.log(loadNeedyAccount[0][0])
-      if (loadNeedyAccount[0][0] == null) {
+      if (loadNeedyAccount == '') {
         console.log('not null2')
 
         await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
           .then(result => {
+            console.log(result+ ' is insert')
             if (result == '') {
-              console.log('not insert')
+           
 
               response.json({
                 error: "عملیات درج با موفقیت انجام نشد"
               });
             } else {
               console.log('insert')
-              response.json(result);
+              response.json(result.NeedyAccountId);
             }
           })
       } else {
@@ -136,8 +136,8 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
 
     if (
       findRequest.NeedyAccountId == null &&
-      findRequest.NeedyId   == null &&
-      findRequest.AccountNumber == null 
+      findRequest.NeedyId == null &&
+      findRequest.AccountNumber == null
     ) {
       response.json("ورودی ها خالی است");
     }

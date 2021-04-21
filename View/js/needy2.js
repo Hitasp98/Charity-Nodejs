@@ -29,24 +29,24 @@ function getmsgs1() {
         contentType: "application/json",
         data: JSON.stringify({
             doc_id_msgs: $("#doct_id").val(),
-            NeedyId:null,
-            NeedyAccountId:null  
+            NeedyId: null,
+            NeedyAccountId: null
         }),
         dataType: "json",
         success: function (data) {
             console.log('ss')
-            console.log(data+' BaseTypeCode')
+            console.log(data + ' BaseTypeCode')
             for (row of data) {
-               
+
                 $("#msg_q").append(
-                    "<tr>" +    
+                    "<tr>" +
                     "<td>" +
                     row.CardNumber +
                     " </td>" +
                     "<td>" +
                     row.OwnerName +
                     " </td>" +
-                     "<td>" +
+                    "<td>" +
                     row.BankId +
                     " </td>" +
                     "</tr>"
@@ -58,29 +58,30 @@ function getmsgs1() {
 getmsgs1();
 
 btnnew.addEventListener('click', () => {
-console.log('hi')
-    const AccountNumberr = document.getElementById("AccountNumber").value;
+    console.log('hi')
+    const AccountNumber = document.getElementById("AccountNumber").value;
     const BankIdd = document.getElementById("BankId").value;
     const OwnerName = document.getElementById("OwnerName").value;
     const CardNumber = document.getElementById("CardNumber").value;
     const AccountName = document.getElementById("AccountName").value;
     const numberAccountshaba = document.getElementById("numberAccountshaba").value;
+    const NeedyIdd = document.getElementById("NeedyAccountId").value;
 
-    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" ||numberAccountshaba=="") {
+    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" || numberAccountshaba == "") {
         alert("epmty")
     } else {
-let AccountNumber=parseInt(AccountNumberr)
-let BankId=parseInt(BankIdd)
+        let NeedyId = parseInt(NeedyIdd)
+        let BankId = parseInt(BankIdd)
         $.ajax({
             type: "POST",
             url: "/NeedyAccounts/insertNeedyAccounts",
             contentType: "application/json",
             data: JSON.stringify({
-
-                AccountNumber: AccountNumber,
                 BankId: BankId,
+                NeedyId: NeedyId,
                 OwnerName: OwnerName,
                 CardNumber: CardNumber,
+                AccountNumber: AccountNumber,              
                 AccountName: AccountName,
                 ShebaNumber: numberAccountshaba,
 
@@ -101,7 +102,7 @@ btnEdit.addEventListener('click', () => {
     const numberAccountshaba = document.getElementById("numberAccountshaba").value;
     const NeedyAccountId = document.getElementById("NeedyAccountId").value;
 
-    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == ""|| numberAccountshaba == ""||NeedyAccountId=="") {
+    if (AccountNumber == "" || BankId == "" || OwnerName == "" || CardNumber == "" || AccountName == "" || numberAccountshaba == "" || NeedyAccountId == "") {
 
         alert("epmty")
     } else {

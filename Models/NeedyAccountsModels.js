@@ -76,16 +76,21 @@ SELECT [${namefinder}]
 //TODO: select tblNeedyAccounts
 async function ws_loadNeedyAccount(findRequest) {
   try {
+
+    console.log('ws_loadNeedyAccount')
+    console.log(findRequest.AccountNumber)
+    console.log('ws_loadNeedyAccount')
+
     //check connection
     let pool = await sql.connect(config)
 
     let tblPersonal
 
     if (
-(      findRequest.NeedyId == null &&
-      findRequest.NeedyAccountId == null)||
-      (findRequest.NeedyId == undefined &&
-      findRequest.NeedyAccountId == undefined)
+      (findRequest.BankId == null &&
+        findRequest.AccountNumber == null) ||
+      (findRequest.BankId == undefined &&
+        findRequest.AccountNumber == undefined)
     ) {
       //!!joining tb tblPersonal & tblCommonBaseData & tblCommonBaseType
       tblPersonal = await pool.request()
@@ -101,16 +106,17 @@ async function ws_loadNeedyAccount(findRequest) {
         //     join tblCommonBaseType
         //     on tblNeedyAccounts.AccountNumber=tblCommonBaseType.BaseTypeTitle
         //    where BaseTypeCode =N ${findRequest.BaseTypeCode}`)
-.query(`SELECT *
+        .query(`SELECT *
 FROM [dbo].[tblNeedyAccounts]
 GO
 
 `)
-// console.log(tblPersonal.recordsets)
+      // console.log(tblPersonal.recordsets)
       return tblPersonal.recordsets
     } else {
       // console.log(findRequest)
       let whereclause = ''
+      console.log('tblNeedyAccounts.recordsets')
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
       for (x in findRequest) {
@@ -120,7 +126,7 @@ GO
           whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[String(x)] + "'" + ` AND `
         } else if (typeof findRequest[String(x)] == 'number') {
           whereclause =
-            whereclause + ' ' + `${x} =  ${findRequest[0][String(x)]}` + ` AND`
+            whereclause + ' ' + `${x} =  ${findRequest[String(x)]}` + ` AND`
         } else if (findRequest[String(x)] == null) {
           whereclause + ' ' + `${x}is null AND`
           // break;
@@ -129,22 +135,30 @@ GO
       whereclause = whereclause.slice(0, -4)
       // console.log(whereclause + 'this whereclause')
       //check query
+      console.log('tblNeedyAccounts.recordsets')
+
       tblNeedyAccounts = await pool
         .request()
         .query(
-          `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ` +
+          `SELECT * FROM [tblNeedyAccounts] WHERE ` +
           whereclause
         )
-      if (tblNeedyAccounts.recordsets== null) {
+      console.log(tblNeedyAccounts.recordsets[0] + 'tblNeedyAccounts.recordsets')
+      // console.log(tblNeedyAccounts.recordsets[0])
+      if (tblNeedyAccounts.recordsets[0] == null) {
+        console.log('tblNeedyAccounts.recordsets')
+
         ShebaNumber = await pool
           .request()
           .query(
-            `SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] WHERE ShebaNumber=${findRequest[0].ShebaNumber}`)
-
-        return ShebaNumber.recordsets
+            `SELECT * FROM [tblNeedyAccounts] WHERE ShebaNumber=${findRequest.ShebaNumber}`)
+        // console.log(ShebaNumber.recordsets[0])
+        return ShebaNumber.recordsets[0]
 
       } else {
-        return tblNeedyAccounts.recordsets
+        // console.log(tblNeedyAccounts.recordsets[0])
+
+        return tblNeedyAccounts.recordsets[0]
       }
     }
   } catch (error) {
@@ -173,35 +187,36 @@ async function ws_createNeedyAccount(findRequest) {
     //!! end value have ',' delete
     value = value.slice(0, -1)
 
-    // console.log('finsh ' + value)
+    console.log('finsh ' + value)
     let insertTblPersonal = await pool.request().query(
-      `INSERT INTO [CharityDB].[dbo].[tblNeedyAccounts]
-                      (   [NeedyAccountId]
-                        ,[BankId]
-                        ,[NeedyId]
-                        ,[OwnerName]
-                        ,[CardNumber]
-                        ,[AccountNumber]
-                        ,[AccountName]
-                        ,[ShebaNumber]
+      `INSERT INTO [tblNeedyAccounts]
+                      ( [NeedyAccountId],  
+                        BankId,
+                      NeedyId,
+                      OwnerName,
+                      CardNumber,
+                      AccountNumber,
+                      AccountName,
+                    ShebaNumber
                       )
                 VALUES
                       (` +
       value +
       `)`
     )
-    console.log(number,'=>number')
+    console.log(number, '=>number')
     let tblNeedyAccounts = await pool
       .request()
       .query(
-        'SELECT * FROM [CharityDB].[dbo].[tblNeedyAccounts] where [NeedyAccountId]=' +
+        'SELECT * FROM [tblNeedyAccounts] where [NeedyAccountId]=' +
         number
       )
     // console.log(tblPersonal.recordsets + "tblPersonal.recordsets");
     // console.log(tblNeedyAccounts.NeedyAccountId)
-    console.log(tblNeedyAccounts.recordsets,'=>tblNeedyAccounts')
+    console.log(tblNeedyAccounts.recordsets[0][0], '=>tblNeedyAccounts')
+ 
+return tblNeedyAccounts.recordsets[0][0]
 
-    return number
   } catch (error) {
     console.log(error.message)
   }
