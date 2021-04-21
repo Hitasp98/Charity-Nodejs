@@ -13,7 +13,7 @@ async function getTblCharityAccounts(findRequest){
         let getTblCharityAccounts; 
        
    
-        if(findRequest.CharityAccountId==null && findRequest.BankId==null && findRequest.BranchName==null && findRequest.OwnerName==null && findRequest.CardNumber==null && findRequest.AccountNumber ==null && findRequest.AccountName ==null){
+        if((findRequest.CharityAccountId===null && findRequest.BankId===null && findRequest.BranchName===null && findRequest.OwnerName===null && findRequest.CardNumber===null && findRequest.AccountNumber ===null && findRequest.AccountName ===null) || ((findRequest.CharityAccountId===undefined && findRequest.BankId===undefined && findRequest.BranchName===undefined && findRequest.OwnerName===undefined && findRequest.CardNumber===undefined && findRequest.AccountNumber ===undefined && findRequest.AccountName ===undefined))){
           
             getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode
             from tblCharityAccounts 
@@ -29,7 +29,7 @@ async function getTblCharityAccounts(findRequest){
             let whereclause = ` BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\''+` AND`
             for (x in findRequest) {
                 
-                //getTblCommonBaseData = await pool.request().query(`select * from tblCommonBaseData where `+ `BaseTypeCode = `+ '\''+ findRequest["BaseTypeCode"] +'\''+`and `+`BaseTypeTitle = `+'\''+ findRequest["BaseTypeTitle"] +'\'' +`and `+`CommonBaseTypeId =  ${findRequest['CommonBaseTypeId']}`)
+                
                 if (typeof(findRequest[String(x)])=="string" ){
                      whereclause = whereclause + " "+`${x} = N`+ '\''+ findRequest[String(x)] +'\''+` AND`;
                     
