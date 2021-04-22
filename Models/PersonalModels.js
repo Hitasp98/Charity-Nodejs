@@ -1,5 +1,6 @@
-var config            = require("../Utils/config");
-const sql             = require("mssql");
+var config   = require("../Utils/config");
+const sql    = require("mssql");
+var crypto   = require('crypto');
 
 var fnGetRandomString = require("../Utils/Randomnumber");
 
@@ -91,7 +92,7 @@ async function ws_loadPersonal(findRequest) {
       if (tblPersonal.recordsets[0] == '') {
         let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
           where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
-        console.log(checker.recordsets + "checker.recordsets[0]")
+        console.log(checker.recordsets[0][0] + "checker.recordsets[0]")
 
         return checker.recordsets[0]
       }else {
@@ -107,7 +108,8 @@ async function ws_loadPersonal(findRequest) {
 }
 async function ws_createPersonal(findRequest) {
   try {
-    let number = fnGetRandomString.fnGetRandomString(3);
+
+let number =  fnGetRandomString.fnGetRandomString(3);
     number     = parseInt(number);
     let pool   = await sql.connect(config);
     let value  = "";
@@ -125,21 +127,29 @@ async function ws_createPersonal(findRequest) {
         if (x  == 'PersonType') {
 
 
-          value = value + "HASHBYTES('SHA2_256','" + `${findRequest[String(x)]}` + `'),`;
+          value = value +" "+ "HASHBYTES('SHA2_256','" + `${findRequest[String(x)]}` + `'),`;
 
-        }
+        } 
          else {
 
           value = value + " " + `${findRequest[String(x)]}` + `,`;
         }
       
       } else {
-        if(x == 'PersonPhoto'){
+          if (x  == 'NAME'||x  == 'NationalCode'||x  == 'Family') {
 
-  
-          value = value + "CONVERT(VARBINARY(MAX),'"+findRequest[String(x)]+"')," ;
+           let f= crypto.createHash('md5').update(findRequest[String(x)] ).digest("hex");
 
+           value = value + " " + `` + "'" + f+ "'" + `,`;
 
+        }else if(x == 'PersonPhoto'){
+      if(findRequest[String(x)]!=null){
+          value = value + "CONVERT('"+findRequest[String(x)]+"',VARBINARY(MAX))," ;
+          }
+else {
+  value = value + " " + `` + "'" + findRequest[String(x)] + "'" + `,`;
+
+}
         }else {
 
 
@@ -152,6 +162,8 @@ async function ws_createPersonal(findRequest) {
 
     value = value.slice(0, -1);
     console.log('finsh ' + value)
+    console.log(typeof(value))
+
     let insertTblPersonal = await pool.request().query(
       `INSERT INTO [tblPersonal]
                       (  PersonId
@@ -215,13 +227,15 @@ async function ws_updatePersonal(findRequest) {
       }
 
       value = value.slice(0, -1)
-      updateTblPersonal  = await pool.request().query(`UPDATE [dbo].[tblPersonal]
+      updateTblPersonal  = await pool.request().query(`UPDATE [tblPersonal]
       SET  ` + value +
         ` WHERE PersonId = ${findRequest.PersonId};`)
 
 
-      updateTblPersonal = await pool.request().query(`SELECT * FROM [CharityDB].[dbo].[tblPersonal] where PersonId=` + findRequest.PersonId)
-      return updateTblPersonal.recordsets;
+      updateTblPersonal = await pool.request().query(`SELECT * FROM [tblPersonal] 
+      where PersonId=` 
+      + findRequest.PersonId)
+      return updateTblPersonal.recordsets[0];
 
 
   } catch (error) {
@@ -251,12 +265,14 @@ async function ws_deletePersonal(findRequest) {
 
 
    } catch (error) {
+
     console.log(error.message);
+
+
   }
 }
 module.exports = {
   ws_loadPersonal: ws_loadPersonal,
-  
   ws_createPersonal: ws_createPersonal,
   ws_updatePersonal: ws_updatePersonal,
   ws_deletePersonal: ws_deletePersonal,

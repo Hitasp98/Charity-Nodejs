@@ -16,12 +16,18 @@ app.use(bodyParser.json());
 
 module.exports.getPersonalController = async function (request, response) {
   try {
+
+
+
     let findRequest = {...request.body};
 
 
 
 
     await PersonalModels.ws_loadPersonal(findRequest).then(result => {
+
+  
+      
       if (result == '') {
 
 
@@ -49,6 +55,8 @@ module.exports.getPersonalController = async function (request, response) {
 
 module.exports.insertPersonalController = async function (request, response) {
   try {
+
+
     let findRequest = { ...request.body };
    
 
@@ -107,9 +115,7 @@ console.log('error NationalCode')
 
 module.exports.updatePersonalController = async function (request, response) {
   try {
-    let findRequest = {
-      ...request.body
-    };
+    let findRequest = {...request.body};
     if (
       findRequest.PersonId     == null &&
       findRequest.Name         == null &&
@@ -129,37 +135,59 @@ module.exports.updatePersonalController = async function (request, response) {
 
 
     } else {
+      
 
       let checked = await PersonalModels.ws_loadPersonal(findRequest);
+
+
       if (checked != ' ') {
+
+
         await PersonalModels.ws_updatePersonal(findRequest).then(result => {
+
+
           if (result == null) {
-            response.json({
-              error: "عملیات ویرایش با موفقیت انجام نشد"
-            });
+
+            response.json({error: "عملیات ویرایش با موفقیت انجام نشد"});
+
+
           } else {
+
             response.json(result);
+
+
           }
         });
       } else {
+
         response.json(checked.PersonId + "1عملیات ویرایش با موفقیت انجام نشد");
+
+
       }
     }
   } catch (error) {
-    response.json({
-      error: "کد نوع را وارد کنید"
-    });
+
+
+    response.json({error: "کد نوع را وارد کنید"});
+
+
   }
 };
 
 module.exports.deletePersonalController = function (request, response) {
   try {
+
     let findRequest = {...request.body }
     if (
+
       findRequest.PersonId == null 
  
     ) {
+
+
       response.json("ورودی ها خالی است");
+
+
     }
     else {
 
@@ -167,33 +195,43 @@ module.exports.deletePersonalController = function (request, response) {
       // request for checking Fk in others table 
       requestApi.post({ url: 'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: { PersonId: findRequest[0].PersonId }, url: 'http://localhost:8090/tblCommonBaseData/tblPayment', form: { PersonId: findRequest[0].PersonId }, url: 'http://localhost:8090/tblCommonBaseData/tblDistributionGoods', form: { PersonId: findRequest[0].PersonId }, url: 'http://localhost:8090/tblCommonBaseData/tblNonCashRequest', form: { PersonId: findRequest[0].PersonId }, url: 'http://localhost:8090/tblCommonBaseData/tblNeedyAccounts', form: { PersonId: findRequest[0].PersonId }, }, async function (err, res, body) {
 
+
         if (await JSON.parse(body).CommonBaseTypeId == findRequest[0].PersonId) {
 
+
           response.json({ error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است" })
+
+
         } else {
+
+
           let checked = await PersonalModels.ws_loadPersonal(findRequest);
           if (checked[0] != ' ') {
-            console.log('else')
+      
 
             await tblCommonBaseTypeModel.deletePersonalController(findRequest).then(result => {
 
               if (result == 1) {
+
                 response.json({ message: "عملیات حذف با موفقیت انجام شد" })
+
               } else {
+
                 response.json({ error: "رکورد مورد نظر موجود نیست" })
+
               }
 
             })
           } else {
+
             response.json({ error: "رکورد مورد نظر موجود نیست" })
+
           }
         }
       })
     }
   } catch (error) {
-    response.json({
-      error: "کد نوع را وارد کنید"
-    })
+    response.json({error: "کد نوع را وارد کنید"})
 
   }
 }
