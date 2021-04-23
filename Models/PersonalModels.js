@@ -1,9 +1,9 @@
-var config   = require("../Utils/config");
-const sql    = require("mssql");
-var crypto   = require('crypto');
+var config = require("../Utils/config");
+const sql = require("mssql");
+var crypto = require('crypto');
 
 var fnGetRandomString = require("../Utils/Randomnumber");
-
+// async function ws
 async function ws_loadPersonal(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -11,40 +11,40 @@ async function ws_loadPersonal(findRequest) {
     let tblPersonal;
 
     if (
-      ( findRequest.PersonId     == undefined &&
-        findRequest.Name         == undefined &&
-        findRequest.Family       == undefined &&
-        findRequest.NationalCode == undefined &&
-        findRequest.IdNumber     == undefined &&
-        findRequest.Sex          == undefined &&
-        findRequest.BirthPlace   == undefined &&
-        findRequest.PersonType   == undefined &&
-        findRequest.PersonPhoto  == undefined &&
-        findRequest.SecretCode   == undefined &&
-        findRequest.BirthDate    == undefined)
-                                               ||
-      (findRequest.PersonId      == null &&
-      findRequest.Name           == null &&
-      findRequest.Family         == null &&
-      findRequest.NationalCode   == null &&
-      findRequest.IdNumber       == null &&
-      findRequest.Sex            == null &&
-      findRequest.BirthPlace     == null &&
-      findRequest.PersonType     == null &&
-      findRequest.PersonPhoto    == null &&
-      findRequest.SecretCode     == null &&
-      findRequest.BirthDate      == null)
+      (findRequest.PersonId === undefined &&
+        findRequest.Name === undefined &&
+        findRequest.Family === undefined &&
+        findRequest.NationalCode === undefined &&
+        findRequest.IdNumber === undefined &&
+        findRequest.Sex === undefined &&
+        findRequest.BirthPlace === undefined &&
+        findRequest.PersonType === undefined &&
+        findRequest.PersonPhoto === undefined &&
+        findRequest.SecretCode === undefined &&
+        findRequest.BirthDate === undefined)
+      ||
+      (findRequest.PersonId === null &&
+        findRequest.Name === null &&
+        findRequest.Family === null &&
+        findRequest.NationalCode === null &&
+        findRequest.IdNumber === null &&
+        findRequest.Sex === null &&
+        findRequest.BirthPlace === null &&
+        findRequest.PersonType === null &&
+        findRequest.PersonPhoto === null &&
+        findRequest.SecretCode === null &&
+        findRequest.BirthDate === null)
     ) {
       tblPersonal = await pool
         .request()
-        .query(`SELECT * FROM CharityDB.dbo.tblPersonal`);
+        .query(`SELECT * FROM tblPersonal`);
 
       return tblPersonal.recordsets[0];
     } else {
-  
+
       let pool = await sql.connect(config)
 
-      console.log(findRequest);
+
       let whereclause = "";
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
@@ -61,43 +61,45 @@ async function ws_loadPersonal(findRequest) {
             ` AND `;
 
         } else if (typeof findRequest[String(x)] == "number") {
-          if (x == 'PersonType') {
-     
-            console.log(findRequest[String(x)] + "findRequest[0][String(x)]1")
-            break;
+          //   if (x == 'PersonType') {
 
-          }
+          //     //console.log(findRequest[String(x)] + "findRequest[0][String(x)]1")
+          //     break;
+
+          //   }
 
           whereclause =
             whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
 
+          whereclause =
+            whereclause + " " + `${x} is null AND`;
+          //console.log(findRequest[String(x)] + "findRequest[0][String(x)]")
 
-          whereclause + " " + `${x}is null AND`;
-          console.log(findRequest[String(x)] + "findRequest[0][String(x)]")
-          
 
         }
       }
 
 
       whereclause = whereclause.slice(0, -4);
-      console.log(whereclause + "this whereclause");
+      // await console.log(whereclause);
+
 
       tblPersonal = await pool
         .request()
-        .query(`SELECT * FROM [dbo].[tblPersonal] WHERE ` + whereclause);
-      console.log(tblPersonal.recordsets[0] + 'tblPersonal')
+        .query(`SELECT * FROM tblPersonal WHERE ` + whereclause);
+      return tblPersonal.recordsets[0]
+      //   console.log(tblPersonal.recordsets[0] + 'tblPersonal')
 
-      if (tblPersonal.recordsets[0] == '') {
-        let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
-          where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
-        console.log(checker.recordsets[0][0] + "checker.recordsets[0]")
+      //   if (tblPersonal.recordsets[0] == '') {
+      //     let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
+      //       where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
+      //     console.log(checker.recordsets + "checker.recordsets[0]")
 
-        return checker.recordsets[0]
-      }else {
-        return tblPersonal.recordsets[0]
-      }
+      //     return checker.recordsets[0]
+      //   }else {
+      //     return tblPersonal.recordsets[0]
+      //   }
 
     }
 
@@ -109,60 +111,63 @@ async function ws_loadPersonal(findRequest) {
 async function ws_createPersonal(findRequest) {
   try {
 
-let number =  fnGetRandomString.fnGetRandomString(3);
-    number     = parseInt(number);
-    let pool   = await sql.connect(config);
-    let value  = "";
-    value      = value + "" + number + ",";
+    let number = fnGetRandomString.fnGetRandomString(3);
+    number = parseInt(number);
+    let pool = await sql.connect(config);
+    let value = "";
+    value = value + "" + number + ",";
     for (x in findRequest) {
 
 
       if (
 
-        findRequest[String(x)]        == null ||
+        findRequest[String(x)] == null ||
         typeof findRequest[String(x)] == "number"
 
       ) {
 
-        if (x  == 'PersonType') {
+        if (x == 'PersonType') {
 
 
-          value = value +" "+ "HASHBYTES('SHA2_256','" + `${findRequest[String(x)]}` + `'),`;
+          value = value + " " + "HASHBYTES('SHA2_256','" + `${findRequest[String(x)]}` + `'),`;
 
-        } 
-         else {
+        }
+        else {
 
           value = value + " " + `${findRequest[String(x)]}` + `,`;
         }
-      
-      } else {
-          if (x  == 'NAME'||x  == 'NationalCode'||x  == 'Family') {
 
-           let f= crypto.createHash('md5').update(findRequest[String(x)] ).digest("hex");
-
-           value = value + " " + `` + "'" + f+ "'" + `,`;
-
-        }else if(x == 'PersonPhoto'){
-      if(findRequest[String(x)]!=null){
-          value = value + "CONVERT('"+findRequest[String(x)]+"',VARBINARY(MAX))," ;
-          }
-else {
-  value = value + " " + `` + "'" + findRequest[String(x)] + "'" + `,`;
-
-}
-        }else {
-
-
-        value = value + " " + `` + "'" + findRequest[String(x)] + "'" + `,`;
-      
       }
+      else {
+        if (x == 'NAME' || x == 'NationalCode' || x == 'Family') {
+
+          let f = await crypto.createHash('md5').update(findRequest[String(x)]).digest("hex");
+          console.log(f + '<============f')
+          String(f)
+          value = value + " " + `` + "'" + f + "'" + `,`;
+          // console.log(value+'<========================')
+        }
+        else if (x == 'PersonPhoto') {
+          if (findRequest[String(x)] != null) {
+            value = value + "CONVERT('" + findRequest[String(x)] + "',VARBINARY(MAX)),";
+          }
+          else {
+            value = value + " " + `` + "'" + findRequest[String(x)] + "'" + `,`;
+
+          }
+        } else {
+
+
+          value = value + " " + `` + "'" + findRequest[String(x)] + "'" + `,`;
+
+        }
 
       }
     }
 
     value = value.slice(0, -1);
     console.log('finsh ' + value)
-    console.log(typeof(value))
+    console.log(typeof (value))
 
     let insertTblPersonal = await pool.request().query(
       `INSERT INTO [tblPersonal]
@@ -178,7 +183,7 @@ else {
                         ,PersonPhoto
                         ,SecretCode
                       )
-                         VALUES (` + value +`)`
+                         VALUES (` + value + `)`
     );
     let tblPersonal = await pool
       .request()
@@ -202,69 +207,69 @@ async function ws_updatePersonal(findRequest) {
 
 
 
-      let updateTblPersonal
-      let pool = await sql.connect(config)
+    let updateTblPersonal
+    let pool = await sql.connect(config)
 
 
-      let value = ''
+    let value = ''
 
-      for (x in findRequest) {
+    for (x in findRequest) {
 
 
-        if (x == "PersonId") {
+      if (x == "PersonId") {
 
-        } else if (findRequest[String(x)] ==  null 
-                      || 
-           typeof (findRequest[String(x)]) == "number") {
- 
-          value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`
+      } else if (findRequest[String(x)] == null
+        ||
+        typeof (findRequest[String(x)]) == "number") {
 
-        } else {
-          value = value + " " + `${x}  = ` + '\'' + findRequest[String(x)] + '\'' + `,`
+        value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`
 
-        }
+      } else {
+        value = value + " " + `${x}  = ` + '\'' + findRequest[String(x)] + '\'' + `,`
 
       }
 
-      value = value.slice(0, -1)
-      updateTblPersonal  = await pool.request().query(`UPDATE [tblPersonal]
+    }
+
+    value = value.slice(0, -1)
+    updateTblPersonal = await pool.request().query(`UPDATE [tblPersonal]
       SET  ` + value +
-        ` WHERE PersonId = ${findRequest.PersonId};`)
+      ` WHERE PersonId = ${findRequest.PersonId};`)
 
 
-      updateTblPersonal = await pool.request().query(`SELECT * FROM [tblPersonal] 
-      where PersonId=` 
+    updateTblPersonal = await pool.request().query(`SELECT * FROM [tblPersonal] 
+      where PersonId=`
       + findRequest.PersonId)
-      return updateTblPersonal.recordsets[0];
+    return updateTblPersonal.recordsets[0];
 
 
   } catch (error) {
 
     console.log(error.message);
-    
+
   }
 }
 async function ws_deletePersonal(findRequest) {
   try {
     let pool = await sql.connect(config)
-        
+
     let deleteTblPersonal
     // let getTblPersonal = await pool.request().query(`select * from [CharityDB].[dbo].[tblPersonal] where PersonId =  ${findRequest.PersonId};`)
-    
-    
-    
 
-    // if(getTblPersonal != ''){
-        
-      deleteTblPersonal = await pool.request().query(`DELETE FROM [CharityDB].[dbo].[tblPersonal] WHERE PersonId = ${findRequest.PersonId};`)
-           
-        // }
-      
-        return deleteTblPersonal.rowsAffected[0];
 
 
 
-   } catch (error) {
+    // if(getTblPersonal != ''){
+
+    deleteTblPersonal = await pool.request().query(`DELETE FROM [CharityDB].[dbo].[tblPersonal] WHERE PersonId = ${findRequest.PersonId};`)
+
+    // }
+
+    return deleteTblPersonal.rowsAffected[0];
+
+
+
+  } catch (error) {
 
     console.log(error.message);
 

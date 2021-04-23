@@ -151,9 +151,9 @@ btnCloseTwo2.addEventListener('click', () => {
 })
 //!send value inset on server
 
-function ws_CreateBaseType(BaseTypeCode, BaseTypeTitle) {
+function ws_CreateBaseType( BaseTypeTitle) {
   const CommonBaseTypeId = Math.floor(Math.random() * 999) + 100
-  if (BaseTypeTitle == '' || BaseTypeCode == '') {
+  if (BaseTypeTitle == '' ) {
     alert('epmty')
   } else {
     $.ajax({
@@ -208,23 +208,24 @@ function ws_DeleteBaseType(CommonBaseTypeId) {
 
 btnInsert.addEventListener('click', () => {
   const vname = document.getElementById('nameone').value
-  const vcode = document.getElementById('codeone').value
-  if (vname == '' || vcode == '') {
+  // const vcode = document.getElementById('codeone').value
+  if (vname == '') {
     alert('epmty')
   } else {
-    ws_CreateBaseType(vcode, vname)
+    ws_CreateBaseType(vname)
   }
-  check()
+  // check()
 })
 const CommonBaseTypeId = document.querySelector('#CommonBaseTypeId')
 
 btnUpdate.addEventListener('click', () => {
   const BaseTypeTitle = document.getElementById('nameone1').value
   const BaseTypeCode = document.getElementById('codeone1').value
-  const CommonBaseTypeId = document.getElementById('CommonBaseTypeId').value
-  if (BaseTypeTitle != '' || BaseTypeCode != '' || CommonBaseTypeId != '') {
+  const CommonBaseTypeIdd = document.getElementById('CommonBaseTypeId').value
+  if (BaseTypeTitle != ''  || CommonBaseTypeId != '') {
     var code
     var sumBaseTypeTitle = []
+    let CommonBaseTypeId=parseInt(CommonBaseTypeIdd)
     // //TODO:Give a BaseTypeCode
     $.ajax({
       type: 'PUT',
@@ -233,7 +234,7 @@ btnUpdate.addEventListener('click', () => {
       data: JSON.stringify({
         doc_id_msgs: $('#doct_id').val(),
         BaseTypeTitle: BaseTypeTitle,
-        BaseTypeCode: BaseTypeCode,
+        
         CommonBaseTypeId: CommonBaseTypeId
       }),
       dataType: 'json',
@@ -247,7 +248,7 @@ btnUpdate.addEventListener('click', () => {
   }
   //Todo : check data for uqiun 
   // ws_UpdateBaseType(vcode, vname, code)
-  check()
+  // check()
 
 })
 

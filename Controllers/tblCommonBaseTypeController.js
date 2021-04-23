@@ -19,7 +19,7 @@ module.exports.getTblCommonBaseTypeController = function (request, response) {
         tblCommonBaseTypeModel.getTblCommonBaseType(findRequest).then(result => {
 
 
-            if (result == null) {
+            if (result == '') {
                 response.json({ error: "هیچ رکوردی موجود نیست" })
             } else {
                 response.json(result)
