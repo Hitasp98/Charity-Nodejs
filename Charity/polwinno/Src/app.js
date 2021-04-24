@@ -9,10 +9,11 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
 
-//app.use('/api', router)
-app.use('/tblCommonBaseType', require('./Routes/tblCommonBaseTypeRoutes'))
-app.use('/tblCommonBaseData', require('./Routes/tblCommonBaseDataRoutes'))
-app.use('/tblCharityAccounts', require('./Routes/tblCharityAccountsRoutes'))
+
+app.use('/tblCommonBaseType', require('./Routes/commonBaseTypeRoutes'))
+app.use('/tblCommonBaseData', require('./Routes/commonBaseDataRoutes'))
+app.use('/tblCharityAccounts', require('./Routes/charityAccountsRoutes'))
+app.use('/tblPersonal', require('./Routes/personalRoutes'))
 
 
 
