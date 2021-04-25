@@ -69,7 +69,8 @@ module.exports.updateTblCommonBaseTypeController = async function (request, resp
     console.log(findRequest)
     //for checking mandatory 
     if (findRequest.BaseTypeTitle != null && findRequest.BaseTypeCode.trim().length == 3 && findRequest.CommonBaseTypeId != null) {
-        //for checking indexes        
+        //for checking indexes
+        console.log('check')
         let findGet = []
         findGet[0] = await tblCommonBaseTypeModel.getTblCommonBaseType({ BaseTypeTitle: findRequest.BaseTypeTitle })
 

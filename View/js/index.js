@@ -49,6 +49,9 @@ function ws_loadBaseType(
           '<td>' +
           row.CommonBaseTypeId +
           ' </td>' +
+          '<td>' +
+          row.BaseTypeCode +
+          ' </td>' +
           '<tr>'
         )
       }
@@ -81,10 +84,10 @@ function ws_loadBaseValue(
         $('#dbdataTwo').append(
           '<tr>' +
           '<td>' +
-          row.BaseCode +
+          row.BaseValue+
           '</td>' +
           '<td>' +
-          row.BaseValue +
+          row.CommonBaseDataId+
           ' </td>' +
           '<tr>'
         )
@@ -166,11 +169,12 @@ function ws_CreateBaseType( BaseTypeTitle) {
       }),
       dataType: 'json',
       success: function (data) {
+      
+        alert('انجام شد') 
         console.log(data)
-        // for (row of data) {
-        //     console.log(row.IdNumber)
 
-        // }
+        location.reload()
+
       },
     })
   }
@@ -188,7 +192,15 @@ function ws_UpdateBaseType(BaseTypeCode, BaseTypeTitle, CommonBaseTypeId) {
         BaseTypeCode: BaseTypeCode,
         CommonBaseTypeId: CommonBaseTypeId
       }),
-      dataType: 'json'
+      dataType: 'json',
+      success: function (data) {
+      
+     
+        console.log(data)
+
+        location.reload()
+
+      },
     })
     location.reload()
   }
@@ -201,7 +213,15 @@ function ws_DeleteBaseType(CommonBaseTypeId) {
     data: JSON.stringify({
       CommonBaseTypeId: CommonBaseTypeId
     }),
-    dataType: 'json'
+    dataType: 'json',
+    success: function (data) {
+      
+     
+      console.log(data)
+
+      location.reload()
+
+    },
   })
   location.reload()
 }
@@ -221,7 +241,7 @@ const CommonBaseTypeId = document.querySelector('#CommonBaseTypeId')
 btnUpdate.addEventListener('click', () => {
   const BaseTypeTitle = document.getElementById('nameone1').value
   const BaseTypeCode = document.getElementById('codeone1').value
-  const CommonBaseTypeIdd = document.getElementById('CommonBaseTypeId').value
+  const CommonBaseTypeIdd  = document.getElementById('CommonBaseTypeId').value
   if (BaseTypeTitle != ''  || CommonBaseTypeId != '') {
     var code
     var sumBaseTypeTitle = []
@@ -234,13 +254,16 @@ btnUpdate.addEventListener('click', () => {
       data: JSON.stringify({
         doc_id_msgs: $('#doct_id').val(),
         BaseTypeTitle: BaseTypeTitle,
-        
+        BaseTypeCode:BaseTypeCode,
         CommonBaseTypeId: CommonBaseTypeId
       }),
       dataType: 'json',
       success: function (data) {
-        console.log(data)
-      }
+        alert('انجام شد') 
+
+        location.reload()
+
+      },
     })
   }
   else {
@@ -269,33 +292,34 @@ btnDel.addEventListener('click', () => {
       }),
       dataType: 'json',
       success: function (data) {
-        console.log(data)
-      }
+        alert('انجام شد') 
+        location.reload()
+
+      },
     })
     // ws_DeleteBaseType(CommonBaseTypeId)
   }
 })
 
 //table two
-function ws_createBaseValue(BaseValue, BaseCode) {
+function ws_createBaseValue(BaseValue, BaseCode) {    
+let BaseCodee=parseInt(BaseCode)
   $.ajax({
     type: 'POST',
     url: '/tblCommonBaseData/insertTblCommonBaseData',
     contentType: 'application/json',
     data: JSON.stringify({
       BaseValue: BaseValue,
-      BaseCode: BaseCode,
-      CommonBaseTypeId: CommonBaseTypeId
+      CommonBaseTypeId: BaseCodee
     }),
-    dataType: 'json'
+    dataType: 'json',
+    success: function (data) {
+      console.log(data)
+    }
   })
-  // location.reload()
+//  location.reload()
 }
-function ws_updateBaseValue(
-  BaseCode,
-  BaseValue,
-
-) {
+function ws_updateBaseValue( BaseCode,BaseValue) {
   $.ajax({
     type: 'PUT',
     url: '/tblCommonBaseData/updateTblCommonBaseData',
@@ -329,7 +353,7 @@ btnInsertTwo.addEventListener('click', () => {
   } else {
     ws_createBaseValue(vname, vcode)
   }
-  check()
+  // check()
 })
 
 btnUpdateTwo.addEventListener('click', () => {

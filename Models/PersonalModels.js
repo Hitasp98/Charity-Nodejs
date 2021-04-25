@@ -3,7 +3,108 @@ const sql = require("mssql");
 var crypto = require('crypto');
 
 var fnGetRandomString = require("../Utils/Randomnumber");
-// async function ws
+ async function ws_check(findRequest){
+  try {
+    let pool = await sql.connect(config);
+
+    let tblPersonal;
+
+    if (
+      ( findRequest.PersonId     === undefined &&
+        findRequest.Name         === undefined &&
+        findRequest.Family       === undefined &&
+        findRequest.NationalCode === undefined &&
+        findRequest.IdNumber     === undefined &&
+        findRequest.Sex          === undefined &&
+        findRequest.BirthPlace   === undefined &&
+        findRequest.PersonType   === undefined &&
+        findRequest.PersonPhoto  === undefined &&
+        findRequest.SecretCode   === undefined &&
+        findRequest.BirthDate    === undefined)
+                                               ||
+      (findRequest.PersonId      === null &&
+      findRequest.Name           === null &&
+      findRequest.Family         === null &&
+      findRequest.NationalCode   === null &&
+      findRequest.IdNumber       === null &&
+      findRequest.Sex            === null &&
+      findRequest.BirthPlace     === null &&
+      findRequest.PersonType     === null &&
+      findRequest.PersonPhoto    === null &&
+      findRequest.SecretCode     === null &&
+      findRequest.BirthDate      === null)
+    ) {
+      tblPersonal = await pool
+        .request()
+        .query(`SELECT * FROM CharityDB.dbo.tblPersonal`);
+
+      return tblPersonal.recordsets[0];
+    } else {
+  
+      let pool = await sql.connect(config)
+
+      console.log(findRequest);
+      let whereclause = "";
+
+      //Todo: find value on proprty with string or number ||null and add to whereclause build query
+      for (x in findRequest) {
+        if (typeof findRequest[String(x)] == "string") {
+
+          whereclause =
+            whereclause +
+            " " +
+            `${x} = ` +
+            "'" +
+            findRequest[String(x)] +
+            "'" +
+            ` AND `;
+
+        } else if (typeof findRequest[String(x)] == "number") {
+          if (x == 'PersonType') {
+     
+            console.log(findRequest[String(x)] + "findRequest[0][String(x)]1")
+            break;
+
+          }
+
+          whereclause =
+            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+        } else if (findRequest[String(x)] == null) {
+
+
+          whereclause + " " + `${x}is null AND`;
+          console.log(findRequest[String(x)] + "findRequest[0][String(x)]")
+          
+
+        }
+      }
+
+
+      whereclause = whereclause.slice(0, -4);
+      console.log(whereclause + "this whereclause");
+
+      tblPersonal = await pool
+        .request()
+        .query(`SELECT * FROM [dbo].[tblPersonal] WHERE ` + whereclause);
+      console.log(tblPersonal.recordsets[0] + 'tblPersonal')
+
+      if (tblPersonal.recordsets[0] == '') {
+        let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
+          where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
+        console.log(checker.recordsets + "checker.recordsets[0]")
+
+        return checker.recordsets[0]
+      }else {
+        return tblPersonal.recordsets[0]
+      }
+
+    }
+
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 async function ws_loadPersonal(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -89,17 +190,17 @@ async function ws_loadPersonal(findRequest) {
         .request()
         .query(`SELECT * FROM tblPersonal WHERE ` + whereclause);
       return tblPersonal.recordsets[0]
-      //   console.log(tblPersonal.recordsets[0] + 'tblPersonal')
+        // console.log(tblPersonal.recordsets[0] + 'tblPersonal')
 
-      //   if (tblPersonal.recordsets[0] == '') {
-      //     let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
-      //       where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
-      //     console.log(checker.recordsets + "checker.recordsets[0]")
+        // if (tblPersonal.recordsets[0] == '') {
+        //   let checker = await pool.request().query(`SELECT PersonType  FROM [dbo].[tblPersonal]
+        //     where PersonType=HASHBYTES('SHA2_256','${findRequest.PersonType}')`)
+        //   console.log(checker.recordsets + "checker.recordsets[0]")
 
-      //     return checker.recordsets[0]
-      //   }else {
-      //     return tblPersonal.recordsets[0]
-      //   }
+        //   return checker.recordsets[0]
+        // }else {
+        //   return tblPersonal.recordsets[0]
+        // }
 
     }
 
@@ -277,6 +378,7 @@ async function ws_deletePersonal(findRequest) {
   }
 }
 module.exports = {
+  ws_check:ws_check,
   ws_loadPersonal: ws_loadPersonal,
   ws_createPersonal: ws_createPersonal,
   ws_updatePersonal: ws_updatePersonal,

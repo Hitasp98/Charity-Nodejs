@@ -66,13 +66,13 @@ module.exports.insertNeedyAccountsController = async function (request, response
 
 
     if (
-      findRequest.NeedyId == null &&
-      findRequest.BankId == null &&
-      findRequest.OwnerName == null &&
-      findRequest.CardNumber == null &&
-      findRequest.AccountNumber == null &&
-      findRequest.AccountName == null &&
-      findRequest.ShebaNumber == null) {
+      findRequest.NeedyId       === null &&
+      findRequest.BankId        === null &&
+      findRequest.OwnerName     === null &&
+      findRequest.CardNumber    === null &&
+      findRequest.AccountNumber === null &&
+      findRequest.AccountName   === null &&
+      findRequest.ShebaNumber   === null) {
 
 
 

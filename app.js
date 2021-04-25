@@ -44,11 +44,21 @@ app.use('/tblCharityAccounts', require('./Routes/tblCharityAccountsRoutes'))
 
 app.use('/Personal',           require('./Routes/Personal'))
 app.use('/NeedyAccounts',      require('./Routes/NeedyAccounts'))
+const Payment=require('./Routes/PaymentRouter')
+app.use('/Payment',Payment)
 
 
+const FirstPlan=require('./Routes/FirstPlanRouter')
+app.use('/FirstPlan',FirstPlan)
 
+const SecondPlan=require('./Routes/SecondPlan')
+app.use('/SecondPlan',SecondPlan)
 
+const Settelment=require('./Routes/Settelment')
+app.use('/Settelment',Settelment)
 
+const Succor=require('./Routes/Succor')
+app.use('/Succor',Succor)
 
 var port = process.env.port || 8090
 app.listen(port,()=>{

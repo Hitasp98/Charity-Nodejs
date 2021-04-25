@@ -34,7 +34,7 @@ function getmsgs1() {
         dataType: "json",
         success: function (data) {
             console.log(data)
-            for (row of data) {
+            for (row of data) {                
                 $("#msg_q").append(
                     "<tr>" +
                     "<td>" +

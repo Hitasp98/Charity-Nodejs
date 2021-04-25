@@ -69,20 +69,21 @@ if(NationalCode.length<10||
    NationalCode.length>10){
 console.log('error NationalCode')
 }else{
-      let loadPersonal = await PersonalModels.ws_loadPersonal(findRequest);
+      let loadPersonal = await PersonalModels.ws_check(findRequest);
       console.log(loadPersonal + 'loadPersonal')
-      if (loadPersonal  == '') {
+      if (loadPersonal === null) {
  
         await PersonalModels.ws_createPersonal(findRequest)
           .then(result => {
-            if (result == '') {
-              response.json({
+            if (result ===null) {
 
 
-                error: "عملیات درج با موفقیت انجام نشد"
 
 
-              });
+              response.json({ error: "عملیات درج با موفقیت انجام نشد" });
+
+
+              
             } else {
 
 
