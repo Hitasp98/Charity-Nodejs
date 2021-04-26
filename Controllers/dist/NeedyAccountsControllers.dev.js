@@ -77,7 +77,7 @@ module.exports.insertNeedyAccountsController = function _callee2(request, respon
 
         case 6:
           _context2.next = 8;
-          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
+          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest.ShebaNumber));
 
         case 8:
           loadNeedyAccount = _context2.sent;
