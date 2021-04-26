@@ -240,18 +240,11 @@ let number =Math.floor(Math.random()*999)+100
         typeof findRequest[String(x)] == 'number'
       ) {
 
-
-
-
         value = value + ' ' + `${findRequest[String(x)]}` + `,`
-
-
 
       } else {
 
-
         value = value + ' ' + `` + "'" + findRequest[String(x)] + "'" + `,`
-
 
       }
     }
@@ -304,10 +297,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
 
 
       for (x in findRequest) {
-        // if(x=='NeedyAccountId'){
-        //   value = value + ' ' + ` ${x} =${number}` + `,`
-
-        // }
+      
         if (
           findRequest[String(x)] == null ||
           typeof findRequest[String(x)] == 'number'

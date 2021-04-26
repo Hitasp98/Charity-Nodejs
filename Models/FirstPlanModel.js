@@ -1,6 +1,6 @@
 var config = require("../Utils/config");
 const sql = require("mssql");
-var crypto = require('crypto');
+var crypto = require("crypto");
 
 var fnGetRandomString = require("../Utils/Randomnumber");
 
@@ -25,12 +25,10 @@ async function ws_loadPlan(findRequest) {
         findRequest.Fdate === null &&
         findRequest.Tdate === null &&
         findRequest.neededLogin === null &&
-        findRequest.PlanId === null )
+        findRequest.PlanId === null)
     ) {
-      getPayment  = await pool
-        .request()
-        .query(`SELECT *
-   FROM tblPlans `)
+      getPayment = await pool.request().query(`SELECT *
+   FROM tblPlans `);
       return getPayment.recordsets[0];
     } else {
       //create  whereclause
@@ -63,39 +61,101 @@ async function ws_loadPlan(findRequest) {
         .query(`select * from tblPlans  where` + whereclause);
       return getTblCommonBaseType.recordsets[0][0];
     }
-  }catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
 }
 async function ws_createPlan(findRequest) {
-  try {    let pool = await sql.connect(config);
+  try {
+    let pool = await sql.connect(config);
+
+    let value = "";
+
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == "number"
+      ) {
+        value = value + " " + `${findRequest[String(x)]}` + `,`;
+      } else {
+        value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
+
+    value = value.slice(0, -1);
+
+    let insertTblCharityAccounts = await pool.request().query(
+      `INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)
+            VALUES (` +
+        value +
+        `)`
+    );
+    let getTblCharityAccounts = await pool
+      .request()
+      .query(
+        `select PlanId  from tblPlans  where PlanId  =` +
+          "'" +
+          findRequest["PlanId"] +
+          "'"
+      );
+    return getTblCharityAccounts.recordsets;
   } catch (error) {
-
     console.log(error.message);
-
-
   }
 }
 async function ws_UpdatePlan(findRequest) {
-  try{    let pool = await sql.connect(config);
+  try {
+    let updateTblCharityAccounts;
+    let pool = await sql.connect(config);
+
+    let value = "";
+
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == "number"
+      ) {
+        value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`;
+      } else {
+        value =
+          value + " " + `${x} = N` + "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
+
+    value = value.slice(0, -1);
+    updateTblCharityAccounts = await pool.request().query(
+      `UPDATE tblPlans
+    SET  ` +
+        value +
+        ` WHERE PlanId = ${findRequest.PlanId};`
+    );
+
+    updateTblCharityAccounts = await pool
+      .request()
+      .query(`select * from tblPlans where PlanId =` + findRequest["PlanId"]);
+    return updateTblCharityAccounts.recordsets;
   } catch (error) {
-
     console.log(error.message);
-
   }
 }
 async function ws_deletePlan(findRequest) {
-    try{    let pool = await sql.connect(config);
-    } catch (error) {
-  
-      console.log(error.message);
-  
-    }
-  }
-module.exports = {
+  try {
+    let pool = await sql.connect(config);
 
-    ws_loadPlan: ws_loadPlan,
-    ws_createPlan: ws_createPlan,
-    ws_UpdatePlan: ws_UpdatePlan,
-    ws_deletePlan:ws_deletePlan
+    let deleteTblCharityAccounts;
+
+    deleteTblCharityAccounts = await pool
+      .request()
+      .query(`DELETE FROM tblPlans WHERE PlanId = ${findRequest.PlanId};`);
+
+    return deleteTblCharityAccounts.rowsAffected[0];
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+module.exports = {
+  ws_loadPlan: ws_loadPlan,
+  ws_createPlan: ws_createPlan,
+  ws_UpdatePlan: ws_UpdatePlan,
+  ws_deletePlan: ws_deletePlan,
 };

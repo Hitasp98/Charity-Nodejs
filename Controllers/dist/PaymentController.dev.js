@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 module.exports.Payment = function _callee(request, response) {
-  var findRequest, C, A;
+  var findRequest, Cc, C, Aa, A;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -32,28 +32,30 @@ module.exports.Payment = function _callee(request, response) {
           return regeneratorRuntime.awrap(PaymentModel.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId));
 
         case 4:
-          C = _context.sent;
-          _context.next = 7;
+          Cc = _context.sent;
+          C = Cc.NeededPrice;
+          _context.next = 8;
           return regeneratorRuntime.awrap(PaymentModel.ws_loadPayment(findRequest.CashAssistanceDetailId, findRequest.PaymentStatus, findRequest.CharityAccountId = null));
 
-        case 7:
-          A = _context.sent;
-          _context.next = 13;
+        case 8:
+          Aa = _context.sent;
+          A = Aa.PaymentPrice;
+          _context.next = 15;
           break;
 
-        case 10:
-          _context.prev = 10;
+        case 12:
+          _context.prev = 12;
           _context.t0 = _context["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 13:
+        case 15:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 10]]);
+  }, null, null, [[0, 12]]);
 };
 
 module.exports.loadPayment = function _callee2(request, response) {

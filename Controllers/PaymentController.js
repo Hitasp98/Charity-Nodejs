@@ -19,8 +19,10 @@ module.exports.Payment = async function (request, response) {
   try {
     let findRequest = {...request.body}
 
-    let C=await PaymentModel.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId)
-    let A=await PaymentModel.ws_loadPayment(findRequest.CashAssistanceDetailId,findRequest.PaymentStatus,findRequest.CharityAccountId=null)
+    let Cc=await PaymentModel.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId)
+    let C=Cc.NeededPrice 
+    let Aa=await PaymentModel.ws_loadPayment(findRequest.CashAssistanceDetailId,findRequest.PaymentStatus,findRequest.CharityAccountId=null)
+    let A=Aa.PaymentPrice
 
         
   } catch (error) {

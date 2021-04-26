@@ -195,7 +195,7 @@ module.exports.updateNeedyAccountsController = async function (request, response
               } else {
                 response.json(checked[0] + "1عملیات ویرایش با موفقیت انجام نشد");
               }
-            }else {
+            } else {
               response.json({
                 error: "امکان ويرايش وجود ندارد عملیات ویرایش با موفقیت انجام نشد"
               });
@@ -231,31 +231,38 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
     }
     else {
 
-
       // request for checking Fk in others table 
-      requestApi.post({ url: 'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: { findRequest: findRequest } }, async function (err, res, body) {
+      requestApi.post({ url: 'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form: { findRequest: findRequest.BankId } }, async function (err, res, body) {
 
-        if (await JSON.parse(body).NeedyId == findRequest.NeedyAccountId) {
+        if (await JSON.parse(body).CommonBaseDataId == findRequest.NeedyAccountId) {
 
           response.json({ error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است" })
         } else {
-          let checked = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest);
-          if (checked[0] != ' ') {
-            console.log('else')
+          requestApi.post({ url: 'http://localhost:8090/Personal/getPersonal', form: { findRequest: findRequest.NeedyId } }, async function (err, res, body) {
+            if (await JSON.parse(body).PersonId == findRequest.NeedyId) {
 
-            await NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(result => {
+              response.json({ error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است" })
+            } else {
+              let checked = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest);
+              if (checked[0] != ' ') {
+                console.log('else')
 
-              if (result == '') {
-                response.json({ message: "عملیات حذف با موفقیت انجام شد" })
+                await NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(result => {
+
+                  if (result == '') {
+                    response.json({ message: "عملیات حذف با موفقیت انجام شد" })
+                  } else {
+                    response.json({ error: "رکورد مورد نظر موجود نیست" })
+                  }
+
+                })
               } else {
                 response.json({ error: "رکورد مورد نظر موجود نیست" })
               }
-
-            })
-          } else {
-            response.json({ error: "رکورد مورد نظر موجود نیست" })
-          }
+            }
+          })
         }
+
       })
     }
   } catch (error) {

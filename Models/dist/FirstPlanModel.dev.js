@@ -4,7 +4,7 @@ var config = require("../Utils/config");
 
 var sql = require("mssql");
 
-var crypto = require('crypto');
+var crypto = require("crypto");
 
 var fnGetRandomString = require("../Utils/Randomnumber");
 
@@ -74,7 +74,7 @@ function ws_loadPlan(findRequest) {
 }
 
 function ws_createPlan(findRequest) {
-  var pool;
+  var pool, value, insertTblCharityAccounts, getTblCharityAccounts;
   return regeneratorRuntime.async(function ws_createPlan$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -85,24 +85,44 @@ function ws_createPlan(findRequest) {
 
         case 3:
           pool = _context2.sent;
-          _context2.next = 9;
-          break;
+          value = "";
 
-        case 6:
-          _context2.prev = 6;
+          for (x in findRequest) {
+            if (findRequest[String(x)] == null || typeof findRequest[String(x)] == "number") {
+              value = value + " " + "".concat(findRequest[String(x)]) + ",";
+            } else {
+              value = value + " " + "N" + "'" + findRequest[String(x)] + "'" + ",";
+            }
+          }
+
+          value = value.slice(0, -1);
+          _context2.next = 9;
+          return regeneratorRuntime.awrap(pool.request().query("INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)\n            VALUES (" + value + ")"));
+
+        case 9:
+          insertTblCharityAccounts = _context2.sent;
+          _context2.next = 12;
+          return regeneratorRuntime.awrap(pool.request().query("select PlanId  from tblPlans  where PlanId  =" + "'" + findRequest["PlanId"] + "'"));
+
+        case 12:
+          getTblCharityAccounts = _context2.sent;
+          return _context2.abrupt("return", getTblCharityAccounts.recordsets);
+
+        case 16:
+          _context2.prev = 16;
           _context2.t0 = _context2["catch"](0);
           console.log(_context2.t0.message);
 
-        case 9:
+        case 19:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 16]]);
 }
 
 function ws_UpdatePlan(findRequest) {
-  var pool;
+  var updateTblCharityAccounts, pool, value;
   return regeneratorRuntime.async(function ws_UpdatePlan$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
@@ -113,24 +133,44 @@ function ws_UpdatePlan(findRequest) {
 
         case 3:
           pool = _context3.sent;
-          _context3.next = 9;
-          break;
+          value = "";
 
-        case 6:
-          _context3.prev = 6;
+          for (x in findRequest) {
+            if (findRequest[String(x)] == null || typeof findRequest[String(x)] == "number") {
+              value = value + " " + " ".concat(x, " = ").concat(findRequest[String(x)]) + ",";
+            } else {
+              value = value + " " + "".concat(x, " = N") + "'" + findRequest[String(x)] + "'" + ",";
+            }
+          }
+
+          value = value.slice(0, -1);
+          _context3.next = 9;
+          return regeneratorRuntime.awrap(pool.request().query("UPDATE tblPlans\n    SET  " + value + " WHERE PlanId = ".concat(findRequest.PlanId, ";")));
+
+        case 9:
+          updateTblCharityAccounts = _context3.sent;
+          _context3.next = 12;
+          return regeneratorRuntime.awrap(pool.request().query("select * from tblPlans where PlanId =" + findRequest["PlanId"]));
+
+        case 12:
+          updateTblCharityAccounts = _context3.sent;
+          return _context3.abrupt("return", updateTblCharityAccounts.recordsets);
+
+        case 16:
+          _context3.prev = 16;
           _context3.t0 = _context3["catch"](0);
           console.log(_context3.t0.message);
 
-        case 9:
+        case 19:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 16]]);
 }
 
 function ws_deletePlan(findRequest) {
-  var pool;
+  var pool, deleteTblCharityAccounts;
   return regeneratorRuntime.async(function ws_deletePlan$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
@@ -141,20 +181,24 @@ function ws_deletePlan(findRequest) {
 
         case 3:
           pool = _context4.sent;
-          _context4.next = 9;
-          break;
+          _context4.next = 6;
+          return regeneratorRuntime.awrap(pool.request().query("DELETE FROM tblPlans WHERE PlanId = ".concat(findRequest.PlanId, ";")));
 
         case 6:
-          _context4.prev = 6;
+          deleteTblCharityAccounts = _context4.sent;
+          return _context4.abrupt("return", deleteTblCharityAccounts.rowsAffected[0]);
+
+        case 10:
+          _context4.prev = 10;
           _context4.t0 = _context4["catch"](0);
           console.log(_context4.t0.message);
 
-        case 9:
+        case 13:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 10]]);
 }
 
 module.exports = {

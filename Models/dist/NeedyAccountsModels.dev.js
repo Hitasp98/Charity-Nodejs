@@ -238,9 +238,6 @@ function ws_UpdateNeedyAccount(findRequest) {
           value = '';
 
           for (x in findRequest) {
-            // if(x=='NeedyAccountId'){
-            //   value = value + ' ' + ` ${x} =${number}` + `,`
-            // }
             if (findRequest[String(x)] == null || typeof findRequest[String(x)] == 'number') {
               value = value + ' ' + " ".concat(x, " = ").concat(findRequest[String(x)]) + ",";
             } else {
