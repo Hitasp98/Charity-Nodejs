@@ -21,41 +21,49 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 module.exports.Payment = function _callee(request, response) {
-  var findRequest, Cc, C, Aa, A;
+  var findRequest, findindex, resultGet, C, findindex2, resultGet2, A;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
           findRequest = _objectSpread({}, request.body);
-          _context.next = 4;
-          return regeneratorRuntime.awrap(PaymentModel.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId));
+          findindex = {
+            CashAssistanceDetailId: findRequest.CashAssistanceDetailId
+          };
+          _context.next = 5;
+          return regeneratorRuntime.awrap(PaymentModel.ws_loadCashAssistanceDetail(findindex));
 
-        case 4:
-          Cc = _context.sent;
-          C = Cc.NeededPrice;
-          _context.next = 8;
-          return regeneratorRuntime.awrap(PaymentModel.ws_loadPayment(findRequest.CashAssistanceDetailId, findRequest.PaymentStatus, findRequest.CharityAccountId = null));
+        case 5:
+          resultGet = _context.sent;
+          C = resultGet[0].NeededPrice;
+          findindex2 = {
+            CashAssistanceDetailId: findRequest.CashAssistanceDetailId,
+            PaymentStatus: 'greate',
+            CharityAccountId: null
+          };
+          _context.next = 10;
+          return regeneratorRuntime.awrap(PaymentModel.ws_loadCashAssistanceDetail(findindex2));
 
-        case 8:
-          Aa = _context.sent;
-          A = Aa.PaymentPrice;
-          _context.next = 15;
+        case 10:
+          resultGet2 = _context.sent;
+          A = resultGet2[0].PaymentPrice;
+          _context.next = 17;
           break;
 
-        case 12:
-          _context.prev = 12;
+        case 14:
+          _context.prev = 14;
           _context.t0 = _context["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 15:
+        case 17:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 12]]);
+  }, null, null, [[0, 14]]);
 };
 
 module.exports.loadPayment = function _callee2(request, response) {
