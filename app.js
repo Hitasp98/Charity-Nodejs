@@ -51,13 +51,13 @@ app.use('/Payment', Payment)
 const FirstPlan = require('./Routes/FirstPlanRouter')
 app.use('/FirstPlan', FirstPlan)
 
-const SecondPlan = require('./Routes/SecondPlan')
+const SecondPlan = require('./Routes/SecondPlanRouter')
 app.use('/SecondPlan', SecondPlan)
 
-const Settelment = require('./Routes/Settelment')
+const Settelment = require('./Routes/SettelmentRouter')
 app.use('/Settelment', Settelment)
 
-const Succor = require('./Routes/Succor')
+const Succor = require('./Routes/SuccorRouter')
 app.use('/Succor', Succor)
 
 var port = process.env.port || 8090

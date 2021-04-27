@@ -89,7 +89,6 @@ module.exports.insertNeedyAccountsController = async function (request, response
 
 
       if (ShebaNumber === null) {
-        let number = findRequest.AccountNumber + findRequest.NeedyId
 
         let number = await NeedyAccountsModels.ws_loadNeedyAccount(number)
 

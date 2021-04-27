@@ -49,15 +49,15 @@ var FirstPlan = require('./Routes/FirstPlanRouter');
 
 app.use('/FirstPlan', FirstPlan);
 
-var SecondPlan = require('./Routes/SecondPlan');
+var SecondPlan = require('./Routes/SecondPlanRouter');
 
 app.use('/SecondPlan', SecondPlan);
 
-var Settelment = require('./Routes/Settelment');
+var Settelment = require('./Routes/SettelmentRouter');
 
 app.use('/Settelment', Settelment);
 
-var Succor = require('./Routes/Succor');
+var Succor = require('./Routes/SuccorRouter');
 
 app.use('/Succor', Succor);
 var port = process.env.port || 8090;

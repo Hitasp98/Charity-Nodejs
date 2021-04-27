@@ -58,7 +58,7 @@ module.exports.getNeedyAccountsController = function _callee(request, response) 
 };
 
 module.exports.insertNeedyAccountsController = function _callee2(request, response) {
-  var findRequest, loadNeedyAccount;
+  var findRequest, ShebaNumber, number, checked;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -72,7 +72,7 @@ module.exports.insertNeedyAccountsController = function _callee2(request, respon
           }
 
           response.json("ورودی ها خالی است");
-          _context2.next = 15;
+          _context2.next = 29;
           break;
 
         case 6:
@@ -80,14 +80,36 @@ module.exports.insertNeedyAccountsController = function _callee2(request, respon
           return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest.ShebaNumber));
 
         case 8:
-          loadNeedyAccount = _context2.sent;
+          ShebaNumber = _context2.sent;
 
-          if (!(loadNeedyAccount == '')) {
-            _context2.next = 14;
+          if (!(ShebaNumber === null)) {
+            _context2.next = 28;
             break;
           }
 
           _context2.next = 12;
+          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(number));
+
+        case 12:
+          number = _context2.sent;
+
+          if (!(number === null)) {
+            _context2.next = 25;
+            break;
+          }
+
+          _context2.next = 16;
+          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
+
+        case 16:
+          checked = _context2.sent;
+
+          if (!(checked === null)) {
+            _context2.next = 22;
+            break;
+          }
+
+          _context2.next = 20;
           return regeneratorRuntime.awrap(NeedyAccountsModels.ws_createNeedyAccount(findRequest).then(function (result) {
             console.log(result + ' is insert');
 
@@ -100,101 +122,180 @@ module.exports.insertNeedyAccountsController = function _callee2(request, respon
             }
           }));
 
-        case 12:
-          _context2.next = 15;
+        case 20:
+          _context2.next = 23;
           break;
 
-        case 14:
+        case 22:
           response.json("قبلا درج شده");
 
-        case 15:
-          _context2.next = 20;
+        case 23:
+          _context2.next = 26;
           break;
 
-        case 17:
-          _context2.prev = 17;
+        case 25:
+          response.json("قبلا درج شده");
+
+        case 26:
+          _context2.next = 29;
+          break;
+
+        case 28:
+          response.json("قبلا درج شده");
+
+        case 29:
+          _context2.next = 34;
+          break;
+
+        case 31:
+          _context2.prev = 31;
           _context2.t0 = _context2["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 20:
+        case 34:
           ;
 
-        case 21:
+        case 35:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 17]]);
+  }, null, null, [[0, 31]]);
 };
 
-module.exports.updateNeedyAccountsController = function _callee3(request, response) {
-  var findRequest, checked;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
+module.exports.updateNeedyAccountsController = function _callee4(request, response) {
+  var findRequest, ShebaNumber, AccountNumber;
+  return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
-          _context3.prev = 0;
+          _context4.prev = 0;
           findRequest = _objectSpread({}, request.body);
           console.log(findRequest);
 
           if (!(findRequest.NeedyAccountId == null && findRequest.NeedyId == null && findRequest.BankId == null && findRequest.OwnerName == null && findRequest.CardNumber == null && findRequest.AccountNumber == null && findRequest.AccountName == null && findRequest.ShebaNumber == null)) {
-            _context3.next = 7;
+            _context4.next = 7;
             break;
           }
 
           response.json("ورودی ها خالی است");
-          _context3.next = 16;
+          _context4.next = 18;
           break;
 
         case 7:
-          _context3.next = 9;
-          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
+          _context4.next = 9;
+          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest.ShebaNumber));
 
         case 9:
-          checked = _context3.sent;
+          ShebaNumber = _context4.sent;
 
-          if (!(checked[0] != ' ')) {
-            _context3.next = 15;
+          if (!(ShebaNumber == null)) {
+            _context4.next = 17;
             break;
           }
 
-          _context3.next = 13;
-          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_UpdateNeedyAccount(findRequest).then(function (result) {
-            if (result == '') {
-              response.json({
-                error: "عملیات ویرایش با موفقیت انجام نشد"
-              });
-            } else {
-              response.json(result);
-            }
-          }));
+          _context4.next = 13;
+          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest.AccountNumber));
 
         case 13:
-          _context3.next = 16;
+          AccountNumber = _context4.sent;
+
+          if (AccountNumber == null) {
+            requestApi.post({
+              url: 'http://localhost:8090/tblPayment/tblPayment ',
+              form: {
+                findRequest: findRequest
+              }
+            }, function _callee3(err, res, body) {
+              var checked;
+              return regeneratorRuntime.async(function _callee3$(_context3) {
+                while (1) {
+                  switch (_context3.prev = _context3.next) {
+                    case 0:
+                      _context3.next = 2;
+                      return regeneratorRuntime.awrap(JSON.parse(body).AccountNumber);
+
+                    case 2:
+                      _context3.t0 = _context3.sent;
+                      _context3.t1 = findRequest.AccountNumber;
+
+                      if (!(_context3.t0 == _context3.t1)) {
+                        _context3.next = 16;
+                        break;
+                      }
+
+                      _context3.next = 7;
+                      return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
+
+                    case 7:
+                      checked = _context3.sent;
+
+                      if (!(checked[0] != ' ')) {
+                        _context3.next = 13;
+                        break;
+                      }
+
+                      _context3.next = 11;
+                      return regeneratorRuntime.awrap(NeedyAccountsModels.ws_UpdateNeedyAccount(findRequest).then(function (result) {
+                        if (result == '') {
+                          response.json({
+                            error: "عملیات ویرایش با موفقیت انجام نشد"
+                          });
+                        } else {
+                          response.json(result);
+                        }
+                      }));
+
+                    case 11:
+                      _context3.next = 14;
+                      break;
+
+                    case 13:
+                      response.json(checked[0] + "1عملیات ویرایش با موفقیت انجام نشد");
+
+                    case 14:
+                      _context3.next = 17;
+                      break;
+
+                    case 16:
+                      response.json({
+                        error: "امکان ويرايش وجود ندارد عملیات ویرایش با موفقیت انجام نشد"
+                      });
+
+                    case 17:
+                    case "end":
+                      return _context3.stop();
+                  }
+                }
+              });
+            });
+          }
+
+          _context4.next = 18;
           break;
 
-        case 15:
-          response.json(checked[0] + "1عملیات ویرایش با موفقیت انجام نشد");
-
-        case 16:
-          _context3.next = 21;
-          break;
+        case 17:
+          response.json("قبلا درج شده");
 
         case 18:
-          _context3.prev = 18;
-          _context3.t0 = _context3["catch"](0);
+          _context4.next = 23;
+          break;
+
+        case 20:
+          _context4.prev = 20;
+          _context4.t0 = _context4["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 21:
+        case 23:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
-  }, null, null, [[0, 18]]);
+  }, null, null, [[0, 20]]);
 };
 
 module.exports.deleteNeedyAccountsController = function (request, response) {
@@ -208,70 +309,107 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
       requestApi.post({
         url: 'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData',
         form: {
-          findRequest: findRequest
+          findRequest: findRequest.BankId
         }
-      }, function _callee4(err, res, body) {
-        var checked;
-        return regeneratorRuntime.async(function _callee4$(_context4) {
+      }, function _callee6(err, res, body) {
+        return regeneratorRuntime.async(function _callee6$(_context6) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                _context4.next = 2;
-                return regeneratorRuntime.awrap(JSON.parse(body).NeedyId);
+                _context6.next = 2;
+                return regeneratorRuntime.awrap(JSON.parse(body).CommonBaseDataId);
 
               case 2:
-                _context4.t0 = _context4.sent;
-                _context4.t1 = findRequest.NeedyAccountId;
+                _context6.t0 = _context6.sent;
+                _context6.t1 = findRequest.NeedyAccountId;
 
-                if (!(_context4.t0 == _context4.t1)) {
-                  _context4.next = 8;
+                if (!(_context6.t0 == _context6.t1)) {
+                  _context6.next = 8;
                   break;
                 }
 
                 response.json({
                   error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است"
                 });
-                _context4.next = 18;
+                _context6.next = 9;
                 break;
 
               case 8:
-                _context4.next = 10;
-                return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
-
-              case 10:
-                checked = _context4.sent;
-
-                if (!(checked[0] != ' ')) {
-                  _context4.next = 17;
-                  break;
-                }
-
-                console.log('else');
-                _context4.next = 15;
-                return regeneratorRuntime.awrap(NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(function (result) {
-                  if (result == '') {
-                    response.json({
-                      message: "عملیات حذف با موفقیت انجام شد"
-                    });
-                  } else {
-                    response.json({
-                      error: "رکورد مورد نظر موجود نیست"
-                    });
+                requestApi.post({
+                  url: 'http://localhost:8090/Personal/getPersonal',
+                  form: {
+                    findRequest: findRequest.NeedyId
                   }
-                }));
+                }, function _callee5(err, res, body) {
+                  var checked;
+                  return regeneratorRuntime.async(function _callee5$(_context5) {
+                    while (1) {
+                      switch (_context5.prev = _context5.next) {
+                        case 0:
+                          _context5.next = 2;
+                          return regeneratorRuntime.awrap(JSON.parse(body).PersonId);
 
-              case 15:
-                _context4.next = 18;
-                break;
+                        case 2:
+                          _context5.t0 = _context5.sent;
+                          _context5.t1 = findRequest.NeedyId;
 
-              case 17:
-                response.json({
-                  error: "رکورد مورد نظر موجود نیست"
+                          if (!(_context5.t0 == _context5.t1)) {
+                            _context5.next = 8;
+                            break;
+                          }
+
+                          response.json({
+                            error: "رکورد مورد نظر به عنوان کلید خارجی استفاده شده است"
+                          });
+                          _context5.next = 18;
+                          break;
+
+                        case 8:
+                          _context5.next = 10;
+                          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_loadNeedyAccount(findRequest));
+
+                        case 10:
+                          checked = _context5.sent;
+
+                          if (!(checked[0] != ' ')) {
+                            _context5.next = 17;
+                            break;
+                          }
+
+                          console.log('else');
+                          _context5.next = 15;
+                          return regeneratorRuntime.awrap(NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(function (result) {
+                            if (result == '') {
+                              response.json({
+                                message: "عملیات حذف با موفقیت انجام شد"
+                              });
+                            } else {
+                              response.json({
+                                error: "رکورد مورد نظر موجود نیست"
+                              });
+                            }
+                          }));
+
+                        case 15:
+                          _context5.next = 18;
+                          break;
+
+                        case 17:
+                          response.json({
+                            error: "رکورد مورد نظر موجود نیست"
+                          });
+
+                        case 18:
+                        case "end":
+                          return _context5.stop();
+                      }
+                    }
+                  });
                 });
 
-              case 18:
+              case 9:
               case "end":
-                return _context4.stop();
+                return _context6.stop();
             }
           }
         });
