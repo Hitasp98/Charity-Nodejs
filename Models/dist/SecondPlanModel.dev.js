@@ -6,7 +6,8 @@ var sql = require("mssql");
 
 var crypto = require("crypto");
 
-var fnGetRandomString = require("../Utils/Randomnumber");
+var fnGetRandomString = require("../Utils/Randomnumber"); //تست نشده
+
 
 function ws_loadNeedyForPlan(findRequest) {
   var pool, getTblCommonBaseType, whereclause;
@@ -27,7 +28,7 @@ function ws_loadNeedyForPlan(findRequest) {
           }
 
           _context.next = 7;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId\n      FROM tblCashAssistanceDetail  \n      join tblPersonal\n      on tblCashAssistanceDetail. = tblPersonal.PersonId\n      join tblPlans\n      on tblPersonal.PersonId= tblPlans.PlanId "));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n      FROM tblAssignNeedyToPlans   \n      join tblPersonal\n      on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId\n      join tblPlans\n      on tblPersonal.PersonId= tblPlans.PlanId "));
 
         case 7:
           getPayment = _context.sent;
@@ -48,9 +49,10 @@ function ws_loadNeedyForPlan(findRequest) {
           }
 
           whereclause = whereclause.slice(0, -3); //show records with whereclause
+          //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
           _context.next = 16;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblCashAssistanceDetail  \n        join tblPersonal\n        on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId\n        join tblPlans\n        on tblPersonal.PersonId= tblPlans.PlanId+  where" + whereclause));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans  \n        join tblPersonal\n        on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId\n        join tblPlans\n        on tblPersonal.PersonId= tblPlans.PlanId\n          where" + whereclause));
 
         case 16:
           getTblCommonBaseType = _context.sent;
@@ -71,10 +73,13 @@ function ws_loadNeedyForPlan(findRequest) {
       }
     }
   }, null, null, [[0, 20]]);
-}
+} //????????????????شناسه نيازمند NeedyId يا هش مپي از ليست نيازمندان (ليستي از شناسه هاي NeedyId )
+//????????????????این مطلب در این مدل قرار نگرفته
+//تست نشده
+
 
 function ws_AssignNeedyToPlan(findRequest) {
-  var pool;
+  var pool, value, inserttblAssignNeedyToPlans, tblAssignNeedyToPlans;
   return regeneratorRuntime.async(function ws_AssignNeedyToPlan$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -85,24 +90,45 @@ function ws_AssignNeedyToPlan(findRequest) {
 
         case 3:
           pool = _context2.sent;
-          _context2.next = 9;
-          break;
+          value = "";
 
-        case 6:
-          _context2.prev = 6;
+          for (x in findRequest) {
+            if (findRequest[String(x)] == null || typeof findRequest[String(x)] == "number") {
+              value = value + " " + "".concat(findRequest[String(x)]) + ",";
+            } else {
+              value = value + " " + "N" + "'" + findRequest[String(x)] + "'" + ",";
+            }
+          }
+
+          value = value.slice(0, -1);
+          _context2.next = 9;
+          return regeneratorRuntime.awrap(pool.request().query("INSERT INTO tblAssignNeedyToPlans  (PlanId,Fdate,Tdate,NeedyId)\n            VALUES (" + value + ")"));
+
+        case 9:
+          inserttblAssignNeedyToPlans = _context2.sent;
+          _context2.next = 12;
+          return regeneratorRuntime.awrap(pool.request().query("select *  from tblAssignNeedyToPlans  "));
+
+        case 12:
+          tblAssignNeedyToPlans = _context2.sent;
+          return _context2.abrupt("return", tblAssignNeedyToPlans.recordsets);
+
+        case 16:
+          _context2.prev = 16;
           _context2.t0 = _context2["catch"](0);
           console.log(_context2.t0.message);
 
-        case 9:
+        case 19:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 6]]);
-}
+  }, null, null, [[0, 16]]);
+} //تست نشده
+
 
 function ws_deleteNeedyFromPlan(findRequest) {
-  var pool;
+  var pool, deletetblAssignNeedyToPlans;
   return regeneratorRuntime.async(function ws_deleteNeedyFromPlan$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
@@ -113,20 +139,24 @@ function ws_deleteNeedyFromPlan(findRequest) {
 
         case 3:
           pool = _context3.sent;
-          _context3.next = 9;
-          break;
+          _context3.next = 6;
+          return regeneratorRuntime.awrap(pool.request().query("DELETE FROM tblAssignNeedyToPlans WHERE PlanId = ".concat(findRequest.PlanId, ";")));
 
         case 6:
-          _context3.prev = 6;
+          deletetblAssignNeedyToPlans = _context3.sent;
+          return _context3.abrupt("return", deletetblAssignNeedyToPlans.rowsAffected[0]);
+
+        case 10:
+          _context3.prev = 10;
           _context3.t0 = _context3["catch"](0);
           console.log(_context3.t0.message);
 
-        case 9:
+        case 13:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 10]]);
 }
 
 module.exports = {

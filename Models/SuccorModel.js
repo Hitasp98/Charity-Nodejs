@@ -1,49 +1,168 @@
 var config = require("../Utils/config");
 const sql = require("mssql");
-var crypto = require('crypto');
+var crypto = require("crypto");
 
 var fnGetRandomString = require("../Utils/Randomnumber");
+//تست نشده 
+async function ws_loadCashAssistanceDetail(findRequest) {
+  try {
+    let pool = await sql.connect(config);
+    let getTblCommonBaseType;
 
-async function  ws_loadCashAssistanceDetail(findRequest) {
-  try{
+    //show all records
+
+    if (
+      (findRequest.AssignNeedyPlanId === undefined &&
+        findRequest.PlanId === undefined &&
+        findRequest.CashAssistanceDetailId === undefined) ||
+      (findRequest.AssignNeedyPlanId === null &&
+        findRequest.PlanId === null &&
+        findRequest.CashAssistanceDetailId === null)
+    ) {
+      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+      getPayment = await pool.request()
+        .query(`SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
+      FROM tblCashAssistanceDetail   
+      join tblPersonal
+      on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId
+      join tblPlans
+      on tblPersonal.PersonId= tblPlans.PlanId `);
+      return getPayment.recordsets[0];
+    } else {
+      //create  whereclause
+      let whereclause = "";
+      for (x in findRequest) {
+        if (typeof findRequest[String(x)] == "string") {
+          whereclause =
+            whereclause +
+            " " +
+            `${x} = N` +
+            "'" +
+            findRequest[String(x)] +
+            "'" +
+            ` AND`;
+        } else if (typeof findRequest[String(x)] == "number") {
+          whereclause =
+            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+        } else if (findRequest[String(x)] == null) {
+          whereclause =
+            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+        }
+      }
+
+      whereclause = whereclause.slice(0, -3);
+
+      //show records with whereclause
+      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+
+      getTblCommonBaseType = await pool.request().query(
+        `SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
+        FROM tblCashAssistanceDetail  
+        join tblPersonal
+        on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId
+        join tblPlans
+        on tblPersonal.PersonId= tblPlans.PlanId
+          where` + whereclause
+      );
+      return getTblCommonBaseType.recordsets[0][0];
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//تست نشده 
+async function ws_createCashAssistanceDetail(findRequest) {
+  try {
     let pool = await sql.connect(config);
 
-  }catch (error) {
-    console.log(error.message);
-  }
-}
+    let value = "";
 
-async function ws_createCashAssistanceDetail(findRequest) {
-  try{    let pool = await sql.connect(config);
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == "number"
+      ) {
+        value = value + " " + `${findRequest[String(x)]}` + `,`;
+      } else {
+        value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
+
+    value = value.slice(0, -1);
+
+    let inserttblAssignNeedyToPlans = await pool.request().query(
+      `INSERT INTO tblCashAssistanceDetail   (AssignNeedyPlanId,PlanId,NeededPrice,MinPrice,Description )
+            VALUES (` +
+        value +
+        `)`
+    );
+    let tblAssignNeedyToPlans = await pool
+      .request()
+      .query(`select *  from  tblCashAssistanceDetail  `);
+    return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
-
     console.log(error.message);
-
   }
 }
-async function  ws_updateCashAssistanceDetail(findRequest) {
-    try {    let pool = await sql.connect(config);
-    } catch (error) {
-  
-      console.log(error.message);
-  
-  
-    }
-  }
-async function  ws_deleteCashAssistanceDetail(findRequest) {
-    try {    let pool = await sql.connect(config);
-    } catch (error) {
-  
-      console.log(error.message);
-  
-  
-    }
-  }
+//تست نشده
+async function ws_updateCashAssistanceDetail(findRequest) {
+  try {
+    let updateTblCharityAccounts;
+    let pool = await sql.connect(config);
 
-  module.exports = {
+    let value = "";
 
-    ws_loadCashAssistanceDetail: ws_loadCashAssistanceDetail,
-    ws_createCashAssistanceDetail: ws_createCashAssistanceDetail,
-    ws_updateCashAssistanceDetail: ws_updateCashAssistanceDetail,
-    ws_deleteCashAssistanceDetail:ws_deleteCashAssistanceDetail
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == "number"
+      ) {
+        value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`;
+      } else {
+        value =
+          value + " " + `${x} = N` + "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
+
+    value = value.slice(0, -1);
+    updateTblCharityAccounts = await pool.request().query(
+      `UPDATE tblCashAssistanceDetail 
+    SET  ` +
+        value +
+        ` WHERE tblCashAssistanceDetail = ${findRequest.tblCashAssistanceDetail};`
+    );
+
+    updateTblCharityAccounts = await pool
+      .request()
+      .query(
+        `select * from tblCashAssistanceDetail  where tblCashAssistanceDetail =` +
+          findRequest["tblCashAssistanceDetail"]
+      );
+    return updateTblCharityAccounts.recordsets;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//تست نشده
+async function ws_deleteCashAssistanceDetail(findRequest) {
+  try {
+    let pool = await sql.connect(config);
+
+    let deleteTblCharityAccounts;
+
+    deleteTblCharityAccounts = await pool
+      .request()
+      .query(`DELETE FROM tblCashAssistanceDetail WHERE CashAssistanceDetailId  = ${findRequest.CashAssistanceDetailId };`);
+
+    return deleteTblCharityAccounts.rowsAffected[0];
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+module.exports = {
+  ws_loadCashAssistanceDetail: ws_loadCashAssistanceDetail,
+  ws_createCashAssistanceDetail: ws_createCashAssistanceDetail,
+  ws_updateCashAssistanceDetail: ws_updateCashAssistanceDetail,
+  ws_deleteCashAssistanceDetail: ws_deleteCashAssistanceDetail,
 };

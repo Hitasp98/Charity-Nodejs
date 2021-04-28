@@ -95,7 +95,8 @@ function ws_createPlan(findRequest) {
             }
           }
 
-          value = value.slice(0, -1);
+          value = value.slice(0, -1); //!!!!!!!!!!!!!!!!!!به دلیل عکس اینسرت انجام نشد 
+
           _context2.next = 9;
           return regeneratorRuntime.awrap(pool.request().query("INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)\n            VALUES (" + value + ")"));
 
@@ -119,7 +120,8 @@ function ws_createPlan(findRequest) {
       }
     }
   }, null, null, [[0, 16]]);
-}
+} //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!تست نشده
+
 
 function ws_UpdatePlan(findRequest) {
   var updateTblCharityAccounts, pool, value;
@@ -167,7 +169,8 @@ function ws_UpdatePlan(findRequest) {
       }
     }
   }, null, null, [[0, 16]]);
-}
+} //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!تست نشده
+
 
 function ws_deletePlan(findRequest) {
   var pool, deleteTblCharityAccounts;

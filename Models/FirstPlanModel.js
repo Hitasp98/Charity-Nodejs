@@ -83,7 +83,7 @@ async function ws_createPlan(findRequest) {
     }
 
     value = value.slice(0, -1);
-
+//!!!!!!!!!!!!!!!!!!به دلیل عکس اینسرت انجام نشد 
     let insertTblCharityAccounts = await pool.request().query(
       `INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)
             VALUES (` +
@@ -103,6 +103,8 @@ async function ws_createPlan(findRequest) {
     console.log(error.message);
   }
 }
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!تست نشده
 async function ws_UpdatePlan(findRequest) {
   try {
     let updateTblCharityAccounts;
@@ -138,6 +140,7 @@ async function ws_UpdatePlan(findRequest) {
     console.log(error.message);
   }
 }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!تست نشده
 async function ws_deletePlan(findRequest) {
   try {
     let pool = await sql.connect(config);

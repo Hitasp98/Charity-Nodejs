@@ -14,5 +14,5 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 router.route('/loadNeedyForPlan').post(PlanControllers.loadNeedyForPlan);
 router.route('/AssignNeedyToPlan').post(PlanControllers.AssignNeedyToPlan);
-router.route('/deleteNeedyFromPlan').put(PlanControllers.deleteNeedyFromPlan);
+router.route('/deleteNeedyFromPlan')["delete"](PlanControllers.deleteNeedyFromPlan);
 module.exports = router;

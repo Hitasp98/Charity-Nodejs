@@ -15,5 +15,5 @@ app.use(bodyParser.json());
 router.route('/loadCashAssistanceDetail').post(SuccorControllers.loadCashAssistanceDetail);
 router.route('/createCashAssistanceDetail').post(SuccorControllers.createCashAssistanceDetail);
 router.route('/updateCashAssistanceDetail').put(SuccorControllers.updateCashAssistanceDetail);
-router.route('/deleteCashAssistanceDetail').put(SuccorControllers.deleteCashAssistanceDetail);
+router.route('/deleteCashAssistanceDetail')["delete"](SuccorControllers.deleteCashAssistanceDetail);
 module.exports = router;

@@ -3,6 +3,7 @@ const sql = require("mssql");
 var crypto = require("crypto");
 
 var fnGetRandomString = require("../Utils/Randomnumber");
+//تست نشده
 
 async function ws_loadNeedyForPlan(findRequest) {
   try {
@@ -19,10 +20,12 @@ async function ws_loadNeedyForPlan(findRequest) {
         findRequest.PlanId === null &&
         findRequest.AssignNeedyPlanId === null)
     ) {
-      getPayment = await pool.request().query(`SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
-      FROM tblCashAssistanceDetail  
+      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+      getPayment = await pool.request()
+        .query(`SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
+      FROM tblAssignNeedyToPlans   
       join tblPersonal
-      on tblCashAssistanceDetail. = tblPersonal.PersonId
+      on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId
       join tblPlans
       on tblPersonal.PersonId= tblPlans.PlanId `);
       return getPayment.recordsets[0];
@@ -51,31 +54,75 @@ async function ws_loadNeedyForPlan(findRequest) {
       whereclause = whereclause.slice(0, -3);
 
       //show records with whereclause
+      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
-      getTblCommonBaseType = await pool
-        .request()
-        .query(`SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
-        FROM tblCashAssistanceDetail  
+      getTblCommonBaseType = await pool.request().query(
+        `SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
+        FROM tblAssignNeedyToPlans  
         join tblPersonal
-        on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId
+        on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId
         join tblPlans
-        on tblPersonal.PersonId= tblPlans.PlanId+  where` + whereclause);
+        on tblPersonal.PersonId= tblPlans.PlanId
+          where` + whereclause
+      );
       return getTblCommonBaseType.recordsets[0][0];
     }
   } catch (error) {
     console.log(error.message);
   }
 }
+//????????????????شناسه نيازمند NeedyId يا هش مپي از ليست نيازمندان (ليستي از شناسه هاي NeedyId )
+//????????????????این مطلب در این مدل قرار نگرفته
+//تست نشده
+
 async function ws_AssignNeedyToPlan(findRequest) {
   try {
     let pool = await sql.connect(config);
+
+    let value = "";
+
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||
+        typeof findRequest[String(x)] == "number"
+      ) {
+        value = value + " " + `${findRequest[String(x)]}` + `,`;
+      } else {
+        value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
+
+    value = value.slice(0, -1);
+
+    let inserttblAssignNeedyToPlans = await pool.request().query(
+      `INSERT INTO tblAssignNeedyToPlans  (PlanId,Fdate,Tdate,NeedyId)
+            VALUES (` +
+        value +
+        `)`
+    );
+    let tblAssignNeedyToPlans = await pool
+      .request()
+      .query(`select *  from tblAssignNeedyToPlans  `);
+    return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
     console.log(error.message);
   }
 }
+//تست نشده
+  
 async function ws_deleteNeedyFromPlan(findRequest) {
   try {
     let pool = await sql.connect(config);
+
+    let deletetblAssignNeedyToPlans;
+
+    deletetblAssignNeedyToPlans = await pool
+      .request()
+      .query(
+        `DELETE FROM tblAssignNeedyToPlans WHERE PlanId = ${findRequest.PlanId};`
+      );
+
+    return deletetblAssignNeedyToPlans.rowsAffected[0];
   } catch (error) {
     console.log(error.message);
   }
