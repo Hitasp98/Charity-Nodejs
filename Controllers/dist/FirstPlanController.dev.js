@@ -189,7 +189,7 @@ module.exports.UpdatePlan = function _callee6(request, response) {
         case 0:
           _context6.prev = 0;
 
-          if (!(findRequest.PlanName !== null && findRequest.Description !== null && findRequest.PlanNature !== null && findRequest.ParentPlanId !== null && findRequest.icon !== null && findRequest.Fdate !== null && findRequest.Tdate !== null && findRequest.neededLogin !== null)) {
+          if (!(findRequest.PlanId !== null && findRequest.PlanName !== null && findRequest.Description !== null && findRequest.PlanNature !== null && findRequest.ParentPlanId !== null && findRequest.icon !== null && findRequest.Fdate !== null && findRequest.Tdate !== null && findRequest.neededLogin !== null || findRequest.PlanId !== undefined && findRequest.PlanName !== undefined && findRequest.Description !== undefined && findRequest.PlanNature !== undefined && findRequest.ParentPlanId !== undefined && findRequest.icon !== undefined && findRequest.Fdate !== undefined && findRequest.Tdate !== undefined && findRequest.neededLogin !== undefined)) {
             _context6.next = 9;
             break;
           }
@@ -243,6 +243,7 @@ module.exports.UpdatePlan = function _callee6(request, response) {
                       resultPlanNature = _context5.sent;
 
                       //اگر چيزي برگردوند يعني ماهيت طرح را نميخواهد تغيير دهد
+                      //یعنی فیلد عوض نشده 
                       if (resultPlanNature != null) {
                         //!error here
                         requestApi.post({

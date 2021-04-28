@@ -85,6 +85,7 @@ module.exports.createPlan = async function(request, response) {
 module.exports.UpdatePlan = async function(request, response) {
   try {
     if (
+      (findRequest.PlanId!==null&&
       findRequest.PlanName !== null &&
       findRequest.Description !== null &&
       findRequest.PlanNature !== null &&
@@ -92,7 +93,16 @@ module.exports.UpdatePlan = async function(request, response) {
       findRequest.icon !== null &&
       findRequest.Fdate !== null &&
       findRequest.Tdate !== null &&
-      findRequest.neededLogin !== null
+      findRequest.neededLogin !== null)||
+    ((findRequest.PlanId!==undefined&&
+      findRequest.PlanName !== undefined &&
+      findRequest.Description !== undefined &&
+      findRequest.PlanNature !== undefined &&
+      findRequest.ParentPlanId !== undefined &&
+      findRequest.icon !== undefined &&
+      findRequest.Fdate !== undefined &&
+      findRequest.Tdate !== undefined &&
+      findRequest.neededLogin !== undefined))
     ) {
       let findIndex = {
         PName: findRequest.PlanName,
@@ -119,6 +129,7 @@ module.exports.UpdatePlan = async function(request, response) {
               //ارسال ماهیت و شناسه برای تشخیص 
               let resultPlanNature = await PlanModel.ws_loadPlan(Nature);
               //اگر چيزي برگردوند يعني ماهيت طرح را نميخواهد تغيير دهد
+              //یعنی فیلد عوض نشده 
               if (resultPlanNature != null) {
                 //!error here
                 requestApi.post(
