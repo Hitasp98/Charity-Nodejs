@@ -114,7 +114,7 @@ module.exports.createPlan = function _callee2(request, response) {
             break;
           }
 
-          console.log('test');
+          console.log("test");
           _context2.next = 20;
           return regeneratorRuntime.awrap(PlanModel.ws_createPlan(_findRequest2).then(function (result) {
             if (result != null) {
@@ -234,6 +234,7 @@ module.exports.UpdatePlan = function _callee6(request, response) {
                         PlandId: findRequest.PlanId,
                         PlanNature: findRequest.PlanNature
                       }; //check PlanNature is here database
+                      //ارسال ماهیت و شناسه برای تشخیص 
 
                       _context5.next = 8;
                       return regeneratorRuntime.awrap(PlanModel.ws_loadPlan(Nature));

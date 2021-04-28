@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 
 module.exports.loadPlan = async function(request, response) {
   try {
-
     let findRequest = { ...request.body };
     await PlanModel.ws_loadPlan(findRequest).then(result => {
       if (result[0] == null) {
@@ -29,7 +28,7 @@ module.exports.loadPlan = async function(request, response) {
 module.exports.createPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
-    console.log(findRequest.icon)
+    console.log(findRequest.icon);
     if (
       findRequest.PlanName !== null &&
       findRequest.Description !== null &&
@@ -46,10 +45,10 @@ module.exports.createPlan = async function(request, response) {
           PlanNature: findRequest.PlanNature,
           ParentPlanId: findRequest.ParentPlanId,
         };
-        console.log(findIndex)
+        console.log(findIndex);
 
         let loadPlan = await PlanModel.ws_loadPlan(findIndex);
-        console.log(typeof(loadPlan))
+        console.log(typeof loadPlan);
 
         if (loadPlan == null) {
           let f = {
@@ -57,11 +56,10 @@ module.exports.createPlan = async function(request, response) {
           };
           let loadPlan2 = await PlanModel.ws_loadPlan(f);
           if (loadPlan2 == null) {
-            console.log('test')
+            console.log("test");
 
             await PlanModel.ws_createPlan(findRequest).then(result => {
               if (result != null) {
-
                 response.json(result.PlanId);
               } else {
                 response.json({ error: " رکورد درج نشد " });
@@ -118,7 +116,7 @@ module.exports.UpdatePlan = async function(request, response) {
                 PlanNature: findRequest.PlanNature,
               };
               //check PlanNature is here database
-
+              //ارسال ماهیت و شناسه برای تشخیص 
               let resultPlanNature = await PlanModel.ws_loadPlan(Nature);
               //اگر چيزي برگردوند يعني ماهيت طرح را نميخواهد تغيير دهد
               if (resultPlanNature != null) {
@@ -127,11 +125,11 @@ module.exports.UpdatePlan = async function(request, response) {
                   {
                     url:
                       "http://localhost:8090/tblCommonBaseData/tblAssignNeedyToPlans   ",
-                    form: { PlanId : findRequest.PlanId  },
+                    form: { PlanId: findRequest.PlanId },
                   },
                   async function(err, res, body) {
                     //!اينجا در نظر داشته باشيد اگه برگرده برابر باشد نميتوان تغيير داد تاريخ را ولي در درست نبودن شرط ميتوان تغيير داد
-                    if (await JSON.parse(body).PlanId == findRequest.PlanId) {
+                    if ((await JSON.parse(body).PlanId) == findRequest.PlanId) {
                       let date = {
                         PlanId: findRequest.PlanId,
                         fdate: findRequest.Fdate,
