@@ -117,26 +117,29 @@ module.exports.updatePersonalController = async function (request, response) {
     
     let findRequest = { ...request.body };
     if(findRequest.PersonType != null && findRequest.Name !=null && findRequest.Family !=null && findRequest.Sex!=null){
-        let nationalCodeChecker = await fnCheckCodeMeli.fnCheckCodeMeli(findRequest.NationalCode)
+       
         let findById = await tblPersonalModel.ws_loadPersonal({PersonId : findRequest.PersonId })
+            
             if(findById[0] != null){
+                let nationalCodeChecker = await fnCheckCodeMeli.fnCheckCodeMeli(findRequest.NationalCode)
                 if(nationalCodeChecker == true ){
                     if(findRequest.PersonType == 2 && findRequest.IdNumber !=null && findRequest.NationalCode !=null && findRequest.BirthDate !=null && findRequest.BirthPlace != null && findRequest.PersonPhoto != null ){
                        
                         
                         let findIndex = {
                         
-                        PersonType : findRequest.PersonType,
+                            PersonType : findRequest.PersonType,
                             NationalCode : findRequest.NationalCode
                         }
                         let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                        if(resultGet[0] == null){
-                            await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
+                   
+                        if(resultGet[0] == null || (resultGet[0].PersonId == findRequest.PersonId && resultGet[0] != null )){
+                            await tblPersonalModel.ws_updatePersonal(findRequest).then(result => 
                                 
-                                response.json(result[0].PersonId)
+                                response.json(result)
                             ).catch (error=>
                             
-                                response.json({error:"رکورد مورد نظر درج نشد"})
+                                response.json({error:"رکورد مورد نظر ویرایش نشد"})
                             )
                         }else{
                             response.json({error:"رکورد مورد نظر تکراری میباشد"})
@@ -150,10 +153,10 @@ module.exports.updatePersonalController = async function (request, response) {
                             NationalCode : findRequest.NationalCode
                         }
                         let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                        if(resultGet[0] == null){
-                            await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
+                        if(resultGet[0] == null || (resultGet[0].PersonId == findRequest.PersonId && resultGet[0] != null)){
+                            await tblPersonalModel.ws_updatePersonal(findRequest).then(result => 
                                 
-                                response.json(result[0].PersonId)
+                                response.json(result)
                             ).catch (error=>
                             
                                 response.json({error:"رکورد مورد نظر ویرایش نشد"})

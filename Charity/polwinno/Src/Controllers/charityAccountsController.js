@@ -85,7 +85,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
                     let findIndex = {
                         AccountNumber : findRequest.AccountNumber,
                         BaseTypeCode : findRequest.BaseTypeCode
-                                        }
+                    }
                     
                     
                     let resultGet = await tblCharityAccountsModel.getTblCharityAccounts(findIndex)

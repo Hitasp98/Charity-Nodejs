@@ -121,23 +121,25 @@ try {
           if ( (findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ||  typeof(findRequest[String(x)])=="boolean") && x != "SecretCode"  ){
               value = value + " "+`${findRequest[String(x)]}`+`,`
              
-          }else if(x == "SecretCode"){
-                if (hashInputBase64 != null){
-                    value = value + " "+`N`+ '\''+ hashInputBase64 +'\''+`,`
-                   
-                }else{
-                    value = value + " "+`${findRequest[String(x)]}`+`,`
-                   
-                }
-               
           }else{
                 value = value + " "+`N`+ '\''+ findRequest[String(x)] +'\''+`,`
           }
            
       }
+
+     // create secretCode
+      if (hashInputBase64 != null){
+          value = value + " "+`N`+ '\''+ hashInputBase64 +'\''+`,`
+          
+      }else{
+          value = value + " "+`${hashInputBase64}`+`,`
+          
+      }
+       
+  
        value = await value.slice(0,-1)
 
-      
+     
 
 
     
@@ -186,36 +188,58 @@ async function ws_updatePersonal(findRequest) {
 
       let updateTblPersonal
       let pool = await sql.connect(config)
+      let personIdValue
+      let hashInputBase64
+     
+      if(findRequest.PersonType == 2){
+          let hashInput = findRequest.Name + findRequest.Family + findRequest.NationalCode + findRequest.PersonType
 
-
+          hashInput = await crypto.SHA1(hashInput);
+      
+          hashInputBase64 = await hashInput.toString(crypto.enc.Base64)
+      }else{
+          hashInputBase64 = null
+      }
+      
+      
       let value = ''
-
+      console.log(findRequest);
       for (x in findRequest) {
 
 
         if (x == "PersonId") {
-
-        } else if (findRequest[String(x)] ==  null 
-                      || 
-           typeof (findRequest[String(x)]) == "number") {
+          
+         personIdValue = findRequest.PersonId
+        
+        } else if ((findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ||  typeof(findRequest[String(x)])=="boolean") && x != "SecretCode") {
  
           value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`
 
-        } else {
-          value = value + " " + `${x}  = ` + '\'' + findRequest[String(x)] + '\'' + `,`
+        }else {
+          value = value + " " + `${x}  = N` + '\'' + findRequest[String(x)] + '\'' + `,`
 
         }
 
       }
 
-      value = value.slice(0, -1)
-      updateTblPersonal  = await pool.request().query(`UPDATE [dbo].[tblPersonal]
+      //create secretCode
+
+      if (hashInputBase64 != null){
+        value = value + " "+`SecretCode = N`+ '\''+ hashInputBase64 +'\''+`,`
+      }else{
+          value = value + " "+`SecretCode = ${hashInputBase64} `+`,`   
+      }
+      
+      value = await value.slice(0, -1)
+      
+      updateTblPersonal  = await pool.request().query(`UPDATE tblPersonal
       SET  ` + value +
-        ` WHERE PersonId = ${findRequest.PersonId};`)
+        ` WHERE PersonId = ${personIdValue};`)
 
 
-      updateTblPersonal = await pool.request().query(`SELECT * FROM [CharityDB].[dbo].[tblPersonal] where PersonId=` + findRequest.PersonId)
-      return updateTblPersonal.recordsets;
+      updateTblPersonal = await pool.request().query(`SELECT * FROM tblPersonal where PersonId=` + findRequest.PersonId)
+      console.log(updateTblPersonal.recordsets);
+      return updateTblPersonal.recordsets[0];
 
 
   } catch (error) {

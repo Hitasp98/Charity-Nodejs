@@ -14,6 +14,7 @@ app.use('/tblCommonBaseType', require('./Routes/commonBaseTypeRoutes'))
 app.use('/tblCommonBaseData', require('./Routes/commonBaseDataRoutes'))
 app.use('/tblCharityAccounts', require('./Routes/charityAccountsRoutes'))
 app.use('/tblPersonal', require('./Routes/personalRoutes'))
+app.use('/NeedyAccounts',  require('./Routes/NeedyAccountsRoutes'))
 
 
 
