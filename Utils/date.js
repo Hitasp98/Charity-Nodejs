@@ -8,8 +8,7 @@ function datechack(date1, date2) {
   let year2 = parseInt(date2.slice(0, 4));
   let month2 = parseInt(date2.slice(5, 7));
   let day2 = parseInt(date2.slice(8, 10));
-  console.log(year1);
-  console.log(year2);
+
   //تاریخ شبیه به هم رو اشتباه برمیگردونیم 
   if (year1 == year2 && month1 == month2 && day1 == day2) {
     return false;
