@@ -28,6 +28,9 @@ function datechack(date1, date2) {
   } else {
     return false;
   }
-}
+} // console.log(datechack("1400/03/05", "1400/05/07"))
 
-console.log(datechack("1400/03/05", "1400/05/07"));
+
+module.exports = {
+  datechack: datechack
+};
