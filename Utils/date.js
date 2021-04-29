@@ -1,11 +1,11 @@
 
-///تغییر اعداد فارسی به انگلیسی 
+///تغییر اعداد فارسی به انگلیسی
 String.prototype.toEnglishDigit = function() {
-  var find = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-  var replace = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  var replaceString = this;
-  var regex;
-  for (var i = 0; i < find.length; i++) {
+    let find = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+    let replace = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    let replaceString = this;
+    let regex;
+  for (let i = 0; i < find.length; i++) {
     regex = new RegExp(find[i], "g");
     replaceString = replaceString.replace(regex, replace[i]);
   }
@@ -56,5 +56,5 @@ function datechack(date1, date2) {
   }
 }
 
-// console.log(datechack("۱۴۰۰/۰۲/۰۴", "۱۴۰۰/۰۲/۰۴"))
+// console.log(datechack("۱۴۰۰/۰۲/۰۵", "۱۴۰۰/۰۲/۰۴"))
 module.exports = { datechack: datechack };
