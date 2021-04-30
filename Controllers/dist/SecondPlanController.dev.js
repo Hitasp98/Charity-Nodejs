@@ -25,6 +25,8 @@ var requestApi = require("request");
 var _require = require("express"),
     json = _require.json;
 
+var date = require("../Utils/date");
+
 var app = express();
 app.use(bodyParser.urlencoded({
   extended: true
@@ -71,7 +73,7 @@ module.exports.loadNeedyForPlan = function _callee(request, response) {
 
 
 module.exports.AssignNeedyToPlan = function _callee3(request, response) {
-  var findRequest;
+  var findRequest, checkDate;
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
@@ -84,19 +86,20 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
               console.log(findRequest.PlanId);
               console.log(findRequest.Fdate);
               console.log(findRequest.Tdate);
-              console.log(findRequest.NeedyId);
+              checkDate = date.datechack(findRequest.Fdate, findRequest.Tdate);
 
-              if (findRequest.Fdate < findRequest.Tdate) {
+              if (checkDate == true) {
                 // تاريخ هاروئ بگيريم  tblPlans در اينجا بايد از جدول
+                //ادرس درست است
                 requestApi.post({
                   url: "http://localhost:8090/FirstPlan/loadPlan",
                   from: {
-                    PlanId: findRequest.PlanI,
+                    PlanId: findRequest.PlanId,
                     Fdate: findRequest.Fdate,
                     Tdate: findRequest.Tdate
                   }
                 }, function _callee2(err, res, body) {
-                  var fPlan, fNeedyId, findNeedyId;
+                  var fPlan, startdate, finshdate, fNeedyId, findNeedyId;
                   return regeneratorRuntime.async(function _callee2$(_context2) {
                     while (1) {
                       switch (_context2.prev = _context2.next) {
@@ -106,33 +109,45 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
 
                         case 2:
                           fPlan = _context2.sent;
-                          console.log(fPlan[0]); //در اینجا باید ابتدا چک کنیم در رنج تاریخ است
-                          //!مشکل اینجا این است تاریخ ها بصورت رشته ای است نه عددی برای مقایسه حتما باید چک کنیم عدد هستش
-                          //!میتونی شرط عدد بودن بگذاریم
+                          console.log(fPlan[0].Fdate); //در اینجا رنج تاریخ را چک میکنیم
+                          //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
 
-                          if (!(fPlan[0].Fdate > findRequest.Fdate || findRequest.Tdate < fPlan[0].Tdate)) {
-                            _context2.next = 17;
+                          startdate = date.datechack(fPlan[0].Fdate, findRequest.Fdate);
+
+                          if (!(startdate == true)) {
+                            _context2.next = 23;
                             break;
                           }
 
+                          //در اینجا تاریخ پایان پلن دو رو کوچک تر درنظر میگیریم
+                          finshdate = date.datechack(findRequest.Tdate, fPlan[0].Tdate);
+
+                          if (!(finshdate == true)) {
+                            _context2.next = 20;
+                            break;
+                          }
+
+                          //در اینجا باید ابتدا چک کنیم در رنج تاریخ است
+                          //!مشکل اینجا این است تاریخ ها بصورت رشته ای است نه عددی برای مقایسه حتما باید چک کنیم عدد هستش
+                          //!میتونی شرط عدد بودن بگذاریم
                           //چک برای اینه تکراری نباشه
                           //شناسه هارو اینجا فقط میفرستیم طبق سند گفته شده شناسه ها  ترکیب یکتا باشند
                           fNeedyId = {
                             NeedyId: findRequest.NeedyId,
                             PlanId: findRequest.PlanId
                           };
-                          _context2.next = 8;
+                          _context2.next = 11;
                           return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(fNeedyId));
 
-                        case 8:
+                        case 11:
                           findNeedyId = _context2.sent;
 
                           if (!(findNeedyId == null)) {
-                            _context2.next = 14;
+                            _context2.next = 17;
                             break;
                           }
 
-                          _context2.next = 12;
+                          _context2.next = 15;
                           return regeneratorRuntime.awrap(PlanModel.ws_AssignNeedyToPlan(findRequest).then(function (result) {
                             if (result != null) {
                               response.json(result);
@@ -143,25 +158,34 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
                             }
                           }));
 
-                        case 12:
-                          _context2.next = 15;
-                          break;
-
-                        case 14:
-                          response.json({
-                            error: " درج تکراری  "
-                          });
-
                         case 15:
                           _context2.next = 18;
                           break;
 
                         case 17:
                           response.json({
-                            error: "تاریخ شروع و پایان را چک کنید "
+                            error: " درج تکراری  "
                           });
 
                         case 18:
+                          _context2.next = 21;
+                          break;
+
+                        case 20:
+                          response.json({
+                            error: " تاریخ شروع و پایان را چک کنید در رنج نست"
+                          });
+
+                        case 21:
+                          _context2.next = 24;
+                          break;
+
+                        case 23:
+                          response.json({
+                            error: " تاریخ شروع و پایان را چک کنید در رنج نست"
+                          });
+
+                        case 24:
                         case "end":
                           return _context2.stop();
                       }
@@ -194,7 +218,7 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
 
 
 module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
-  var findRequest, findAssignNeedyPlanId;
+  var findRequest, findPlanId;
   return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
@@ -202,19 +226,32 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
           _context6.prev = 0;
           findRequest = _toConsumableArray(request.body);
 
-          if (!(findRequest.AssignNeedyPlanId !== null && findRequest.PlanId !== null || findRequest.AssignNeedyPlanId !== undefined && findRequest.PlanId !== undefined)) {
+          if (!(findRequest.PlanId !== null || findRequest.PlanId !== undefined)) {
+            _context6.next = 22;
+            break;
+          }
+
+          if (!(findRequest.AssignNeedyPlanId !== null || findRequest.AssignNeedyPlanId !== undefined)) {
             _context6.next = 7;
             break;
           }
 
-          _context6.next = 5;
-          return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.AssignNeedyPlanId));
+          _context6.next = 6;
+          return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.PlanId));
 
-        case 5:
-          findAssignNeedyPlanId = _context6.sent;
+        case 6:
+          findRequest.AssignNeedyPlanId = _context6.sent;
+
+        case 7:
+          if (!(findRequest.AssignNeedyPlanId != null || findRequest.AssignNeedyPlanId != undefined)) {
+            _context6.next = 11;
+            break;
+          }
+
           //api اینجا اررو هست دلیل نداشتن
           requestApi.post({
-            url: "http://localhost:8090/tblCashAssistanceDetail/tblCashAssistanceDetail",
+            //tblNonCashAssistanceDetail
+            url: "tblCashAssistanceDetail",
             from: {
               // در این قسمت در  داخل سند نوشته شد بود
               AssignNeedyPlanId: findRequest.AssignNeedyPlanId
@@ -234,7 +271,8 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
 
                     if (fPlan[0] == null) {
                       requestApi.post({
-                        url: "http://localhost:8090/tblNonCashAssistanceDetail /tblNonCashAssistanceDetail ",
+                        //tblNonCashAssistanceDetail
+                        url: " tblNonCashAssistanceDetail ",
                         from: {
                           // در این قسمت در  داخل سند نوشته شد بود
                           AssignNeedyPlanId: findRequest.AssignNeedyPlanId
@@ -258,7 +296,7 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
                                 }
 
                                 _context4.next = 7;
-                                return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.PlanId));
+                                return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.AssignNeedyPlanId));
 
                               case 7:
                                 findPlanId = _context4.sent;
@@ -269,7 +307,7 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
                                 }
 
                                 _context4.next = 11;
-                                return regeneratorRuntime.awrap(PlanModel.ws_deleteNeedyFromPlan(findRequest.PlanId).then(function (result) {
+                                return regeneratorRuntime.awrap(PlanModel.ws_deleteNeedyFromPlan(findRequest.AssignNeedyPlanId).then(function (result) {
                                   if (result != null) {
                                     response.json("حذف شد");
                                   } else {
@@ -317,22 +355,65 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
               }
             });
           });
-
-        case 7:
-          _context6.next = 12;
+          _context6.next = 20;
           break;
 
-        case 9:
-          _context6.prev = 9;
+        case 11:
+          _context6.next = 13;
+          return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.PlanId));
+
+        case 13:
+          findPlanId = _context6.sent;
+
+          if (!(findPlanId != null)) {
+            _context6.next = 19;
+            break;
+          }
+
+          _context6.next = 17;
+          return regeneratorRuntime.awrap(PlanModel.ws_deleteNeedyFromPlan(findRequest.PlanId).then(function (result) {
+            if (result != null) {
+              response.json("حذف شد");
+            } else {
+              response.json({
+                error: "حذف نشد"
+              });
+            }
+          }));
+
+        case 17:
+          _context6.next = 20;
+          break;
+
+        case 19:
+          response.json({
+            error: "رکورد یافت نشد "
+          });
+
+        case 20:
+          _context6.next = 23;
+          break;
+
+        case 22:
+          response.json({
+            error: "ورودی هارو چک کنید "
+          });
+
+        case 23:
+          _context6.next = 28;
+          break;
+
+        case 25:
+          _context6.prev = 25;
           _context6.t0 = _context6["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 12:
+        case 28:
         case "end":
           return _context6.stop();
       }
     }
-  }, null, null, [[0, 9]]);
+  }, null, null, [[0, 25]]);
 };

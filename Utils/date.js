@@ -34,8 +34,7 @@ function datechack(date1, date2) {
   m2=month2.toEnglishDigit()
   d2=day2.toEnglishDigit()
 
-  console.log(y1);
-  console.log(y2);
+
   //تاریخ شبیه به هم رو اشتباه برمیگردونیم
   if (y1 == y2) {
     if (m1 == m2) {
@@ -55,6 +54,7 @@ function datechack(date1, date2) {
     return false;
   }
 }
+///return true درست است 
 
-console.log(datechack("۱۴۰۰/۰۲/۰۳", "۱۴۰۰/۰۲/۰۴"))
+// console.log(datechack("۱۴۰۰/۰۲/۰۳", "۱۴۰۰/۰۲/۰۴"))
 module.exports = { datechack: datechack };
