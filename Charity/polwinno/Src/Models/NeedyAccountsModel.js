@@ -19,7 +19,9 @@ async function ws_loadNeedyAccount(findRequest) {
     let tblNeedyAccounts 
 
     if (
-      (findRequest.BankId === null &&
+      (
+        findRequest.NeedyAccountId === null &&  
+        findRequest.BankId === null &&
         findRequest.NeedyId === null &&
         findRequest.OwnerName === null && 
         findRequest.CardNumber === null &&
@@ -27,7 +29,9 @@ async function ws_loadNeedyAccount(findRequest) {
         findRequest.AccountName === null &&
         findRequest.ShebaNumber === null
         ) ||
-      (findRequest.BankId === undefined &&
+      (
+        findRequest.NeedyAccountId === undefined &&   
+        findRequest.BankId === undefined &&
         findRequest.NeedyId === undefined &&
         findRequest.OwnerName === undefined && 
         findRequest.CardNumber === undefined &&
@@ -55,7 +59,7 @@ async function ws_loadNeedyAccount(findRequest) {
 
 
 
-      let whereclause = ''
+      let whereclause = ` BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\''+` AND`
       
 
       //Todo: find value on proprty with string or number ||null and add to whereclause build query
@@ -197,24 +201,24 @@ async function ws_UpdateNeedyAccount(findRequest) {
 
 
       for (x in findRequest) {
-      
-        if (
+      if(x == "NeedyAccountId"){
+
+      }else if (
           findRequest[String(x)] == null || typeof findRequest[String(x)] == 'number') {
 
           value = value + ' ' + ` ${x} = ${findRequest[String(x)]}` + `,`
         } else {
-          value = value + ' ' + `${x} = ` + "'" + findRequest[String(x)] + "'" + `,`
+          value = value + ' ' + `${x} = ` + "N'" + findRequest[String(x)] + "'" + `,`
         }
       }
 
-      value = value.slice(0, -1)
+      value = await value.slice(0, -1)
 
 
-
+console.log(value);
       updateTblPersonal = await pool.request().query(
-        `UPDATE [tblNeedyAccounts]
-      SET  ` +
-        value +
+        `UPDATE tblNeedyAccounts
+      SET  ` + value +
         ` WHERE NeedyAccountId = ${findRequest.NeedyAccountId};`
       )
 

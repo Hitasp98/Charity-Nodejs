@@ -139,18 +139,18 @@ try {
                     
                                     
                         )}else{
-                        response.json("رکورد ویرایش شده یکتا نیست");
+                        response.json({error : "رکورد ویرایش شده یکتا نیست"});
                     }
                             
                 }else{
-                response.json("چنین رکوردی برای ویرایش موجود نیست");
+                response.json({error : "چنین رکوردی برای ویرایش موجود نیست"});
             }       
         }else{
-        response.json("فیلدهای ضروری را پر کنید");
+        response.json({errror :"فیلدهای ضروری را پر کنید"});
         }
   } catch (error) {
     response.json({
-      error: "کد نوع را وارد کنید"
+      error: "عملیات ویرایش انجام نشد"
     })
   }
 };
@@ -159,7 +159,7 @@ try {
 
 
 
-module.exports.deleteNeedyAccountsController = function (request, response) {
+module.exports.deleteNeedyAccountsController = async function (request, response) {
   try {
     let findRequest = {...request.body}
             
@@ -169,8 +169,9 @@ module.exports.deleteNeedyAccountsController = function (request, response) {
         BaseTypeCode : findRequest.BaseTypeCode
     }
     
-    
+    console.log(findIndex);
     let resultGet = await NeedyAccountsModels.ws_loadNeedyAccount(findIndex) 
+   
     if (resultGet[0] != null){
         await NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(result =>{
 
