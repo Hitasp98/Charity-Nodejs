@@ -130,9 +130,10 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
         findRequest.AssignNeedyPlanId !== null ||
         findRequest.AssignNeedyPlanId !== undefined
       ) {
-        findRequest.AssignNeedyPlanId = await PlanModel.ws_loadNeedyForPlan(
+        let findAssignNeedyPlanId = await PlanModel.ws_loadNeedyForPlan(
           findRequest.PlanId
         );
+        findRequest.AssignNeedyPlanId=findAssignNeedyPlanId[0].AssignNeedyPlanId
       }
       //درصورتيکه شناسه تخصيص حاوي مقدار باشد، براساس شناسه تخصيص نيازمند
       //! ============================>اولویت ابتدای امر با شناسه تخصيص نيازمند به طرح در صورت نداشتن  شناسه طرح مهم)

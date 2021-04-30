@@ -218,7 +218,7 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
 
 
 module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
-  var findRequest, findPlanId;
+  var findRequest, findAssignNeedyPlanId, findPlanId;
   return regeneratorRuntime.async(function _callee6$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
@@ -227,12 +227,12 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
           findRequest = _toConsumableArray(request.body);
 
           if (!(findRequest.PlanId !== null || findRequest.PlanId !== undefined)) {
-            _context6.next = 22;
+            _context6.next = 23;
             break;
           }
 
           if (!(findRequest.AssignNeedyPlanId !== null || findRequest.AssignNeedyPlanId !== undefined)) {
-            _context6.next = 7;
+            _context6.next = 8;
             break;
           }
 
@@ -240,11 +240,12 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
           return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.PlanId));
 
         case 6:
-          findRequest.AssignNeedyPlanId = _context6.sent;
+          findAssignNeedyPlanId = _context6.sent;
+          findRequest.AssignNeedyPlanId = findAssignNeedyPlanId[0].AssignNeedyPlanId;
 
-        case 7:
+        case 8:
           if (!(findRequest.AssignNeedyPlanId != null || findRequest.AssignNeedyPlanId != undefined)) {
-            _context6.next = 11;
+            _context6.next = 12;
             break;
           }
 
@@ -355,22 +356,22 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
               }
             });
           });
-          _context6.next = 20;
+          _context6.next = 21;
           break;
 
-        case 11:
-          _context6.next = 13;
+        case 12:
+          _context6.next = 14;
           return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest.PlanId));
 
-        case 13:
+        case 14:
           findPlanId = _context6.sent;
 
           if (!(findPlanId != null)) {
-            _context6.next = 19;
+            _context6.next = 20;
             break;
           }
 
-          _context6.next = 17;
+          _context6.next = 18;
           return regeneratorRuntime.awrap(PlanModel.ws_deleteNeedyFromPlan(findRequest.PlanId).then(function (result) {
             if (result != null) {
               response.json("حذف شد");
@@ -381,39 +382,39 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
             }
           }));
 
-        case 17:
-          _context6.next = 20;
+        case 18:
+          _context6.next = 21;
           break;
 
-        case 19:
+        case 20:
           response.json({
             error: "رکورد یافت نشد "
           });
 
-        case 20:
-          _context6.next = 23;
+        case 21:
+          _context6.next = 24;
           break;
 
-        case 22:
+        case 23:
           response.json({
             error: "ورودی هارو چک کنید "
           });
 
-        case 23:
-          _context6.next = 28;
+        case 24:
+          _context6.next = 29;
           break;
 
-        case 25:
-          _context6.prev = 25;
+        case 26:
+          _context6.prev = 26;
           _context6.t0 = _context6["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 28:
+        case 29:
         case "end":
           return _context6.stop();
       }
     }
-  }, null, null, [[0, 25]]);
+  }, null, null, [[0, 26]]);
 };
