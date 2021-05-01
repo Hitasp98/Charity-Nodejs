@@ -73,6 +73,7 @@ module.exports.createPlan = async function(request, response) {
 
 module.exports.UpdatePlan = async function(request, response) {
   try {
+    let findRequest = { ...request.body };
     if (
       findRequest.PlanId!=null&&
       findRequest.PlanName != null &&
@@ -82,7 +83,7 @@ module.exports.UpdatePlan = async function(request, response) {
 
         if(findById[0] != null){
             let findIndex = {
-                PName: findRequest.PlanName,
+                PlanName: findRequest.PlanName,
                 PlanId: findRequest.PlanId,
                 ParentPlanId: findRequest.ParentPlanId,
               };
@@ -282,6 +283,7 @@ module.exports.UpdatePlan = async function(request, response) {
 
 module.exports.deletePlan = async function(request, response) {
   try {
+    let findRequest = { ...request.body };
     // requestApi.post(
     //   {
     //     url: "http://localhost:8090/tblCommonBaseData/tblAssignNeedyToPlans",
@@ -305,7 +307,8 @@ module.exports.deletePlan = async function(request, response) {
     //               },
     //               async function(err, res, body) {
     //                 if ((await JSON.parse(body).PlanId) != findRequest.PlanId) {
-        let resultGet = await PlanModel.ws_deletePlan({PlanId : findRequest.PlanId}) 
+      if(findRequest.PlanId != null ){
+        let resultGet = await PlanModel.ws_loadPlan({PlanId : findRequest.PlanId}) 
    
         if (resultGet[0] != null){
             await PlanModel.ws_deletePlan(findRequest).then(result =>{
@@ -319,6 +322,10 @@ module.exports.deletePlan = async function(request, response) {
             response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
         }                  
 
+      }else{
+        response.json({error : "فیلد های ضروری را پر کنید"})
+      }
+        
 
                     
     //                 } else {
@@ -344,6 +351,6 @@ module.exports.deletePlan = async function(request, response) {
     //   }
     // );
   } catch (error) {
-    response.json({ error: "کد نوع را وارد کنید" });
+    response.json({ error: "رکورد مورد نظز پاک نشد" });
   }
 };

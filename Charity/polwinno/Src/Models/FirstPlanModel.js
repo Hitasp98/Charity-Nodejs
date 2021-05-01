@@ -53,7 +53,7 @@ async function ws_loadPlan(findRequest) {
       }
 
       whereclause = await whereclause.slice(0, -3);
-    console.log(whereclause);
+    
       //show records with whereclause
 
       getPlan = await pool
@@ -107,33 +107,37 @@ async function ws_createPlan(findRequest) {
 
 async function ws_UpdatePlan(findRequest) {
   try {
-    let updateTblCharityAccounts;
+    let updateTblPlan;
     let pool = await sql.connect(config);
 
     let value = "";
 
     for (x in findRequest) {
-      if (
+      if (x == "PlanId"){
+
+      }else if (
         findRequest[String(x)] == null || typeof findRequest[String(x)] == "number" || typeof findRequest[String(x)] == "boolean" ) {
         value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`;
       } else {
         value =
           value + " " + `${x} = N` + "'" + findRequest[String(x)] + "'" + `,`;
       }
+      //console.log(value);
     }
 
-    value = value.slice(0, -1);
-    updateTblCharityAccounts = await pool.request().query(
+    value = await value.slice(0, -1);
+    
+    updateTblPlan = await pool.request().query(
       `UPDATE tblPlans
     SET  ` +
         value +
         ` WHERE PlanId = ${findRequest.PlanId};`
     );
 
-    updateTblCharityAccounts = await pool
+    updateTblPlan = await pool
       .request()
       .query(`select * from tblPlans where PlanId =` + findRequest["PlanId"]);
-    return updateTblCharityAccounts.recordsets;
+    return updateTblPlan.recordsets;
   } catch (error) {
     console.log(error.message);
   }

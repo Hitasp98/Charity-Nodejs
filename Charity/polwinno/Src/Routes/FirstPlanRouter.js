@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 router.route('/getPlan').post(PlanControllers.loadPlan);
 router.route('/insertPlan').post(PlanControllers.createPlan);
-router.route('/UpdatePlan').put(PlanControllers.UpdatePlan);
+router.route('/updatePlan').put(PlanControllers.UpdatePlan);
 router.route('/deletePlan').delete(PlanControllers.deletePlan);
 
 
