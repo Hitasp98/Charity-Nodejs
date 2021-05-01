@@ -28,7 +28,7 @@ function ws_loadCashAssistanceDetail(findRequest) {
           }
 
           _context.next = 7;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId\n      FROM tblCashAssistanceDetail   \n      join tblPersonal\n      on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId\n      join tblPlans\n      on tblPersonal.PersonId= tblPlans.PlanId "));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId\n        FROM tblCashAssistanceDetail   \n        join tblAssignNeedyToPlans\n        on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId\n        join tblPlans\n        on tblCashAssistanceDetail.PlanId= tblPlans.PlanId "));
 
         case 7:
           getPayment = _context.sent;
@@ -52,7 +52,7 @@ function ws_loadCashAssistanceDetail(findRequest) {
           //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
           _context.next = 16;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblCashAssistanceDetail  \n        join tblPersonal\n        on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId\n        join tblPlans\n        on tblPersonal.PersonId= tblPlans.PlanId\n          where" + whereclause));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId\n        FROM tblCashAssistanceDetail   \n        join tblAssignNeedyToPlans\n        on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId\n        join tblPlans\n        on tblCashAssistanceDetail.PlanId= tblPlans.PlanId\n      where " + whereclause));
 
         case 16:
           getTblCommonBaseType = _context.sent;

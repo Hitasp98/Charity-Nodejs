@@ -40,7 +40,9 @@ module.exports.loadCashAssistanceDetail = function _callee(request, response) {
           _findRequest = _objectSpread({}, request.body);
           _context.next = 4;
           return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(_findRequest).then(function (result) {
-            if (result[0] == null) {
+            console.log(result);
+
+            if (result == null) {
               response.json({
                 error: "هیچ رکوردی موجود نیست"
               });

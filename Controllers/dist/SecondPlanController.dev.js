@@ -1,13 +1,5 @@
 "use strict";
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -73,7 +65,7 @@ module.exports.loadNeedyForPlan = function _callee(request, response) {
 
 
 module.exports.AssignNeedyToPlan = function _callee3(request, response) {
-  var findRequest, checkDate;
+  var findRequest, Fdate, Tdate, checkDate;
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
@@ -86,11 +78,18 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
               console.log(findRequest.PlanId);
               console.log(findRequest.Fdate);
               console.log(findRequest.Tdate);
+              Fdate = date.changed(findRequest.Fdate);
+              findRequest.Fdate = Fdate.toString();
+              console.log(findRequest.Fdate);
+              Tdate = date.changed(findRequest.Tdate);
+              findRequest.Tdate = Tdate.toString();
+              console.log(findRequest.Tdate);
               checkDate = date.datechack(findRequest.Fdate, findRequest.Tdate);
 
               if (checkDate == true) {
                 // تاريخ هاروئ بگيريم  tblPlans در اينجا بايد از جدول
                 //ادرس درست است
+                console.log("6759");
                 requestApi.post({
                   url: "http://localhost:8090/FirstPlan/loadPlan",
                   from: {
@@ -109,24 +108,18 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
 
                         case 2:
                           fPlan = _context2.sent;
-                          console.log(fPlan[0].Fdate); //در اینجا رنج تاریخ را چک میکنیم
-                          //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
+                          console.log("6759"); // //در اینجا رنج تاریخ را چک میکنیم
+                          // //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
 
                           startdate = date.datechack(fPlan[0].Fdate, findRequest.Fdate);
-
-                          if (!(startdate == true)) {
-                            _context2.next = 23;
-                            break;
-                          }
-
-                          //در اینجا تاریخ پایان پلن دو رو کوچک تر درنظر میگیریم
                           finshdate = date.datechack(findRequest.Tdate, fPlan[0].Tdate);
 
-                          if (!(finshdate == true)) {
-                            _context2.next = 20;
+                          if (!(startdate == true && finshdate == true)) {
+                            _context2.next = 19;
                             break;
                           }
 
+                          //   //در اینجا تاریخ پایان پلن دو رو کوچک تر درنظر میگیریم
                           //در اینجا باید ابتدا چک کنیم در رنج تاریخ است
                           //!مشکل اینجا این است تاریخ ها بصورت رشته ای است نه عددی برای مقایسه حتما باید چک کنیم عدد هستش
                           //!میتونی شرط عدد بودن بگذاریم
@@ -136,18 +129,18 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
                             NeedyId: findRequest.NeedyId,
                             PlanId: findRequest.PlanId
                           };
-                          _context2.next = 11;
+                          _context2.next = 10;
                           return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(fNeedyId));
 
-                        case 11:
+                        case 10:
                           findNeedyId = _context2.sent;
 
                           if (!(findNeedyId == null)) {
-                            _context2.next = 17;
+                            _context2.next = 16;
                             break;
                           }
 
-                          _context2.next = 15;
+                          _context2.next = 14;
                           return regeneratorRuntime.awrap(PlanModel.ws_AssignNeedyToPlan(findRequest).then(function (result) {
                             if (result != null) {
                               response.json(result);
@@ -158,34 +151,25 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
                             }
                           }));
 
-                        case 15:
-                          _context2.next = 18;
+                        case 14:
+                          _context2.next = 17;
                           break;
 
-                        case 17:
+                        case 16:
                           response.json({
                             error: " درج تکراری  "
                           });
 
-                        case 18:
-                          _context2.next = 21;
+                        case 17:
+                          _context2.next = 20;
                           break;
+
+                        case 19:
+                          response.json({
+                            error: " تاریخ شروع و پایان را چک کنید در رنج نست"
+                          });
 
                         case 20:
-                          response.json({
-                            error: " تاریخ شروع و پایان را چک کنید در رنج نست"
-                          });
-
-                        case 21:
-                          _context2.next = 24;
-                          break;
-
-                        case 23:
-                          response.json({
-                            error: " تاریخ شروع و پایان را چک کنید در رنج نست"
-                          });
-
-                        case 24:
                         case "end":
                           return _context2.stop();
                       }
@@ -224,14 +208,14 @@ module.exports.deleteNeedyFromPlan = function _callee6(request, response) {
       switch (_context6.prev = _context6.next) {
         case 0:
           _context6.prev = 0;
-          findRequest = _toConsumableArray(request.body);
+          findRequest = _objectSpread({}, request.body);
 
           if (!(findRequest.PlanId !== null || findRequest.PlanId !== undefined)) {
             _context6.next = 23;
             break;
           }
 
-          if (!(findRequest.AssignNeedyPlanId !== null || findRequest.AssignNeedyPlanId !== undefined)) {
+          if (!(findRequest.AssignNeedyPlanId == null || findRequest.AssignNeedyPlanId == undefined)) {
             _context6.next = 8;
             break;
           }

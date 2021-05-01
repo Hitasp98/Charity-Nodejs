@@ -28,7 +28,7 @@ function ws_loadNeedyForPlan(findRequest) {
           }
 
           _context.next = 7;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n      FROM tblAssignNeedyToPlans   \n      join tblPersonal\n      on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId\n      join tblPlans\n      on tblPersonal.PersonId= tblPlans.PlanId "));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans   \n        join tblPersonal\n        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId\n        join tblPlans\n        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId "));
 
         case 7:
           getPayment = _context.sent;
@@ -52,7 +52,7 @@ function ws_loadNeedyForPlan(findRequest) {
           //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
           _context.next = 16;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans  \n        join tblPersonal\n        on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId\n        join tblPlans\n        on tblPersonal.PersonId= tblPlans.PlanId\n          where" + whereclause));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans   \n        join tblPersonal\n        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId\n        join tblPlans\n        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId\n          where" + whereclause));
 
         case 16:
           getTblCommonBaseType = _context.sent;
@@ -102,12 +102,12 @@ function ws_AssignNeedyToPlan(findRequest) {
 
           value = value.slice(0, -1);
           _context2.next = 9;
-          return regeneratorRuntime.awrap(pool.request().query("INSERT INTO tblAssignNeedyToPlans  (PlanId,Fdate,Tdate,NeedyId)\n            VALUES (" + value + ")"));
+          return regeneratorRuntime.awrap(pool.request().query("\nINSERT INTO [dbo].[tblAssignNeedyToPlans]\n           ([NeedyId]\n           ,[PlanId]\n           ,[Fdate]\n           ,[Tdate])\n     VALUES (" + value + ")"));
 
         case 9:
           inserttblAssignNeedyToPlans = _context2.sent;
           _context2.next = 12;
-          return regeneratorRuntime.awrap(pool.request().query("select *  from tblAssignNeedyToPlans  "));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n      FROM tblAssignNeedyToPlans   \n      join tblPersonal\n      on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId\n      join tblPlans\n      on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId "));
 
         case 12:
           tblAssignNeedyToPlans = _context2.sent;
@@ -140,7 +140,7 @@ function ws_deleteNeedyFromPlan(findRequest) {
         case 3:
           pool = _context3.sent;
           _context3.next = 6;
-          return regeneratorRuntime.awrap(pool.request().query("DELETE FROM tblAssignNeedyToPlans WHERE PlanId = ".concat(findRequest.PlanId, ";")));
+          return regeneratorRuntime.awrap(pool.request().query("DELETE FROM [dbo].[tblAssignNeedyToPlans]\n        WHERE PlanId = ".concat(findRequest.PlanId, ";")));
 
         case 6:
           deletetblAssignNeedyToPlans = _context3.sent;

@@ -21,12 +21,12 @@ async function ws_loadCashAssistanceDetail(findRequest) {
     ) {
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
       getPayment = await pool.request()
-        .query(`SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
-      FROM tblCashAssistanceDetail   
-      join tblPersonal
-      on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId
-      join tblPlans
-      on tblPersonal.PersonId= tblPlans.PlanId `);
+        .query(`SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId
+        FROM tblCashAssistanceDetail   
+        join tblAssignNeedyToPlans
+        on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+        join tblPlans
+        on tblCashAssistanceDetail.PlanId= tblPlans.PlanId `);
       return getPayment.recordsets[0];
     } else {
       //create  whereclause
@@ -56,13 +56,13 @@ async function ws_loadCashAssistanceDetail(findRequest) {
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
       getTblCommonBaseType = await pool.request().query(
-        `SELECT tblCashAssistanceDetail.*,tblPersonal.PersonId,tblPlans.PlanId
-        FROM tblCashAssistanceDetail  
-        join tblPersonal
-        on tblCashAssistanceDetail.PlanId = tblPersonal.PersonId
+        `SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId
+        FROM tblCashAssistanceDetail   
+        join tblAssignNeedyToPlans
+        on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
         join tblPlans
-        on tblPersonal.PersonId= tblPlans.PlanId
-          where` + whereclause
+        on tblCashAssistanceDetail.PlanId= tblPlans.PlanId
+      where ` + whereclause
       );
       return getTblCommonBaseType.recordsets[0][0];
     }

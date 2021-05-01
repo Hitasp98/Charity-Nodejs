@@ -13,7 +13,7 @@ String.prototype.toEnglishDigit = function () {
   }
 
   return replaceString;
-}; // var fa_number = "۰۱۲۳۴۵۶۷۸۹"; 
+}; // var fa_number = "۰۱۲۳۴۵۶۷۸۹";
 // console.log(fa_number.toEnglishDigit());
 //1398/01/01
 //date1<date2
@@ -22,39 +22,51 @@ String.prototype.toEnglishDigit = function () {
 function datechack(date1, date2) {
   var year1 = date1.slice(0, 4);
   var month1 = date1.slice(5, 7);
-  var day1 = date1.slice(8, 10);
-  y1 = year1.toEnglishDigit();
-  m1 = month1.toEnglishDigit();
-  d1 = day1.toEnglishDigit(); ///////////////////////
+  var day1 = date1.slice(8, 10); // y1 = year1.toEnglishDigit();
+  // m1 = month1.toEnglishDigit();
+  // d1 = day1.toEnglishDigit();
+  ///////////////////////
 
   var year2 = date2.slice(0, 4);
   var month2 = date2.slice(5, 7);
-  var day2 = date2.slice(8, 10);
-  y2 = year2.toEnglishDigit();
-  m2 = month2.toEnglishDigit();
-  d2 = day2.toEnglishDigit(); //تاریخ شبیه به هم رو اشتباه برمیگردونیم
+  var day2 = date2.slice(8, 10); // y2 = year2.toEnglishDigit();
+  // m2 = month2.toEnglishDigit();
+  // d2 = day2.toEnglishDigit();
+  //تاریخ شبیه به هم رو اشتباه برمیگردونیم
 
-  if (y1 == y2) {
-    if (m1 == m2) {
-      if (d1 < d2) {
+  if (year1 == year2) {
+    if (month1 == month2) {
+      if (day1 < day2) {
         return true;
       } else {
         return false;
       }
-    } else if (m1 < m2) {
+    } else if (month1 < month2) {
       return true;
     } else {
       return false;
     }
-  } else if (y1 < y2) {
+  } else if (year1 < year2) {
     return true;
   } else {
     return false;
   }
-} ///return true درست است 
-// console.log(datechack("۱۴۰۰/۰۲/۰۳", "۱۴۰۰/۰۲/۰۴"))
+} ///return true درست است
+
+
+function changed(date1) {
+  d1 = '';
+  var year1 = date1.slice(0, 4);
+  var month1 = date1.slice(5, 7);
+  var day1 = date1.slice(8, 10);
+  d1 = d1 + year1.toEnglishDigit();
+  d1 = d1 + '/' + month1.toEnglishDigit();
+  d1 = d1 + '/' + day1.toEnglishDigit();
+  return d1;
+} // console.log(datechack("۱۴۰۰/۰۲/۰۳", "۱۴۰۰/۰۲/۰۴"))
 
 
 module.exports = {
+  changed: changed,
   datechack: datechack
 };

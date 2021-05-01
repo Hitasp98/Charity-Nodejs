@@ -23,11 +23,11 @@ async function ws_loadNeedyForPlan(findRequest) {
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
       getPayment = await pool.request()
         .query(`SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
-      FROM tblAssignNeedyToPlans   
-      join tblPersonal
-      on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId
-      join tblPlans
-      on tblPersonal.PersonId= tblPlans.PlanId `);
+        FROM tblAssignNeedyToPlans   
+        join tblPersonal
+        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
+        join tblPlans
+        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId `);
       return getPayment.recordsets[0];
     } else {
       //create  whereclause
@@ -58,11 +58,11 @@ async function ws_loadNeedyForPlan(findRequest) {
 
       getTblCommonBaseType = await pool.request().query(
         `SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
-        FROM tblAssignNeedyToPlans  
+        FROM tblAssignNeedyToPlans   
         join tblPersonal
-        on tblAssignNeedyToPlans.PlanId = tblPersonal.PersonId
+        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
         join tblPlans
-        on tblPersonal.PersonId= tblPlans.PlanId
+        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
           where` + whereclause
       );
       return getTblCommonBaseType.recordsets[0][0];
@@ -95,14 +95,24 @@ async function ws_AssignNeedyToPlan(findRequest) {
     value = value.slice(0, -1);
 
     let inserttblAssignNeedyToPlans = await pool.request().query(
-      `INSERT INTO tblAssignNeedyToPlans  (PlanId,Fdate,Tdate,NeedyId)
-            VALUES (` +
+      `
+INSERT INTO [dbo].[tblAssignNeedyToPlans]
+           ([NeedyId]
+           ,[PlanId]
+           ,[Fdate]
+           ,[Tdate])
+     VALUES (` +
         value +
         `)`
     );
     let tblAssignNeedyToPlans = await pool
       .request()
-      .query(`select *  from tblAssignNeedyToPlans  `);
+      .query(`SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
+      FROM tblAssignNeedyToPlans   
+      join tblPersonal
+      on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
+      join tblPlans
+      on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId `);
     return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
     console.log(error.message);
@@ -119,7 +129,8 @@ async function ws_deleteNeedyFromPlan(findRequest) {
     deletetblAssignNeedyToPlans = await pool
       .request()
       .query(
-        `DELETE FROM tblAssignNeedyToPlans WHERE PlanId = ${findRequest.PlanId};`
+        `DELETE FROM [dbo].[tblAssignNeedyToPlans]
+        WHERE PlanId = ${findRequest.PlanId};`
       );
 
     return deletetblAssignNeedyToPlans.rowsAffected[0];

@@ -13,7 +13,8 @@ module.exports.loadCashAssistanceDetail = async function(request, response) {
   try {
     let findRequest = { ...request.body };
     await Succor.ws_loadCashAssistanceDetail(findRequest).then(result => {
-      if (result[0] == null) {
+      console.log(result)
+      if (result == null) {
         response.json({ error: "هیچ رکوردی موجود نیست" });
       } else {
         response.json(result);
