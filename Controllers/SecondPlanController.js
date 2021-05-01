@@ -15,7 +15,7 @@ module.exports.loadNeedyForPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
     await PlanModel.ws_loadNeedyForPlan(findRequest).then(result => {
-      if (result[0] == null) {
+      if (result == null) {
         response.json({ error: "هیچ رکوردی موجود نیست" });
       } else {
         response.json(result);
@@ -62,14 +62,13 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
           {
             url: "http://localhost:8090/FirstPlan/loadPlan",
             from: {
-              PlanId: findRequest.PlanId,
-              Fdate: findRequest.Fdate,
-              Tdate: findRequest.Tdate,
+              PlanId: findRequest.PlanId
+              
             },
           },
           async function(err, res, body) {
             let fPlan = await JSON.parse(body);
-            console.log("6759");
+            console.log(fPlan[0]);
             // //در اینجا رنج تاریخ را چک میکنیم
             // //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
             let startdate = date.datechack(fPlan[0].Fdate, findRequest.Fdate);

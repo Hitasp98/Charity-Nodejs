@@ -52,7 +52,7 @@ function ws_loadNeedyForPlan(findRequest) {
           //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
           _context.next = 16;
-          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans   \n        join tblPersonal\n        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId\n        join tblPlans\n        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId\n          where" + whereclause));
+          return regeneratorRuntime.awrap(pool.request().query("SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId\n        FROM tblAssignNeedyToPlans   \n        join tblPersonal\n        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId\n        join tblPlans\n        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId\n\t\twhere" + whereclause));
 
         case 16:
           getTblCommonBaseType = _context.sent;

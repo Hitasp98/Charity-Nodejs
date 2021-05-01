@@ -35,7 +35,7 @@ module.exports.loadNeedyForPlan = function _callee(request, response) {
           findRequest = _objectSpread({}, request.body);
           _context.next = 4;
           return regeneratorRuntime.awrap(PlanModel.ws_loadNeedyForPlan(findRequest).then(function (result) {
-            if (result[0] == null) {
+            if (result == null) {
               response.json({
                 error: "هیچ رکوردی موجود نیست"
               });
@@ -93,9 +93,7 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
                 requestApi.post({
                   url: "http://localhost:8090/FirstPlan/loadPlan",
                   from: {
-                    PlanId: findRequest.PlanId,
-                    Fdate: findRequest.Fdate,
-                    Tdate: findRequest.Tdate
+                    PlanId: findRequest.PlanId
                   }
                 }, function _callee2(err, res, body) {
                   var fPlan, startdate, finshdate, fNeedyId, findNeedyId;
@@ -108,7 +106,7 @@ module.exports.AssignNeedyToPlan = function _callee3(request, response) {
 
                         case 2:
                           fPlan = _context2.sent;
-                          console.log("6759"); // //در اینجا رنج تاریخ را چک میکنیم
+                          console.log(fPlan[0]); // //در اینجا رنج تاریخ را چک میکنیم
                           // //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
 
                           startdate = date.datechack(fPlan[0].Fdate, findRequest.Fdate);

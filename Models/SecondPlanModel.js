@@ -63,7 +63,7 @@ async function ws_loadNeedyForPlan(findRequest) {
         on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
         join tblPlans
         on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
-          where` + whereclause
+		where` + whereclause
       );
       return getTblCommonBaseType.recordsets[0][0];
     }
