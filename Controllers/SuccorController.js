@@ -13,7 +13,7 @@ module.exports.loadCashAssistanceDetail = async function(request, response) {
   try {
     let findRequest = { ...request.body };
     await Succor.ws_loadCashAssistanceDetail(findRequest).then(result => {
-      console.log(result)
+      console.log(result);
       if (result == null) {
         response.json({ error: "هیچ رکوردی موجود نیست" });
       } else {
@@ -30,22 +30,18 @@ module.exports.loadCashAssistanceDetail = async function(request, response) {
 
 module.exports.createCashAssistanceDetail = async function(request, response) {
   try {
-    let findRequest = [...request.body];
+    let findRequest = { ...request.body };
     if (
-      (findRequest.AssignNeedyPlanId !== null &&
-        findRequest.PlanId !== null &&
-        findRequest.NeededPrice !== null &&
-        findRequest.MinPrice !== null &&
-        findRequest.Description !== null) ||
-      (findRequest.AssignNeedyPlanId !== undefined &&
-        findRequest.PlanId !== undefined &&
-        findRequest.NeededPrice !== undefined &&
-        findRequest.MinPrice !== undefined &&
-        findRequest.Description !== undefined)
+      (findRequest.PlanId !== null && findRequest.NeededPrice !== null) ||
+      (findRequest.PlanId !== undefined &&
+        findRequest.NeededPrice !== undefined)
     ) {
-      if ((findRequest.MinPrice = null)) {
+      findRequest.MinPrice = parseInt(findRequest.MinPrice);
+      findRequest.NeededPrice = parseInt(findRequest.NeededPrice);
+      if (findRequest.MinPrice == null) {
         findRequest.MinPrice = 0;
       }
+
       if (findRequest.MinPrice <= findRequest.NeededPrice) {
         //ترکيب شناسه طرح و نيازمند طرح کليد يکتا را مي سازد
         let findindex = {
@@ -54,8 +50,9 @@ module.exports.createCashAssistanceDetail = async function(request, response) {
 
           PlanId: findRequest.PlanId,
         };
-        let findId = await Succor.ws_loadCashAssistanceDetail(findindex);
-        if (findId == null) {
+        let findId = await Succor.ws_chackCashAssistanceDetail(findindex);
+        console.log(findId)
+        if (findId == '') {
           //در نهایت درج
           await Succor.ws_createCashAssistanceDetail(
             findRequest
@@ -87,30 +84,36 @@ module.exports.createCashAssistanceDetail = async function(request, response) {
 
 module.exports.updateCashAssistanceDetail = async function(request, response) {
   try {
+    let findRequest = {...request.body};
+    console.log(findRequest.PlanId)
+
     if (
-      (findRequest.AssignNeedyPlanId !== null &&
+      (
         findRequest.PlanId !== null &&
-        findRequest.NeededPrice !== null &&
-        findRequest.MinPrice !== null &&
-        findRequest.Description !== null) ||
-      (findRequest.AssignNeedyPlanId !== undefined &&
+        findRequest.NeededPrice !== null ) ||
+      (
         findRequest.PlanId !== undefined &&
-        findRequest.NeededPrice !== undefined &&
-        findRequest.MinPrice !== undefined &&
-        findRequest.Description !== undefined)
+        findRequest.NeededPrice !== undefined )
     ) {
-      if ((findRequest.MinPrice = null)) {
+      if (findRequest.MinPrice == null) {
         findRequest.MinPrice = 0;
       }
+      findRequest.MinPrice = parseInt(findRequest.MinPrice);
+      findRequest.NeededPrice = parseInt(findRequest.NeededPrice);
       if (findRequest.MinPrice <= findRequest.NeededPrice) {
-        let findindex = {
-          AssignNeedyPlanId: findRequest.AssignNeedyPlanId,
-          //?داخل سند فقط گفته شد شناسه طرح و نیاز مند طرح
-
-          PlanId: findRequest.PlanId,
-        };
-        let findId = await Succor.ws_loadCashAssistanceDetail(findindex);
+          //ترکيب شناسه طرح و نيازمند طرح کليد يکتا را مي سازد
+          let findindex = {
+            AssignNeedyPlanId:  findRequest.AssignNeedyPlanId,
+            //?داخل سند فقط گفته شد شناسه طرح و نیاز مند طرح
+  
+            PlanId: findRequest.PlanId,
+          };
+          
+        let findId = await Succor.ws_chackCashAssistanceDetail(findindex);
+        console.log(findId)
         if (findId != null) {
+          console.log("findId")
+
           // tblPayment اگر به ازاء شناسه جزئيات رکوردي در جدول  وجود داشته باشد
           //باشد امکان تغييرات روي دو مبلغ وجود ندارد
 
@@ -122,31 +125,39 @@ module.exports.updateCashAssistanceDetail = async function(request, response) {
               },
             },
             async function(err, res, body) {
-              if ((await JSON.parse(body).CashAssistanceDetailId) != null) {
-                //tblCashAssistanceDetail براساس شناسه جزئيات ابتدا رکورد مد نظر از جدول  واکشي مي شود
-                let findCashAssistanceDetailId = await Succor.ws_loadCashAssistanceDetail(
-                  findRequest.CashAssistanceDetailId
-                );
-                if (findCashAssistanceDetailId != null) {
-                  await Succor.ws_updateCashAssistanceDetail(
-                    findRequest
-                  ).then(result => {
-                    if (result != null) {
-                      response.json(result);
-                    } else {
-                      response.json({ error: "ویرایش نشد " });
-                    }
-                  });
-                } else {
-                  response.json({
-                    error: "رکورد وجود ندارد",
-                  });
-                }
+          if ((await JSON.parse(body).CashAssistanceDetailId) != null) {
+          //tblCashAssistanceDetail براساس شناسه جزئيات ابتدا رکورد مد نظر از جدول  واکشي مي شود
+          let findindex1 = {
+            CashAssistanceDetailId:findRequest.CashAssistanceDetailId,
+            //?داخل سند فقط گفته شد شناسه طرح و نیاز مند طرح
+  
+          
+          };
+          let findCashAssistanceDetailId = await Succor.ws_chackCashAssistanceDetail(
+            findindex1
+          );
+          console.log(findCashAssistanceDetailId)
+          if (findCashAssistanceDetailId != null) {
+            await Succor.ws_updateCashAssistanceDetail(
+              findRequest
+            ).then(result => {
+              console.log(result)
+              if (result != null) {
+                response.json(result);
               } else {
-                response.json({
-                  error: "باشد امکان تغييرات روي دو مبلغ وجود ندارد",
-                });
+                response.json({ error: "ویرایش نشد " });
               }
+            });
+          } else {
+            response.json({
+              error: "رکورد وجود ندارد",
+            });
+          }
+          } else {
+            response.json({
+              error: "باشد امکان تغييرات روي دو مبلغ وجود ندارد",
+            });
+          }
             }
           );
         } else {
@@ -166,15 +177,18 @@ module.exports.updateCashAssistanceDetail = async function(request, response) {
 
 module.exports.deleteCashAssistanceDetail = async function(request, response) {
   try {
-    let findRequest = [...request.body];
+    let findRequest = {...request.body};
+    console.log(findRequest)
     if (
       findRequest.CashAssistanceDetailId !== null ||
       findRequest.CashAssistanceDetailId !== undefined
     ) {
       //tblCashAssistanceDetailبراساس شناسه جزئيات  ابتدا رکورد مد نظر از جدول  واکشي مي شود
-
-      let findCashAssistanceDetailId = await Succor.ws_loadCashAssistanceDetail(
-        findRequest.CashAssistanceDetailId
+      let findindex = {
+        CashAssistanceDetailId:findRequest.CashAssistanceDetailId
+      };
+      let findCashAssistanceDetailId = await Succor.ws_chackCashAssistanceDetail(
+        findindex
       );
       if (findCashAssistanceDetailId != null) {
         //tblPayment ,CashAssistanceDetailIdبراساس شناسه جزئيات  جدول  داراي رکورد باشد

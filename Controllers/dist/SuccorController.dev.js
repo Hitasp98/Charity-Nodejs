@@ -1,13 +1,5 @@
 "use strict";
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -30,16 +22,15 @@ app.use(bodyParser.json()); //تست نشده
 //join این متد مانند متد های معملولی قبلی گیت معمولی به علاوه
 
 module.exports.loadCashAssistanceDetail = function _callee(request, response) {
-  var _findRequest;
-
+  var findRequest;
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          _findRequest = _objectSpread({}, request.body);
+          findRequest = _objectSpread({}, request.body);
           _context.next = 4;
-          return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(_findRequest).then(function (result) {
+          return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findRequest).then(function (result) {
             console.log(result);
 
             if (result == null) {
@@ -72,48 +63,50 @@ module.exports.loadCashAssistanceDetail = function _callee(request, response) {
 
 
 module.exports.createCashAssistanceDetail = function _callee2(request, response) {
-  var _findRequest2, findindex, findId;
-
+  var findRequest, findindex, findId;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           _context2.prev = 0;
-          _findRequest2 = _toConsumableArray(request.body);
+          findRequest = _objectSpread({}, request.body);
 
-          if (!(_findRequest2.AssignNeedyPlanId !== null && _findRequest2.PlanId !== null && _findRequest2.NeededPrice !== null && _findRequest2.MinPrice !== null && _findRequest2.Description !== null || _findRequest2.AssignNeedyPlanId !== undefined && _findRequest2.PlanId !== undefined && _findRequest2.NeededPrice !== undefined && _findRequest2.MinPrice !== undefined && _findRequest2.Description !== undefined)) {
-            _context2.next = 20;
+          if (!(findRequest.PlanId !== null && findRequest.NeededPrice !== null || findRequest.PlanId !== undefined && findRequest.NeededPrice !== undefined)) {
+            _context2.next = 22;
             break;
           }
 
-          if (_findRequest2.MinPrice = null) {
-            _findRequest2.MinPrice = 0;
+          findRequest.MinPrice = parseInt(findRequest.MinPrice);
+          findRequest.NeededPrice = parseInt(findRequest.NeededPrice);
+
+          if (findRequest.MinPrice == null) {
+            findRequest.MinPrice = 0;
           }
 
-          if (!(_findRequest2.MinPrice <= _findRequest2.NeededPrice)) {
-            _context2.next = 17;
+          if (!(findRequest.MinPrice <= findRequest.NeededPrice)) {
+            _context2.next = 19;
             break;
           }
 
           //ترکيب شناسه طرح و نيازمند طرح کليد يکتا را مي سازد
           findindex = {
-            AssignNeedyPlanId: _findRequest2.AssignNeedyPlanId,
+            AssignNeedyPlanId: findRequest.AssignNeedyPlanId,
             //?داخل سند فقط گفته شد شناسه طرح و نیاز مند طرح
-            PlanId: _findRequest2.PlanId
+            PlanId: findRequest.PlanId
           };
-          _context2.next = 8;
+          _context2.next = 10;
           return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findindex));
 
-        case 8:
+        case 10:
           findId = _context2.sent;
 
           if (!(findId == null)) {
-            _context2.next = 14;
+            _context2.next = 16;
             break;
           }
 
-          _context2.next = 12;
-          return regeneratorRuntime.awrap(Succor.ws_createCashAssistanceDetail(_findRequest2).then(function (result) {
+          _context2.next = 14;
+          return regeneratorRuntime.awrap(Succor.ws_createCashAssistanceDetail(findRequest).then(function (result) {
             if (result != null) {
               response.json(result);
             } else {
@@ -123,72 +116,74 @@ module.exports.createCashAssistanceDetail = function _callee2(request, response)
             }
           }));
 
-        case 12:
-          _context2.next = 15;
+        case 14:
+          _context2.next = 17;
           break;
 
-        case 14:
+        case 16:
           response.json({
             error: "رکورد تکراری"
           });
 
-        case 15:
-          _context2.next = 18;
+        case 17:
+          _context2.next = 20;
           break;
 
-        case 17:
+        case 19:
           response.json({
             error: "حداقل مبلغ بايد از مبلغ مورد نياز کوچکتر يا مساوي باشد."
           });
 
-        case 18:
-          _context2.next = 21;
+        case 20:
+          _context2.next = 23;
           break;
 
-        case 20:
+        case 22:
           response.json({
             error: "ورودی هارو چک کنید"
           });
 
-        case 21:
-          _context2.next = 26;
+        case 23:
+          _context2.next = 28;
           break;
 
-        case 23:
-          _context2.prev = 23;
+        case 25:
+          _context2.prev = 25;
           _context2.t0 = _context2["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 26:
+        case 28:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 23]]);
+  }, null, null, [[0, 25]]);
 }; //تست نشده
 
 
-module.exports.updateCashAssistanceDetail = function _callee4(request, response) {
-  var findindex, findId;
-  return regeneratorRuntime.async(function _callee4$(_context4) {
+module.exports.updateCashAssistanceDetail = function _callee3(request, response) {
+  var findRequest, findindex, findId, findCashAssistanceDetailId;
+  return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
-          _context4.prev = 0;
+          _context3.prev = 0;
+          findRequest = _objectSpread({}, request.body);
+          console.log(findRequest.PlanId);
 
-          if (!(findRequest.AssignNeedyPlanId !== null && findRequest.PlanId !== null && findRequest.NeededPrice !== null && findRequest.MinPrice !== null && findRequest.Description !== null || findRequest.AssignNeedyPlanId !== undefined && findRequest.PlanId !== undefined && findRequest.NeededPrice !== undefined && findRequest.MinPrice !== undefined && findRequest.Description !== undefined)) {
-            _context4.next = 11;
+          if (!(findRequest.PlanId !== null && findRequest.NeededPrice !== null || findRequest.PlanId !== undefined && findRequest.NeededPrice !== undefined)) {
+            _context3.next = 27;
             break;
           }
 
-          if (findRequest.MinPrice = null) {
+          if (findRequest.MinPrice == null) {
             findRequest.MinPrice = 0;
           }
 
           if (!(findRequest.MinPrice <= findRequest.NeededPrice)) {
-            _context4.next = 9;
+            _context3.next = 25;
             break;
           }
 
@@ -197,165 +192,133 @@ module.exports.updateCashAssistanceDetail = function _callee4(request, response)
             //?داخل سند فقط گفته شد شناسه طرح و نیاز مند طرح
             PlanId: findRequest.PlanId
           };
-          _context4.next = 7;
+          console.log(findindex.PlanId);
+          _context3.next = 10;
           return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findindex));
 
-        case 7:
-          findId = _context4.sent;
+        case 10:
+          findId = _context3.sent;
+          console.log(findId);
 
-          if (findId != null) {
-            // tblPayment اگر به ازاء شناسه جزئيات رکوردي در جدول  وجود داشته باشد
-            //باشد امکان تغييرات روي دو مبلغ وجود ندارد
-            requestApi.post({
-              url: "Api tblPayment ",
-              form: {
-                CashAssistanceDetailId: findRequest.CashAssistanceDetailId
-              }
-            }, function _callee3(err, res, body) {
-              var findCashAssistanceDetailId;
-              return regeneratorRuntime.async(function _callee3$(_context3) {
-                while (1) {
-                  switch (_context3.prev = _context3.next) {
-                    case 0:
-                      _context3.next = 2;
-                      return regeneratorRuntime.awrap(JSON.parse(body).CashAssistanceDetailId);
-
-                    case 2:
-                      _context3.t0 = _context3.sent;
-
-                      if (!(_context3.t0 != null)) {
-                        _context3.next = 15;
-                        break;
-                      }
-
-                      _context3.next = 6;
-                      return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId));
-
-                    case 6:
-                      findCashAssistanceDetailId = _context3.sent;
-
-                      if (!(findCashAssistanceDetailId != null)) {
-                        _context3.next = 12;
-                        break;
-                      }
-
-                      _context3.next = 10;
-                      return regeneratorRuntime.awrap(Succor.ws_updateCashAssistanceDetail(findRequest).then(function (result) {
-                        if (result != null) {
-                          response.json(result);
-                        } else {
-                          response.json({
-                            error: "ویرایش نشد "
-                          });
-                        }
-                      }));
-
-                    case 10:
-                      _context3.next = 13;
-                      break;
-
-                    case 12:
-                      response.json({
-                        error: "رکورد وجود ندارد"
-                      });
-
-                    case 13:
-                      _context3.next = 16;
-                      break;
-
-                    case 15:
-                      response.json({
-                        error: "باشد امکان تغييرات روي دو مبلغ وجود ندارد"
-                      });
-
-                    case 16:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }
-              });
-            });
-          } else {
-            response.json({
-              error: "رکورد وجود ندارد"
-            });
+          if (!(findId != null)) {
+            _context3.next = 24;
+            break;
           }
 
-        case 9:
-          _context4.next = 12;
+          _context3.next = 15;
+          return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId));
+
+        case 15:
+          findCashAssistanceDetailId = _context3.sent;
+
+          if (!(findCashAssistanceDetailId != null)) {
+            _context3.next = 21;
+            break;
+          }
+
+          _context3.next = 19;
+          return regeneratorRuntime.awrap(Succor.ws_updateCashAssistanceDetail(findRequest).then(function (result) {
+            if (result != null) {
+              response.json(result);
+            } else {
+              response.json({
+                error: "ویرایش نشد "
+              });
+            }
+          }));
+
+        case 19:
+          _context3.next = 22;
           break;
 
-        case 11:
+        case 21:
+          response.json({
+            error: "رکورد وجود ندارد"
+          });
+
+        case 22:
+          _context3.next = 25;
+          break;
+
+        case 24:
+          response.json({
+            error: "رکورد وجود ندارد"
+          });
+
+        case 25:
+          _context3.next = 28;
+          break;
+
+        case 27:
           response.json({
             error: "ورودی هارو چک کنید"
           });
 
-        case 12:
-          _context4.next = 17;
+        case 28:
+          _context3.next = 33;
           break;
 
-        case 14:
-          _context4.prev = 14;
-          _context4.t0 = _context4["catch"](0);
+        case 30:
+          _context3.prev = 30;
+          _context3.t0 = _context3["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
-        case 17:
+        case 33:
         case "end":
-          return _context4.stop();
+          return _context3.stop();
       }
     }
-  }, null, null, [[0, 14]]);
+  }, null, null, [[0, 30]]);
 }; //تست نشده
 
 
-module.exports.deleteCashAssistanceDetail = function _callee6(request, response) {
-  var _findRequest3, findCashAssistanceDetailId;
-
-  return regeneratorRuntime.async(function _callee6$(_context6) {
+module.exports.deleteCashAssistanceDetail = function _callee5(request, response) {
+  var findRequest, findCashAssistanceDetailId;
+  return regeneratorRuntime.async(function _callee5$(_context5) {
     while (1) {
-      switch (_context6.prev = _context6.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
-          _context6.prev = 0;
-          _findRequest3 = _toConsumableArray(request.body);
+          _context5.prev = 0;
+          findRequest = _objectSpread({}, request.body);
 
-          if (!(_findRequest3.CashAssistanceDetailId !== null || _findRequest3.CashAssistanceDetailId !== undefined)) {
-            _context6.next = 9;
+          if (!(findRequest.CashAssistanceDetailId !== null || findRequest.CashAssistanceDetailId !== undefined)) {
+            _context5.next = 9;
             break;
           }
 
-          _context6.next = 5;
-          return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(_findRequest3.CashAssistanceDetailId));
+          _context5.next = 5;
+          return regeneratorRuntime.awrap(Succor.ws_loadCashAssistanceDetail(findRequest.CashAssistanceDetailId));
 
         case 5:
-          findCashAssistanceDetailId = _context6.sent;
+          findCashAssistanceDetailId = _context5.sent;
 
           if (findCashAssistanceDetailId != null) {
             //tblPayment ,CashAssistanceDetailIdبراساس شناسه جزئيات  جدول  داراي رکورد باشد
             requestApi.post({
               url: "Api tblPayment ",
               form: {
-                CashAssistanceDetailId: _findRequest3.CashAssistanceDetailId
+                CashAssistanceDetailId: findRequest.CashAssistanceDetailId
               }
-            }, function _callee5(err, res, body) {
-              return regeneratorRuntime.async(function _callee5$(_context5) {
+            }, function _callee4(err, res, body) {
+              return regeneratorRuntime.async(function _callee4$(_context4) {
                 while (1) {
-                  switch (_context5.prev = _context5.next) {
+                  switch (_context4.prev = _context4.next) {
                     case 0:
-                      _context5.next = 2;
+                      _context4.next = 2;
                       return regeneratorRuntime.awrap(JSON.parse(body).CashAssistanceDetailId);
 
                     case 2:
-                      _context5.t0 = _context5.sent;
+                      _context4.t0 = _context4.sent;
 
-                      if (!(_context5.t0 == null)) {
-                        _context5.next = 8;
+                      if (!(_context4.t0 == null)) {
+                        _context4.next = 8;
                         break;
                       }
 
-                      _context5.next = 6;
-                      return regeneratorRuntime.awrap(Succor.ws_deleteCashAssistanceDetail(_findRequest3).then(function (result) {
+                      _context4.next = 6;
+                      return regeneratorRuntime.awrap(Succor.ws_deleteCashAssistanceDetail(findRequest).then(function (result) {
                         if (result != null) {
                           response.json(result);
                         } else {
@@ -366,7 +329,7 @@ module.exports.deleteCashAssistanceDetail = function _callee6(request, response)
                       }));
 
                     case 6:
-                      _context5.next = 9;
+                      _context4.next = 9;
                       break;
 
                     case 8:
@@ -376,7 +339,7 @@ module.exports.deleteCashAssistanceDetail = function _callee6(request, response)
 
                     case 9:
                     case "end":
-                      return _context5.stop();
+                      return _context4.stop();
                   }
                 }
               });
@@ -387,7 +350,7 @@ module.exports.deleteCashAssistanceDetail = function _callee6(request, response)
             });
           }
 
-          _context6.next = 10;
+          _context5.next = 10;
           break;
 
         case 9:
@@ -396,19 +359,19 @@ module.exports.deleteCashAssistanceDetail = function _callee6(request, response)
           });
 
         case 10:
-          _context6.next = 15;
+          _context5.next = 15;
           break;
 
         case 12:
-          _context6.prev = 12;
-          _context6.t0 = _context6["catch"](0);
+          _context5.prev = 12;
+          _context5.t0 = _context5["catch"](0);
           response.json({
             error: "کد نوع را وارد کنید"
           });
 
         case 15:
         case "end":
-          return _context6.stop();
+          return _context5.stop();
       }
     }
   }, null, null, [[0, 12]]);

@@ -3,14 +3,55 @@ const sql = require("mssql");
 var crypto = require("crypto");
 
 var fnGetRandomString = require("../Utils/Randomnumber");
-//تست نشده 
+async function ws_chackCashAssistanceDetail(findRequest){
+ try {
+  let pool = await sql.connect(config);
+console.log(findRequest)
+    //create  whereclause
+    let whereclause = "";
+    for (x in findRequest) {
+      if (typeof findRequest[String(x)] == "string") {
+        whereclause =
+          whereclause +
+          " " +
+          `${x} = N` +
+          "'" +
+          findRequest[String(x)] +
+          "'" +
+          ` AND`;
+      } else if (typeof findRequest[String(x)] == "number") {
+        whereclause =
+          whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+      } else if (findRequest[String(x)] == null) {
+        whereclause =
+          whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+      }
+    }
+
+    whereclause = whereclause.slice(0, -3);
+    console.log(whereclause);
+    //show records with whereclause
+    //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+    //اررو
+    getTblCommonBaseType = await pool.request().query(
+      `SELECT *
+      FROM tblCashAssistanceDetail   
+        where ` + whereclause
+    );
+    return getTblCommonBaseType.recordsets[0];
+  }catch (error) {
+    console.log(error.message);
+  }
+}
+
+//تست نشده
 async function ws_loadCashAssistanceDetail(findRequest) {
   try {
     let pool = await sql.connect(config);
     let getTblCommonBaseType;
 
     //show all records
-
+    console.log(findRequest.PlanId);
     if (
       (findRequest.AssignNeedyPlanId === undefined &&
         findRequest.PlanId === undefined &&
@@ -51,12 +92,12 @@ async function ws_loadCashAssistanceDetail(findRequest) {
       }
 
       whereclause = whereclause.slice(0, -3);
-
+      console.log(whereclause);
       //show records with whereclause
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
-
+      //اررو
       getTblCommonBaseType = await pool.request().query(
-        `SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId
+        `SELECT *
         FROM tblCashAssistanceDetail   
         join tblAssignNeedyToPlans
         on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
@@ -64,15 +105,16 @@ async function ws_loadCashAssistanceDetail(findRequest) {
         on tblCashAssistanceDetail.PlanId= tblPlans.PlanId
       where ` + whereclause
       );
-      return getTblCommonBaseType.recordsets[0][0];
+      return getTblCommonBaseType.recordsets[0];
     }
   } catch (error) {
     console.log(error.message);
   }
 }
-//تست نشده 
+//تست نشده
 async function ws_createCashAssistanceDetail(findRequest) {
   try {
+    console.log(findRequest.PlanId);
     let pool = await sql.connect(config);
 
     let value = "";
@@ -91,15 +133,24 @@ async function ws_createCashAssistanceDetail(findRequest) {
     value = value.slice(0, -1);
 
     let inserttblAssignNeedyToPlans = await pool.request().query(
-      `INSERT INTO tblCashAssistanceDetail   (AssignNeedyPlanId,PlanId,NeededPrice,MinPrice,Description )
-            VALUES (` +
+      `INSERT INTO [dbo].[tblCashAssistanceDetail]
+      ([AssignNeedyPlanId]
+      ,[PlanId]
+      ,[NeededPrice]
+      ,[MinPrice]
+      ,[Description])
+      VALUES (` +
         value +
         `)`
     );
-    let tblAssignNeedyToPlans = await pool
-      .request()
-      .query(`select *  from  tblCashAssistanceDetail  `);
-    return tblAssignNeedyToPlans.recordsets;
+    let tblAssignNeedyToPlans = await pool.request()
+      .query(`SELECT tblCashAssistanceDetail.*,tblCashAssistanceDetail.AssignNeedyPlanId,tblPlans.PlanId
+      FROM tblCashAssistanceDetail   
+      join tblAssignNeedyToPlans
+      on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+      join tblPlans
+      on tblCashAssistanceDetail.PlanId= tblPlans.PlanId  `);
+    return tblAssignNeedyToPlans.recordsets[0][0];
   } catch (error) {
     console.log(error.message);
   }
@@ -107,12 +158,15 @@ async function ws_createCashAssistanceDetail(findRequest) {
 //تست نشده
 async function ws_updateCashAssistanceDetail(findRequest) {
   try {
+    console.log("findRequest");
     let updateTblCharityAccounts;
     let pool = await sql.connect(config);
 
     let value = "";
 
     for (x in findRequest) {
+      if(x=='CashAssistanceDetailId'){
+continue      }
       if (
         findRequest[String(x)] == null ||
         typeof findRequest[String(x)] == "number"
@@ -125,20 +179,23 @@ async function ws_updateCashAssistanceDetail(findRequest) {
     }
 
     value = value.slice(0, -1);
+    console.log(value)
     updateTblCharityAccounts = await pool.request().query(
-      `UPDATE tblCashAssistanceDetail 
-    SET  ` +
+      `UPDATE [dbo].[tblCashAssistanceDetail]
+      SET  ` +
         value +
-        ` WHERE tblCashAssistanceDetail = ${findRequest.tblCashAssistanceDetail};`
+        `  WHERE CashAssistanceDetailId = ${findRequest.CashAssistanceDetailId};`
     );
 
-    updateTblCharityAccounts = await pool
-      .request()
-      .query(
-        `select * from tblCashAssistanceDetail  where tblCashAssistanceDetail =` +
-          findRequest["tblCashAssistanceDetail"]
-      );
-    return updateTblCharityAccounts.recordsets;
+    updateTblCharityAccounts = await pool.request().query(
+      `SELECT *
+        FROM tblCashAssistanceDetail   
+        
+        WHERE CashAssistanceDetailId = ${findRequest.CashAssistanceDetailId};`
+    );
+    console.log('+++++++++++++++++')
+    console.log(updateTblCharityAccounts.recordsets[0][0])
+    return updateTblCharityAccounts.recordsets[0][0];
   } catch (error) {
     console.log(error.message);
   }
@@ -152,7 +209,9 @@ async function ws_deleteCashAssistanceDetail(findRequest) {
 
     deleteTblCharityAccounts = await pool
       .request()
-      .query(`DELETE FROM tblCashAssistanceDetail WHERE CashAssistanceDetailId  = ${findRequest.CashAssistanceDetailId };`);
+      .query(
+        `DELETE FROM tblCashAssistanceDetail WHERE CashAssistanceDetailId  = ${findRequest.CashAssistanceDetailId};`
+      );
 
     return deleteTblCharityAccounts.rowsAffected[0];
   } catch (error) {
@@ -161,6 +220,7 @@ async function ws_deleteCashAssistanceDetail(findRequest) {
 }
 
 module.exports = {
+  ws_chackCashAssistanceDetail:ws_chackCashAssistanceDetail,
   ws_loadCashAssistanceDetail: ws_loadCashAssistanceDetail,
   ws_createCashAssistanceDetail: ws_createCashAssistanceDetail,
   ws_updateCashAssistanceDetail: ws_updateCashAssistanceDetail,
