@@ -6,7 +6,6 @@ var fnGetRandomString = require("../Utils/Randomnumber");
 async function ws_chackCashAssistanceDetail(findRequest){
  try {
   let pool = await sql.connect(config);
-console.log(findRequest)
     //create  whereclause
     let whereclause = "";
     for (x in findRequest) {
@@ -29,7 +28,6 @@ console.log(findRequest)
     }
 
     whereclause = whereclause.slice(0, -3);
-    console.log(whereclause);
     //show records with whereclause
     //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
     //اررو
@@ -51,7 +49,6 @@ async function ws_loadCashAssistanceDetail(findRequest) {
     let getTblCommonBaseType;
 
     //show all records
-    console.log(findRequest.PlanId);
     if (
       (findRequest.AssignNeedyPlanId === undefined &&
         findRequest.PlanId === undefined &&
@@ -92,7 +89,6 @@ async function ws_loadCashAssistanceDetail(findRequest) {
       }
 
       whereclause = whereclause.slice(0, -3);
-      console.log(whereclause);
       //show records with whereclause
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
       //اررو
@@ -114,7 +110,6 @@ async function ws_loadCashAssistanceDetail(findRequest) {
 //تست نشده
 async function ws_createCashAssistanceDetail(findRequest) {
   try {
-    console.log(findRequest.PlanId);
     let pool = await sql.connect(config);
 
     let value = "";
@@ -158,7 +153,6 @@ async function ws_createCashAssistanceDetail(findRequest) {
 //تست نشده
 async function ws_updateCashAssistanceDetail(findRequest) {
   try {
-    console.log("findRequest");
     let updateTblCharityAccounts;
     let pool = await sql.connect(config);
 
@@ -179,7 +173,7 @@ continue      }
     }
 
     value = value.slice(0, -1);
-    console.log(value)
+
     updateTblCharityAccounts = await pool.request().query(
       `UPDATE [dbo].[tblCashAssistanceDetail]
       SET  ` +
@@ -193,8 +187,6 @@ continue      }
         
         WHERE CashAssistanceDetailId = ${findRequest.CashAssistanceDetailId};`
     );
-    console.log('+++++++++++++++++')
-    console.log(updateTblCharityAccounts.recordsets[0][0])
     return updateTblCharityAccounts.recordsets[0][0];
   } catch (error) {
     console.log(error.message);

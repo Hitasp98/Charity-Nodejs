@@ -18,7 +18,9 @@ app.set('views', viewPath)
 
 
 hbs.registerPartials(partialsPath)
-
+app.get('/info12', (req, res) => {
+    res.render('baseinfo12')
+})
 app.get('/info3', (req, res) => {
     res.render('baseinfo3')
 })
@@ -27,6 +29,21 @@ app.get('/needy1', (req, res) => {
 })
 app.get('/needy2', (req, res) => {
     res.render('needy2')
+})
+app.get('/FirstPlan', (req, res) => {
+    res.render('Plan1')
+})
+app.get('/SecondPlan', (req, res) => {
+    res.render('Plan2')
+})
+app.get('/Settelment', (req, res) => {
+    res.render('Settelment')
+})
+app.get('/Succor', (req, res) => {
+    res.render('Succor')
+})
+app.get('/Payment', (req, res) => {
+    res.render('Payment')
 })
 app.get('*', (req, res) => {
     res.render('404')

@@ -23,7 +23,7 @@ module.exports.loadNeedyForPlan = async function(request, response) {
     });
   } catch (error) {
     response.json({
-      error: "کد نوع را وارد کنید",
+      error: "اشتباه",
     });
   }
 };
@@ -32,7 +32,6 @@ module.exports.loadNeedyForPlan = async function(request, response) {
 module.exports.AssignNeedyToPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
-    console.log(findRequest.PlanId);
     if (
       (findRequest.PlanId !== null &&
         findRequest.Fdate !== null &&
@@ -43,32 +42,24 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
         findRequest.Tdate !== undefined &&
         findRequest.NeedyId !== undefined)
     ) {
-      console.log(findRequest.PlanId);
-      console.log(findRequest.Fdate);
-      console.log(findRequest.Tdate);
       let Fdate = date.changed(findRequest.Fdate);
       findRequest.Fdate = Fdate.toString();
-      console.log(findRequest.Fdate);
       let Tdate = date.changed(findRequest.Tdate);
       findRequest.Tdate = Tdate.toString();
-      console.log(findRequest.Tdate);
       let checkDate = date.datechack(findRequest.Fdate, findRequest.Tdate);
       if (checkDate == true) {
         // تاريخ هاروئ بگيريم  tblPlans در اينجا بايد از جدول
         //ادرس درست است
-        console.log("6759");
 
         requestApi.post(
           {
             url: "http://localhost:8090/FirstPlan/loadPlan",
             from: {
-              PlanId: findRequest.PlanId
-              
+              PlanId: findRequest.PlanId,
             },
           },
           async function(err, res, body) {
             let fPlan = await JSON.parse(body);
-            console.log(fPlan[0]);
             // //در اینجا رنج تاریخ را چک میکنیم
             // //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
             let startdate = date.datechack(fPlan[0].Fdate, findRequest.Fdate);
@@ -83,7 +74,7 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
 
               //چک برای اینه تکراری نباشه
               //شناسه هارو اینجا فقط میفرستیم طبق سند گفته شده شناسه ها  ترکیب یکتا باشند
-          
+
               let fNeedyId = {
                 NeedyId: findRequest.NeedyId,
                 PlanId: findRequest.PlanId,
@@ -117,7 +108,9 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
       response.json({ error: " ورودی ها رو چک کنید " });
     }
   } catch (error) {
-    response.json({ error: "کد نوع را وارد کنید" });
+    response.json({
+      error: "اشتباه",
+    });
   }
 };
 //تست نشده
@@ -159,7 +152,6 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
           },
           async function(err, res, body) {
             let fPlan = await JSON.parse(body);
-            console.log(fPlan[0]);
             if (fPlan[0] == null) {
               requestApi.post(
                 {
@@ -173,7 +165,6 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
                 },
                 async function(err, res, body) {
                   let fPlan2 = await JSON.parse(body);
-                  console.log(fPlan2[0]);
                   if (fPlan2[0] == null) {
                     let findPlanId = await PlanModel.ws_loadNeedyForPlan(
                       findRequest.AssignNeedyPlanId
@@ -231,6 +222,8 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
       response.json({ error: "ورودی هارو چک کنید " });
     }
   } catch (error) {
-    response.json({ error: "کد نوع را وارد کنید" });
+    response.json({
+      error: "اشتباه",
+    });
   }
 };
