@@ -8,7 +8,15 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+  </script>
+  <link rel="styleSheet" href="css/Succor.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <title>HomePage</title>
 
@@ -16,150 +24,181 @@
 
 
   <div style="
-          background-color: white;
           padding-left: 200px;
           padding-right: 200px;
+          margin-top: 20%; 
+          
         ">
-           <a href="http://localhost:8090/info3">info3</a><br/>
-         <input type="text" placeholder="Search.." id="inputSearch" />
-      <button id="btnSearch">جستوجو</button>
-      <h1 id="setSearch"></h1>
-   
-    <div class="tablewhere">
-     
-      <table id="msg_q">
-        <tr>
-          <th>عنوان شناسه ثابت</th>
-          <th> شناسه ثابت</th>
-          <th>کد شناسه ثابت</th>
-        </tr>
 
+    <div class="input-group">
+      <input id="inputSearch" type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+        aria-describedby="search-addon" />
+      <button id="btnSearch" type="button" class="btn btn-outline-primary">search</button>
+    </div>
+    <h1 id="setSearch"></h1>
+    <div class="tablewhere">
+      <table class="table table-dark" id="msg_q">
+        <thead>
+          <tr>
+            <th>عنوان شناسه ثابت</th>
+            <th> شناسه ثابت</th>
+            <th>کد شناسه ثابت</th>
+          </tr>
+        </thead>
       </table>
     </div>
 
-    <div>
-      <button id="delet">حذف</button>
-      <button id="edit">ویرایش</button>
-      <button id="new">جدید</button>
+    <div style="margin-top: 140px; margin-left: 50%;">
+      <button id="delet" type="button" class="btn b1 btn-danger">حذف</button>
+      <button id="edit" type="button" class="btn b1 btn-warning">ویرایش </button>
+      <button id="new" type="button" class="btn b1 btn-success">جدید</button>
     </div>
-    <div id="vsave">
-      <div id="save">
-        <p>جدید</p>
-        <label>عنوان شناسه ثابت :</label>
-        <input type="text" id="nameone" />
-
-        <!-- <label>کد شناسه:</label>
-
-        <input type="text" id="nameone" /> -->
+    <span class="sp1 border-dark" id="vsave" style="margin-top: 40px; border-radius: 8px;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 100px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="nameone" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" عنوان شناسه ثابت ">
+        </div>
       </div>
-      <div style="margin-left: 300px; padding: 20px">
-        <button id="close">انصراف</button>
-        <button id="btnSave">دخیره</button>
-      </div>
-    </div>
-    <div id="vsave1">
-      <div id="save">
-        <p>ویرایش</p>
-        <label>عنوان شناسه ثابت :</label>
-        <input type="text" id="codeone1" />
-
-        <label>کد شناسه:</label>
-
-        <input type="text" id="nameone1" />
-        <div style="margin-top: -150px;">
-
-        <label> شناسه</label>
-
-        <input type="text" id="CommonBaseTypeId" />
-      </div>
-      </div>
-      <div style="margin-left: 300px; padding: 20px">
-        <button id="close1">انصراف</button>
-        <button id="btnupdate">دخیره</button>
-      </div>
-    </div>
-    <div id="vsave2">
-      <div id="save">
-        <p>حذف</p>
-
-        <input type="text" id="codeone2" />
-
-        <label>کد شناسه:</label>
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="button" id="close" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="button" id="btnSave" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
 
       </div>
-      <div style="margin-left: 300px; padding: 20px">
-        <button id="close2">انصراف</button>
-        <button id="btnDelete">دخیره</button>
+    </span>
+
+
+    <span class="sp1 border-dark" id="vsave1" style="margin-bottom: -100px; border-radius: 8px;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 100px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="nameone1" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" عنوان شناسه ثابت   ">
+        </div>
       </div>
-    </div>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 10px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="codeone1" class="form-control input-sm" style="font-size: 15px;"
+            placeholder="کد شناسه">
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 10px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="CommonBaseTypeId" class="form-control input-sm"
+            style="font-size: 15px;" placeholder="  شناسه">
+        </div>
+      </div>
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="button" id="close1" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="button" id="btnupdate" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
+
+      </div>
+    </span>
+    <span class="sp1 border-dark" id="vsave2" style="margin-bottom: -100px; border-radius: 8px;">
+
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 10px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="codeone2" class="form-control input-sm"
+            style="font-size: 15px; margin-top: 90px;" placeholder=" شناسه ثابت">
+        </div>
+      </div>
+
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="button" id="close2" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="button" id="btnDelete" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
+
+      </div>
+    </span>
 
 
-  <!-- table tow -->
+
+    <!-- table tow -->
     <div class="tablewhere">
-      <table id="dbdataTwo">
-        <tr>
-          <th>عنوان شناسه ثابت</th>
-          <th>کد شناسه ثابت</th>
-        </tr>
-  
+      <table class="table table-dark" id="dbdataTwo">
+        <thead>
+          <tr>
+            <th>عنوان شناسه ثابت</th>
+
+            <th>کد شناسه ثابت</th>
+          </tr>
+        </thead>
       </table>
-  </div>
-  <div>
-    <button id="deleteTwo">حذف</button>
-    <button id="editTwo">ویرایش</button>
-    <button id="newTwo">جدید</button>
-  </div>
-  <div id="vsaveTwo" style=" margin-top: -50px; visibility: hidden;">
-    <div id="save">
-      <p>جدید</p>
-      <label>عنوان شناسه ثابت :</label>
-      <input type="text" id="codeoneTwo" />
-
-      <label>کد شناسه:</label>
-
-      <input type="text" id="nameoneTwo" />
     </div>
-    <div style="margin-left: 300px; padding: 20px">
-      <button id="closeTwo">انصراف</button>
-      <button id="btnSaveTwo">دخیره</button>
+    <div style="margin-top: 140px; margin-left: 50%;">
+      <button id="deleteTwo" type="button" class="btn b1 btn-danger">حذف</button>
+      <button id="editTwo" type="button" class="btn b1 btn-warning">ویرایش </button>
+      <button id="newTwo" type="button" class="btn b1 btn-success">جدید</button>
     </div>
-  </div>
-  <div id="vsaveTwo1" style="margin-top: -350px; visibility: hidden;">
-    <div id="save">
-      <p>ویرایش</p>
-      <label>عنوان شناسه ثابت :</label>
-      <input type="text" id="codeoneTwo1" />
+    <span class="sp1 border-dark" id="vsaveTwo"
+      style="margin-top: 40px; border-radius: 8px; margin-top: 10px; visibility: hidden;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 100px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="nameone" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" عنوان شناسه ثابت ">
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 10px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="codeoneTwo" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" کد شناسه  ">
+        </div>
+      </div>
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="closeTwo" id="closeTwo" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="btnSaveTwo" id="btnSaveTwo" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
 
-      <label>کد شناسه:</label>
+      </div>
+    </span>
+    <span class="sp1 border-dark" id="vsaveTwo1" style="margin-top: -1600px; border-radius: 8px; visibility: hidden;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 100px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="nameoneTwo1" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" عنوان شناسه ثابت ">
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 10px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="codeoneTwo1" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" کد شناسه  ">
+        </div>
+      </div>
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="closeTwo" id="closeTwo1" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="btnSaveTwo" id="btnUpdateTwo" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
 
-      <input type="text" id="nameoneTwo1" />
-    </div>
-    <div style="margin-left: 300px; padding: 20px">
-      <button id="closeTwo1">انصراف</button>
-      <button id="btnUpdateTwo">دخیره</button>
-    </div>
-  </div>
-  <div id="vsaveTwo2" style="margin-top: -350px; visibility: hidden;">
-    <div id="save">
-      <p>حذف</p>
+      </div>
+    </span>
+       <span class="sp1 border-dark" id="vsaveTwo2" style="margin-top: -1600px; border-radius: 8px; visibility: hidden;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-left: 280px; margin-top: 100px;">
+        <div class="form-group">
+          <input type="text" name="first_name" id="codeoneTwo2" class="form-control input-sm" style="font-size: 15px;"
+            placeholder=" کد شناسه ">
+        </div>
+      </div>
+  
+      <div class="btn1" style="margin-top: 200px; margin-left: 300px;">
+        <button type="closeTwo" id="closeTwo2" style="font-size: 20px;" class="btn  btn-warning">انصراف </button>
+        <button type="btnSaveTwo" id="btnDeleteTwo" style="font-size: 20px;" class="btn  btn-danger">ذخیره</button>
 
-      <input type="text" id="codeoneTwo2" />
-
-      <label>کد شناسه:</label>
-
-    </div>
-    <div style="margin-left: 300px; padding: 20px">
-      <button id="closeTwo2">انصراف</button>
-      <button id="btnDeleteTwo">دخیره</button>
-    </div>
-  </div>
-  </div>
+      </div>
+    </span>
+  
   
   </div>
-  </div>
+
 
   <script src="./js/index.js">
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </script>
 </body>
 

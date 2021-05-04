@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <link rel="styleSheet" href="css/settelemt.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>settelment</title>
 </head>
 
@@ -46,85 +50,133 @@
             <button type="button" class="btn  btn-warning">ویرایش </button>
             <button type="button" class="btn  btn-success">جدید</button>
         </div>
- <div class=" container" style="margin-left: 80px; margin-top: 40px;" >
-            <div class="row1 row centered-form" style="width: 1800px;height: 2000px;">
+        <div class=" container" style="margin-left: 80px; margin-top: 40px;">
+            <div class="row1 row centered-form" style="margin-left: -40%; width: 2800px;height: 2000px;">
                 <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class=" panel-title" id="ph3">ورودی ها</h3>
+                            <h3 class=" panel-title" id="ph3">مشاهد اطلاعات </h3>
                         </div>
                         <div class="panel-body">
                             <form role="form">
                                 <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="first_name" id="first_name"
+                                                class="form-control input-sm" placeholder="شناسه درگاه پرداخت  ">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="last_name" id="last_name"
+                                                class="form-control input-sm" placeholder="تاریخ پرداخت ">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="last_name" id="last_name"
+                                                class="form-control input-sm" placeholder="زمان پرداخت">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- --}}
+                                <div class="row" style="padding: 2%; ">
+                                    <div class="col-xs-6 col-sm-6 col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="first_name" id="first_name"
+                                                class="form-control input-sm" placeholder="کمک توسط خیریه  ">
+                                        </div>
+                                    </div>
+                                    <div class="btn-group" style="margin-left: 60%; padding: 2%;margin-top: -60px;">
+                                        <button class="btn  btn-secondary btn-lg dropdown-toggle" type="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            کمک هزینه ازدواج </button>
+                                        <div class="dropdown-menu">
+                                            <p>جهیزیه نو عروس</p>
+                                            <p>جهیزیه ازدواج مجدد بانوان</p>
+                                            <p>کمک هزینه پسران </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <input type="text" name="first_name" id="first_name"
-                                                class="form-control input-sm" placeholder="طرح اصلی ">
+                                                class="form-control input-sm" placeholder="شناسه درگاه پرداخت  ">
                                         </div>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                         <div class="form-group">
                                             <input type="text" name="last_name" id="last_name"
-                                                class="form-control input-sm" placeholder="عنوان طرح">
+                                                class="form-control input-sm" placeholder="تاریخ پرداخت ">
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="exampleFormControlFile1">عکس را انتخاب کنید</label>
-                                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
                                 </div>
-
                                 <div class="row">
-
-                                    <div class="col-xs-6 col-sm-6 col-md-6"
-                                        style="display: flex; flex-direction: row; ">
-                                        <div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    id="flexRadioDefault1" style="margin-left: -10px;">
-                                                <label class="form-check-label" for="flexRadioDefault1"
-                                                    style="margin-left: 10px;">
-                                                    کمک نقدی </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    id="flexRadioDefault2" style="margin-left: -10px;">
-                                                <label class="form-check-label" for="flexRadioDefault2"
-                                                    style="margin-left: 10px;">
-                                                    کمک غیر نقدی
-                                                </label>
-                                            </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" name="first_name" id="first_name"
+                                                class="form-control input-sm" placeholder="شناسه درگاه پرداخت  ">
                                         </div>
-                                        <p>ماهیت طرح</p>
-
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6">
-                                        <div class=" form-check" style="display: flex; justify-content: flex-start;  ">
-                                            <label class="form-check-label" for="flexCheckDefault"
-                                                style="margin-left:100px ;">
-                                                ایا در این طرح خیر نیاز به لاگین دارد؟ </label>
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="flexCheckDefault">
-
+                                        <div class="form-group">
+                                            <input type="text" name="last_name" id="last_name"
+                                                class="form-control input-sm" placeholder="تاریخ پرداخت ">
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="row">
-                                    <div style="margin-left: 20px;">
-                                        <input type="date" id="birthday" name="birthday">
-                                        <label for="birthday">مدت خاتمه</label>
+                                <span class="border border-dark" style="width: 800xp;">
+                                    <div class="column">
+                                        <div class="panel-heading">
+                                            <h3 class=" panel-title" id="ph3">توضیح کمک نقدی </h3>
+                                        </div>
+                                        <div class="row col-xs-6 col-sm-6 col-md-4" style="padding: 5%;">
+                                            <label>ریال</label>
+                                            <div class="form-group">
+
+                                                <input type="text" name="last_name" id="last_name"
+                                                    class="form-control input-sm" placeholder="مبلغ">
+
+                                            </div>
+                                        </div>
+                                        <select class="form-select" aria-label="Default select example"
+                                            style="margin: 20px; padding: 1%;">
+                                            <option selected>انتخاب كنيد</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                        <label>نیاز مند</label>
+
+
+                                        <select class="form-select" aria-label="Default select example"
+                                            style="margin: 20px;   padding: 1%;">
+                                            <option selected>انتخاب كنيد</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                        <label>شماره حساب نیاز مند</label>
+
+                                        <select class="form-select" aria-label="Default select example"
+                                            style="margin: 20px; margin-top: 50px;  padding: 1%;">
+                                            <option selected>انتخاب كنيد</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                        <label>شماره حساب خیریه</label>
+
+
+                                        <div style="margin-top: 200px; margin-left: 400px;">
+                                            <button type="button" class="btn btn1 btn-success">پرداخت از حساب</button>
+                                        </div>
+
                                     </div>
-                                    <div style="margin-left:190px;">
-                                        <input type="date" id="birthday" name="birthday">
-                                        <label for="birthday">زمان شروع</label>
-                                    </div>
-                                </div>
-                                <div style="margin-left: 200px;">
-                                    <button type="button" class="btn btn1 btn-danger">انصراف </button>
-                                    <button type="button" class="btn btn1 btn-success">ذخیره</button>
-                                </div>
+                                </span>
                             </form>
                         </div>
                     </div>
@@ -132,7 +184,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
