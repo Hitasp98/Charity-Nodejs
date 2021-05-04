@@ -1,7 +1,6 @@
 var config = require("../Utils/dbconfig");
 const sql = require("mssql");
-var crypto = require("crypto");
-const { log } = require("console");
+
 
 
 async function ws_loadPlan(findRequest) {
@@ -34,7 +33,7 @@ async function ws_loadPlan(findRequest) {
       //create  whereclause
       let whereclause = "";
       for (x in findRequest) {
-        if (typeof findRequest[String(x)] == "string") {
+        if (typeof findRequest[String(x)] == "string" || typeof findRequest[String(x)] == "boolean") {
           whereclause =
             whereclause +
             " " +
@@ -43,7 +42,7 @@ async function ws_loadPlan(findRequest) {
             findRequest[String(x)] +
             "'" +
             ` AND`;
-        } else if (typeof findRequest[String(x)] == "number") {
+        } else if (typeof findRequest[String(x)] == "number" ) {
           whereclause =
             whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
@@ -53,7 +52,7 @@ async function ws_loadPlan(findRequest) {
       }
 
       whereclause = await whereclause.slice(0, -3);
-    
+   
       //show records with whereclause
 
       getPlan = await pool
@@ -83,7 +82,7 @@ async function ws_createPlan(findRequest) {
     }
 
     value = await value.slice(0, -1);
-    await console.log(value);
+    
     let insertTblCharityAccounts = await pool.request().query(
       `INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)
             VALUES (` +
