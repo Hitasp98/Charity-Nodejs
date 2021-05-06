@@ -158,7 +158,7 @@ module.exports.deletePlan = async function(request, response) {
 
                 await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
                     if(await JSON.parse(body)[0] != null){
-                      await PlanModel.ws_deletePlan(findRequest).then(result =>{
+                      await PlanModel.ws_deleteNeedyFromPlan(findRequest).then(result =>{
           
                         if (result == 1 ){
                             response.json({message:"عملیات حذف با موفقیت انجام شد"})

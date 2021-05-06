@@ -16,8 +16,8 @@ app.use(bodyParser.json())
 
 
 
-router.route('/getTblCommonBaseData').post(tblCommonBaseDataControllers.getTblCommonBaseDataController);
-router.route('/insertTblCommonBaseData').post(tblCommonBaseDataControllers.insertTblCommonBaseDataController);
-router.route('/updateTblCommonBaseData').put(tblCommonBaseDataControllers.updateTblCommonBaseDataController);
-router.route('/deleteTblCommonBaseData').delete(tblCommonBaseDataControllers.deleteTblCommonBaseDataController);
+router.route('/getCommonBaseData').post(tblCommonBaseDataControllers.getTblCommonBaseDataController);
+router.route('/insertCommonBaseData').post(tblCommonBaseDataControllers.insertTblCommonBaseDataController);
+router.route('/updateCommonBaseData').put(tblCommonBaseDataControllers.updateTblCommonBaseDataController);
+router.route('/deleteCommonBaseData').delete(tblCommonBaseDataControllers.deleteTblCommonBaseDataController);
 module.exports = router

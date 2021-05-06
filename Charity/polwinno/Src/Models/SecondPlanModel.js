@@ -25,7 +25,7 @@ async function ws_loadNeedyForPlan(findRequest) {
     ) {
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
       getAssignNeedyToPlans = await pool.request()
-        .query(`SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId
+        .query(`SELECT tblAssignNeedyToPlans.*
         FROM tblAssignNeedyToPlans   
         join tblPersonal
         on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
@@ -40,34 +40,35 @@ async function ws_loadNeedyForPlan(findRequest) {
           whereclause =
             whereclause +
             " " +
-            `${x} = N` +
+            `tblAssignNeedyToPlans.${x} = N` +
             "'" +
             findRequest[String(x)] +
             "'" +
             ` AND`;
         } else if (typeof findRequest[String(x)] == "number") {
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + " " + `tblAssignNeedyToPlans.${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + " " + `tblAssignNeedyToPlans.${x} =  ${findRequest[String(x)]}` + ` AND`;
         }
       }
 
       whereclause = whereclause.slice(0, -3);
-
+     
       //show records with whereclause
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
 
-      getTblCommonBaseType = await pool.request().query(
-        `SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId
+      getAssignNeedyToPlans = await pool.request().query(
+        `SELECT tblAssignNeedyToPlans.*
         FROM tblAssignNeedyToPlans   
         join tblPersonal
         on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
         join tblPlans
         on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
-		where` + whereclause
+	    	 where ` + whereclause
       );
+    
       return getAssignNeedyToPlans.recordsets[0];
     }
   } catch (error) {
@@ -77,40 +78,26 @@ async function ws_loadNeedyForPlan(findRequest) {
 //????????????????شناسه نيازمند NeedyId يا هش مپي از ليست نيازمندان (ليستي از شناسه هاي NeedyId )
 //????????????????این مطلب در این مدل قرار نگرفته
 //تست نشده
-
+ 
 async function ws_AssignNeedyToPlan(findRequest) {
   try {
     let pool = await sql.connect(config);
-
-    let value = "";
-
-    for (x in findRequest) {
-      if (
-        findRequest[String(x)] == null ||
-        typeof findRequest[String(x)] == "number"
-      ) {
-        value = value + " " + `${findRequest[String(x)]}` + `,`;
-      } else {
-        value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;
-      }
+    
+    let values = "";
+    for(let i=0;i<findRequest.NeedyId.length;i++){
+      values = values + `(`+findRequest.NeedyId[i] +`,`+findRequest.PlanId +`,N`+"'"+findRequest.Fdate +"'"+`,N`+"'"+findRequest.Tdate+"'"+`) ,`
+     
     }
+    values = await values.slice(0, -1);
+    let insertPlan = "INSERT INTO tblAssignNeedyToPlans VALUES "+ values
+ 
 
-    value = value.slice(0, -1);
 
-    let inserttblAssignNeedyToPlans = await pool.request().query(
-      `
-INSERT INTO [dbo].[tblAssignNeedyToPlans]
-           ([NeedyId]
-           ,[PlanId]
-           ,[Fdate]
-           ,[Tdate])
-     VALUES (` +
-        value +
-        `)`
-    );
+    let inserttblAssignNeedyToPlans = await pool.request().query(insertPlan)
+
     let tblAssignNeedyToPlans = await pool
       .request()
-      .query(`SELECT tblAssignNeedyToPlans.*,tblPersonal.PersonId,tblPlans.PlanId
+      .query(`SELECT tblAssignNeedyToPlans.*
       FROM tblAssignNeedyToPlans   
       join tblPersonal
       on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
@@ -132,8 +119,8 @@ async function ws_deleteNeedyFromPlan(findRequest) {
     deletetblAssignNeedyToPlans = await pool
       .request()
       .query(
-        `DELETE FROM [dbo].[tblAssignNeedyToPlans]
-        WHERE PlanId = ${findRequest.PlanId};`
+        `DELETE FROM tblAssignNeedyToPlans
+        WHERE AssignNeedyPlanId = ${findRequest.AssignNeedyPlanId};`
       );
 
     return deletetblAssignNeedyToPlans.rowsAffected[0];

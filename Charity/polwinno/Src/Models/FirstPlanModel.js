@@ -26,6 +26,7 @@ async function ws_loadPlan(findRequest) {
         findRequest.neededLogin === null &&
         findRequest.PlanId === null)
     ) {
+    
       getPlan = await pool.request().query(`SELECT *
    FROM tblPlans `);
       return getPlan.recordsets[0];
@@ -51,8 +52,10 @@ async function ws_loadPlan(findRequest) {
         }
       }
 
+      
       whereclause = await whereclause.slice(0, -3);
-   
+      
+      await console.log(whereclause);
       //show records with whereclause
 
       getPlan = await pool

@@ -2,11 +2,11 @@ var config = require('../Utils/dbconfig');
 const sql = require('mssql');
 const { request } = require('express');
 const getRandomString = require('../Utils/fnGetRandomString')
-
-
+const url = require('../Utils/urlConfig')
+console.log(url);
 //ws_loadBaseType()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-async function getTblCommonBaseType(findRequest){
+async function ws_loadBaseType(findRequest){
     try{
         let pool = await sql.connect(config)
      
@@ -55,7 +55,7 @@ async function getTblCommonBaseType(findRequest){
 //ws_CreateBaseType() 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function insertTblCommonBaseType(findRequest){
+async function ws_CreateBaseType(findRequest){
   
    
     try{
@@ -83,7 +83,7 @@ async function insertTblCommonBaseType(findRequest){
 //ws_UpdateBaseType()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function updateTblCommonBaseType(findRequest){
+async function ws_UpdateBaseType(findRequest){
     let CommonBaseTypeValue
     try{
         let pool = await sql.connect(config)
@@ -114,19 +114,18 @@ async function updateTblCommonBaseType(findRequest){
         
     }
 }
+//ws_DeleteBaseType
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function deleteTblCommonBaseType(findRequest){
+async function ws_DeleteBaseType(findRequest){
     try{
         let pool = await sql.connect(config)
         
-            //let deleteTblCommonBaseType
-            //let getTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where CommonBaseTypeId =  ${findRequest.CommonBaseTypeId};`)
             
-            //if(getTblCommonBaseType != null){
                 
         let deleteTblCommonBaseType = await pool.request().query(`DELETE FROM tblCommonBaseType WHERE CommonBaseTypeId = ${findRequest.CommonBaseTypeId};`)
                    
-               // }
+               
               
         return deleteTblCommonBaseType.rowsAffected[0];
         
@@ -138,10 +137,10 @@ async function deleteTblCommonBaseType(findRequest){
     }
 }
 
-module.exports = {getTblCommonBaseType : getTblCommonBaseType,
+module.exports = {ws_loadBaseType : ws_loadBaseType,
 
-insertTblCommonBaseType:insertTblCommonBaseType,
-updateTblCommonBaseType:updateTblCommonBaseType,
-deleteTblCommonBaseType:deleteTblCommonBaseType
+    ws_CreateBaseType  :ws_CreateBaseType,
+    ws_UpdateBaseType : ws_UpdateBaseType,
+    ws_DeleteBaseType : ws_DeleteBaseType
 
 } 

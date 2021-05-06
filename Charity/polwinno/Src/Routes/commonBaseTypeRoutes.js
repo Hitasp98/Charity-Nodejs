@@ -17,9 +17,9 @@ app.use(bodyParser.json())
 
 //commonBaseType routes
 
-router.route('/getTblCommonBaseType').post(tblCommonBaseTypeControllers.getTblCommonBaseTypeController);
-router.route('/insertTblCommonBaseType').post(tblCommonBaseTypeControllers.insertTblCommonBaseTypeController);
-router.route('/updateTblCommonBaseType').put(tblCommonBaseTypeControllers.updateTblCommonBaseTypeController);
-router.route('/deleteTblCommonBaseType').delete(tblCommonBaseTypeControllers.deleteTblCommonBaseTypeController);
+router.route('/getCommonBaseType').post(tblCommonBaseTypeControllers.getTblCommonBaseTypeController);
+router.route('/insertCommonBaseType').post(tblCommonBaseTypeControllers.insertTblCommonBaseTypeController);
+router.route('/updateCommonBaseType').put(tblCommonBaseTypeControllers.updateTblCommonBaseTypeController);
+router.route('/deleteCommonBaseType').delete(tblCommonBaseTypeControllers.deleteTblCommonBaseTypeController);
 
 module.exports = router

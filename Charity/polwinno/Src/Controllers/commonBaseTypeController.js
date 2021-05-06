@@ -17,7 +17,7 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
 
         let findRequest = {...request.body}
    
-        tblCommonBaseTypeModel.getTblCommonBaseType(findRequest).then(result =>{ 
+        tblCommonBaseTypeModel.ws_loadBaseType(findRequest).then(result =>{ 
         
             
                 if(result == null){
@@ -39,10 +39,10 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
 //for checking mandatory
        if(findRequest.BaseTypeTitle != null){
 //first get for cecking index property
-        let resultGet = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
+        let resultGet = await tblCommonBaseTypeModel.ws_loadBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
    
             if(resultGet == null){
-                tblCommonBaseTypeModel.insertTblCommonBaseType(findRequest).then(result => 
+                tblCommonBaseTypeModel.ws_CreateBaseType(findRequest).then(result => 
             
                     response.json(result[0][0].CommonBaseTypeId)
                 ).catch (error=>
@@ -69,12 +69,12 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         if(findRequest.BaseTypeTitle != null  && findRequest.CommonBaseTypeId !=null){
      //for checking indexes        
             let findGet = []
-                findGet[0] = await tblCommonBaseTypeModel.getTblCommonBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
+                findGet[0] = await tblCommonBaseTypeModel.ws_loadBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
              
               
            
                     if ((findGet[0] == null || (findGet[0].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[0] != null) ) && ( findGet[1] == null )){
-                        tblCommonBaseTypeModel.updateTblCommonBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId,
+                        tblCommonBaseTypeModel.ws_UpdateBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId,
                         BaseTypeTitle : findRequest.BaseTypeTitle  
                         }).then(result =>{
                             
@@ -106,17 +106,17 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         
       // request for checking Fk in others table   
        if(findRequest.CommonBaseTypeId != null){
-            let findGet = await tblCommonBaseTypeModel.getTblCommonBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId})
+            let findGet = await tblCommonBaseTypeModel.ws_loadBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId})
               
                 if(findGet != null){
-                    await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
-                    
+                    await requestApi.post({url:'http://localhost:8090/CommonBaseData/getCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+                        
                         if (await JSON.parse(body)[0] !=null && await JSON.parse(body)[0].CommonBaseTypeId == findRequest.CommonBaseTypeId){
                             response.json({error : "امکان حذف بدليل وابستگي امکان پذير نمي باشد"})
                         
                         }else{
                     
-                            await tblCommonBaseTypeModel.deleteTblCommonBaseType(findRequest).then(result =>{
+                            await tblCommonBaseTypeModel.ws_DeleteBaseType(findRequest).then(result =>{
 
                                 if (result == 1 ){
                                     response.json({message:"عملیات حذف با موفقیت انجام شد"})
