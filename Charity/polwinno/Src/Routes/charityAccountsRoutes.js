@@ -21,5 +21,5 @@ router.route('/insertCharityAccounts').post(charityAccountsControllers.insertTbl
 router.route('/updateCharityAccounts').put(charityAccountsControllers.updateTblCharityAccountsController);
 router.route('/deleteCharityAccounts').delete(charityAccountsControllers.deleteTblCharityAccountsController);
 // just check charity for use in other table (without any join)
-router.route('/checkCharityAccounts').post(charityAccountsControllers.getForOtherTablesController);
+router.route('/checkCharityAccounts').post(charityAccountsControllers.checkCharityController);
 module.exports = router

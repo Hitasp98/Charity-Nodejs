@@ -3,8 +3,8 @@ const sql = require("mssql");
 var crypto = require("crypto-js");
 var config = require('../Utils/dbconfig');
 
-
-
+//ws_loadPersonal
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadPersonal(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -50,18 +50,18 @@ async function ws_loadPersonal(findRequest) {
 
      
       for (x in findRequest) {
-        if (typeof findRequest[String(x)] == "string") {
+        if (typeof findRequest[String(x)] == "string" || typeof findRequest[String(x)] == "boolean") {
 
           whereclause =
             whereclause +
             " " +
-            `${x} = ` +
+            `${x} = N` +
             "'" +
             findRequest[String(x)] +
             "'" +
             ` AND `;
 
-        } else if (typeof findRequest[String(x)] == "number") {
+        } else if (typeof findRequest[String(x)] == "number"  ) {
        
 
           whereclause =
@@ -77,7 +77,7 @@ async function ws_loadPersonal(findRequest) {
       }
 
 
-      whereclause = whereclause.slice(0, -4);
+      whereclause =await whereclause.slice(0, -4);
      
      
 
@@ -94,8 +94,8 @@ async function ws_loadPersonal(findRequest) {
     console.log(error.message);
   }
 }
-
-
+//ws_createPersonal
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_createPersonal(findRequest) {
 try {
   
@@ -179,8 +179,8 @@ try {
   
     }
   }
-
-
+//ws_updatePersonal
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_updatePersonal(findRequest) {
   try {
 
@@ -190,7 +190,7 @@ async function ws_updatePersonal(findRequest) {
       let pool = await sql.connect(config)
       let personIdValue
       let hashInputBase64
-     
+     // hash base on personType
       if(findRequest.PersonType == 2){
           let hashInput = findRequest.Name + findRequest.Family + findRequest.NationalCode + findRequest.PersonType
 
@@ -203,7 +203,7 @@ async function ws_updatePersonal(findRequest) {
       
       
       let value = ''
-      console.log(findRequest);
+      
       for (x in findRequest) {
 
 
@@ -238,7 +238,7 @@ async function ws_updatePersonal(findRequest) {
 
 
       updateTblPersonal = await pool.request().query(`SELECT * FROM tblPersonal where PersonId=` + findRequest.PersonId)
-      console.log(updateTblPersonal.recordsets);
+     
       return updateTblPersonal.recordsets[0];
 
 
@@ -248,6 +248,8 @@ async function ws_updatePersonal(findRequest) {
     
   }
 }
+//ws_deletePersonal
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_deletePersonal(findRequest) {
   try {
 
@@ -271,7 +273,6 @@ async function ws_deletePersonal(findRequest) {
 }
 module.exports = {
   ws_loadPersonal: ws_loadPersonal,
-  
   ws_createPersonal: ws_createPersonal,
   ws_updatePersonal: ws_updatePersonal,
   ws_deletePersonal: ws_deletePersonal,

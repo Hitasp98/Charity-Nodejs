@@ -165,7 +165,7 @@ async function ws_deleteCharityAccounts(findRequest){
 // just for check charity accounts (without any join)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function getForInsert(findRequest){
+async function checkCharity(findRequest){
     try{
         let pool = await sql.connect(config)
    
@@ -202,7 +202,7 @@ async function getForInsert(findRequest){
 
 module.exports = {
 ws_loadCharityAccounts : ws_loadCharityAccounts,
-getForInsert : getForInsert,
+checkCharity : checkCharity,
 ws_CreateCharityAccounts : ws_CreateCharityAccounts,
 ws_updateCharityAccounts : ws_updateCharityAccounts,
 ws_deleteCharityAccounts : ws_deleteCharityAccounts

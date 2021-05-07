@@ -6,102 +6,87 @@ var bodyParser = require("body-parser");
 const requestApi = require('request');
 
 
-
-
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 
-
-
+//get personal
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getPersonalController = async function (request, response) {
   try {
     let findRequest = {...request.body};
 
-
-
-
     await tblPersonalModel.ws_loadPersonal(findRequest).then(result => {
-      if (result == '') {
-
-
-        response.json({error: "هیچ رکوردی موجود نیست"});
-
-
-      } else {
-
-  
-
-        response.json(result);
-
-
-      }
+        if(result[0] == null){
+            response.json({error:"هیچ رکوردی موجود نیست"})
+        }else{
+            response.json(result)
+        }
 
     });
   } catch (error) {
 
-
     console.log(error.message);
-
-
   }
 };
-
+//insert personal 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.insertPersonalController = async function (request, response) {
 try {
 
     let findRequest = { ...request.body };
     if(findRequest.PersonType != null && findRequest.Name !=null && findRequest.Family !=null && findRequest.Sex!=null){
-        let nationalCodeChecker = fnCheckCodeMeli.fnCheckCodeMeli(findRequest.NationalCode)
-       
-        if(nationalCodeChecker == true ){
-            if(findRequest.PersonType == 2 && findRequest.IdNumber !=null && findRequest.NationalCode !=null && findRequest.BirthDate !=null && findRequest.BirthPlace != null && findRequest.PersonPhoto != null ){
-               
-                
-                let findIndex = {
-                
-                PersonType : findRequest.PersonType,
-                    NationalCode : findRequest.NationalCode
-                }
-                let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                if(resultGet[0] == null){
-                    await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
-                        
-                        response.json(result[0].PersonId)
-                    ).catch (error=>
+       // check nationalcode 
+                let nationalCodeChecker = fnCheckCodeMeli.fnCheckCodeMeli(findRequest.NationalCode)
+            
+                if(nationalCodeChecker == true ){
+                    if(findRequest.PersonType == 2 && findRequest.IdNumber !=null && findRequest.NationalCode !=null && findRequest.BirthDate !=null && findRequest.BirthPlace != null && findRequest.PersonPhoto != null ){
                     
-                        response.json({error:"رکورد مورد نظر درج نشد"})
-                    )
-                }else{
-                    response.json({error:"رکورد مورد نظر تکراری میباشد"})
-                }
-                
-            }else if(findRequest.PersonType == 1 || findRequest.PersonType == 0 ){
-                
-                let findIndex = {
-                
-                    PersonType : findRequest.PersonType,
-                    NationalCode : findRequest.NationalCode
-                }
-                let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                if(resultGet[0] == null){
-                    await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
                         
-                        response.json(result[0].PersonId)
-                    ).catch (error=>
-                    
-                        response.json({error:"رکورد مورد نظر درج نشد"})
-                    )
-                }else{
-                    response.json({error:"رکورد مورد نظر تکراری میباشد"})
-                }
+                        let findIndex = {
+                        
+                        PersonType : findRequest.PersonType,
+                            NationalCode : findRequest.NationalCode
+                        }
+                        let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
+                        if(resultGet[0] == null){
+                            await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
+                                
+                                response.json(result[0].PersonId)
+                            ).catch (error=>
+                            
+                                response.json({error:"رکورد مورد نظر درج نشد"})
+                            )
+                        }else{
+                            response.json({error:"رکورد مورد نظر تکراری میباشد"})
+                        }
+                        
+                    }else if(findRequest.PersonType == 1 || findRequest.PersonType == 3 ){
+                        
+                        let findIndex = {
+                        
+                            PersonType : findRequest.PersonType,
+                            NationalCode : findRequest.NationalCode
+                        }
+                        let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
+                        if(resultGet[0] == null){
+                            await tblPersonalModel.ws_createPersonal(findRequest).then(result => 
+                                
+                                response.json(result[0].PersonId)
+                            ).catch (error=>
+                            
+                                response.json({error:"رکورد مورد نظر درج نشد"})
+                            )
+                        }else{
+                            response.json({error:"رکورد مورد نظر تکراری میباشد"})
+                        }
+                    }else{
+                        response.json({ error:" فیلد های اجباری برای شخص نیازمند را صحیح پر کنید "}); 
+                    }
             }else{
-                response.json({ error:" فیلد های اجباری برای شخص نیازمند را پر کنید "}); 
-            }
-       }else{
-        response.json({ error:" کدملی صحیح نمیباشد "});
-       }     
+                response.json({ error:" کدملی صحیح نمیباشد "});
+            }     
     }else{
         response.json({ error:" فیلد های اجباری پر کنید "}); 
     }
@@ -109,7 +94,8 @@ try {
     response.json({ error: "رکورد مورد نظر درج نشد"});
   }
 };
-
+//update personal
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.updatePersonalController = async function (request, response) {
   try {
   
@@ -183,7 +169,8 @@ module.exports.updatePersonalController = async function (request, response) {
     });
   }
 };
-
+//delete Personal
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.deletePersonalController = async  function (request, response) {
   try {
     let findRequest = { ...request.body };

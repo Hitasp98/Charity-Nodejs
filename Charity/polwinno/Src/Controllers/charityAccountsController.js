@@ -1,7 +1,7 @@
 
 const tblCharityAccountsModel = require('../Models/charityAccountsModel')
 const api = require('../Utils/urlConfig')
-
+var fnCheckCardNumber = require('../Utils/cardNumberChecker');
 
 
 var express = require('express')
@@ -44,14 +44,18 @@ module.exports.getTblCharityAccountsController = async function(request,response
         let findRequest = {...request.body}
         // check mandatory fields
         if(findRequest.AccountNumber != null  && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
+           
+            let cardNumberChecker = await fnCheckCardNumber.fnCheckCartDigit(findRequest.CardNumber)
+          
+           if(cardNumberChecker == true){
             let findIndex = {
                 AccountNumber : findRequest.AccountNumber,
                 }
             // check index    
-            let resultGet = await tblCharityAccountsModel.getForInsert(findIndex)
+            let resultGet = await tblCharityAccountsModel.checkCharity(findIndex)
             
                 if (resultGet[0] == null){
-                   // await delete findRequest.BaseTypeCode
+                 
                     
                     await tblCharityAccountsModel.ws_CreateCharityAccounts(findRequest).then(result => 
                 
@@ -62,6 +66,10 @@ module.exports.getTblCharityAccountsController = async function(request,response
                         )
                 }else{
                     response.json({error : "رکورد مورد نظر  یکتا نیست"})}
+           }else{
+            response.json({error:"شماره کارت صحیح نیست"})
+           }
+           
 
         }else{
             response.json({error:"فیلد های اجباری وارد شود"})
@@ -79,31 +87,35 @@ module.exports.getTblCharityAccountsController = async function(request,response
             let findRequest = {...request.body}
             
             if(findRequest.AccountNumber != null  && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
-                
-                let findById = await tblCharityAccountsModel.getForInsert({CharityAccountId : findRequest.CharityAccountId })
+                //check id for update
+                let findById = await tblCharityAccountsModel.checkCharity({CharityAccountId : findRequest.CharityAccountId })
                 
                 if (findById[0] != null){
-                    let findIndex = {
-                        AccountNumber : findRequest.AccountNumber
+                    //check card number
+                    let cardNumberChecker = await fnCheckCardNumber.fnCheckCartDigit(findRequest.CardNumber)
+                    if(cardNumberChecker == true){
+                        let findIndex = {
+                            AccountNumber : findRequest.AccountNumber
+                        }
                         
-                    }
-                    
-                    
-                    let resultGet = await tblCharityAccountsModel.getForInsert(findIndex)
-                    
-           
-                    if(resultGet[0] == null || (resultGet[0].CharityAccountId == findRequest.CharityAccountId && resultGet[0] != null )){
-                      // await delete findRequest.BaseTypeCode
-                       await tblCharityAccountsModel.ws_updateCharityAccounts(findRequest).then(result =>{
+                        let resultGet = await tblCharityAccountsModel.checkCharity(findIndex)
                         
-                            response.json(result[0])}
+                        if(resultGet[0] == null || (resultGet[0].CharityAccountId == findRequest.CharityAccountId && resultGet[0] != null )){
+                          
+                           await tblCharityAccountsModel.ws_updateCharityAccounts(findRequest).then(result =>{
                             
-                        ).catch(error=>
-                    
-                            response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
-                    )}else{
-                        response.json({error:"شماره حساب یکتا نیست"})
-                    }  
+                                response.json(result[0])}
+                                
+                            ).catch(error=>
+                        
+                                response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
+                        )}else{
+                            response.json({error:"شماره حساب یکتا نیست"})
+                        } 
+                    }else{
+                        response.json({error:"شماره کارت صحیح نیست"})
+                    }
+                   
                 }else{
                    
                     response.json({error:"چنین رکوردی برای ویرایش موجود نیست"})
@@ -133,7 +145,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
             }
             
             
-            let resultGet = await tblCharityAccountsModel.getForInsert(findIndex) 
+            let resultGet = await tblCharityAccountsModel.checkCharity(findIndex) 
             if (resultGet[0] != null){
                 await tblCharityAccountsModel.ws_deleteCharityAccounts(findRequest).then(result =>{
     
@@ -153,11 +165,11 @@ module.exports.getTblCharityAccountsController = async function(request,response
      }
 //get for other tables       
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-module.exports.getForOtherTablesController = async function(request,response){
+module.exports.checkCharityController = async function(request,response){
     try{
         let findRequest = {...request.body}
        
-            await tblCharityAccountsModel.getForInsert(findRequest).then(result =>{ 
+            await tblCharityAccountsModel.checkCharity(findRequest).then(result =>{ 
       
                     response.json(result)
                 
