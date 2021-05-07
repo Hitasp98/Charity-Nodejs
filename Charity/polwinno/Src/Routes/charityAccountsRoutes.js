@@ -1,8 +1,6 @@
-// const tblCommonBaseTypeModel = require('../Models/tblCommonBaseTypeModel')
-// const tblCommonBaseDataModel = require('../Models/tblCommonBaseDataModel')
-//const tblCharityAccountsModel = require('../Models/tblCharityAccountsModel')
 
-const tblCharityAccountsControllers = require('../Controllers/charityAccountsController')
+
+const charityAccountsControllers = require('../Controllers/charityAccountsController')
 
 
 
@@ -18,8 +16,10 @@ app.use(bodyParser.json())
 
 
 
-router.route('/getTblCharityAccounts').post(tblCharityAccountsControllers.getTblCharityAccountsController);
-router.route('/insertTblCharityAccounts').post(tblCharityAccountsControllers.insertTblCharityAccountsController);
-router.route('/updateTblCharityAccounts').put(tblCharityAccountsControllers.updateTblCharityAccountsController);
-router.route('/deleteTblCharityAccounts').delete(tblCharityAccountsControllers.deleteTblCharityAccountsController);
+router.route('/getCharityAccounts').post(charityAccountsControllers.getTblCharityAccountsController);
+router.route('/insertCharityAccounts').post(charityAccountsControllers.insertTblCharityAccountsController);
+router.route('/updateCharityAccounts').put(charityAccountsControllers.updateTblCharityAccountsController);
+router.route('/deleteCharityAccounts').delete(charityAccountsControllers.deleteTblCharityAccountsController);
+// just check charity for use in other table (without any join)
+router.route('/checkCharityAccounts').post(charityAccountsControllers.getForOtherTablesController);
 module.exports = router

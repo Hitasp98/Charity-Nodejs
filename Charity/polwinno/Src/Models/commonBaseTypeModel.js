@@ -3,7 +3,7 @@ const sql = require('mssql');
 const { request } = require('express');
 const getRandomString = require('../Utils/fnGetRandomString')
 const url = require('../Utils/urlConfig')
-console.log(url);
+
 //ws_loadBaseType()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadBaseType(findRequest){

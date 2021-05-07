@@ -1,4 +1,6 @@
  const tblCommonBaseTypeModel = require('../Models/commonBaseTypeModel')
+ // create url for example http://localhost:8090
+ const api = require('../Utils/urlConfig')
 
 var express = require('express')
 var bodyParser = require('body-parser')
@@ -109,7 +111,7 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
             let findGet = await tblCommonBaseTypeModel.ws_loadBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId})
               
                 if(findGet != null){
-                    await requestApi.post({url:'http://localhost:8090/CommonBaseData/getCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+                    await requestApi.post({url: api.url + '/CommonBaseData/getCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
                         
                         if (await JSON.parse(body)[0] !=null && await JSON.parse(body)[0].CommonBaseTypeId == findRequest.CommonBaseTypeId){
                             response.json({error : "امکان حذف بدليل وابستگي امکان پذير نمي باشد"})

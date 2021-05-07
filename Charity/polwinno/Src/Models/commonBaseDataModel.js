@@ -4,9 +4,9 @@ const { request } = require('express');
 const getRandomString = require('../Utils/fnGetRandomString')
 
 
-
-
-async function getTblCommonBaseData(findRequest){
+//ws_loadBaseValue
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_loadBaseValue(findRequest){
     try{
         let pool = await sql.connect(config)
      
@@ -47,9 +47,9 @@ async function getTblCommonBaseData(findRequest){
     }
 }
 
-
-
-async function insertTblCommonBaseData(findRequest){
+//ws_createBaseValue
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_createBaseValue(findRequest){
    
     
     try{
@@ -79,7 +79,9 @@ async function insertTblCommonBaseData(findRequest){
     }
 
 }
-async function updateTblCommonBaseData(findRequest){
+//ws_updateBaseValue
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_updateBaseValue(findRequest){
 
     try{
         let updateTblCommonBaseData
@@ -91,7 +93,7 @@ async function updateTblCommonBaseData(findRequest){
         let getTblCommonBaseDataCode = await pool.request().query(`select * from tblCommonBaseData where CommonBaseDataId =` + findRequest["CommonBaseDataId"])
         let getTblCommonBaseCode = getTblCommonBaseTypeCode.recordsets[0][0].BaseTypeCode + await getTblCommonBaseDataCode.recordsets[0][0].BaseCode.substring(3, 6)
        
-        console.log(getTblCommonBaseCode);
+       
             for(x in findRequest){
                 if (x=="CommonBaseDataId"){
                     CommonBaseDataValue = findRequest.CommonBaseDataId;
@@ -128,8 +130,9 @@ async function updateTblCommonBaseData(findRequest){
         
     }
 }
-
-async function deleteTblCommonBaseData(findRequest){
+//ws_deleteBaseValue
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_deleteBaseValue(findRequest){
     try{
         let pool = await sql.connect(config)
         
@@ -152,10 +155,10 @@ async function deleteTblCommonBaseData(findRequest){
     }
 }
 
-module.exports = {getTblCommonBaseData : getTblCommonBaseData,
-
-insertTblCommonBaseData:insertTblCommonBaseData,
-updateTblCommonBaseData:updateTblCommonBaseData,
-deleteTblCommonBaseData:deleteTblCommonBaseData
+module.exports = {
+ws_loadBaseValue : ws_loadBaseValue,
+ws_createBaseValue : ws_createBaseValue,
+ws_updateBaseValue : ws_updateBaseValue,
+ws_deleteBaseValue : ws_deleteBaseValue
 
 } 

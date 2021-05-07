@@ -1,6 +1,6 @@
 
 const tblCharityAccountsModel = require('../Models/charityAccountsModel')
-
+const api = require('../Utils/urlConfig')
 
 
 
@@ -13,12 +13,13 @@ var app = express()
 
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
-
+//get charity accounts
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getTblCharityAccountsController = async function(request,response){
     try{
         let findRequest = {...request.body}
         if (findRequest.BaseTypeCode != null){
-            await tblCharityAccountsModel.getTblCharityAccounts(findRequest).then(result =>{ 
+            await tblCharityAccountsModel.ws_loadCharityAccounts(findRequest).then(result =>{ 
             
                 
                 if(result[0] == null){
@@ -36,23 +37,23 @@ module.exports.getTblCharityAccountsController = async function(request,response
         }
        
 }
-
-
+//insert charity accounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     module.exports.insertTblCharityAccountsController = async function(request,response){
     try{
         let findRequest = {...request.body}
-        let findIndex = {
-            AccountNumber : findRequest.AccountNumber,
-            BaseTypeCode : findRequest.BaseTypeCode
-            }
-        if(findRequest.AccountNumber != null && findRequest.BaseTypeCode !=null && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
-
-            let resultGet = await tblCharityAccountsModel.getTblCharityAccounts(findIndex)
+        // check mandatory fields
+        if(findRequest.AccountNumber != null  && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
+            let findIndex = {
+                AccountNumber : findRequest.AccountNumber,
+                }
+            // check index    
+            let resultGet = await tblCharityAccountsModel.getForInsert(findIndex)
             
                 if (resultGet[0] == null){
-                    await delete findRequest.BaseTypeCode
+                   // await delete findRequest.BaseTypeCode
                     
-                    await tblCharityAccountsModel.insertTblCharityAccounts(findRequest).then(result => 
+                    await tblCharityAccountsModel.ws_CreateCharityAccounts(findRequest).then(result => 
                 
                         response.json(result[0][0].CharityAccountId)
                     ).catch (error=>
@@ -60,40 +61,40 @@ module.exports.getTblCharityAccountsController = async function(request,response
                         response.json({error:"رکورد مورد نظر درج نشد"})
                         )
                 }else{
-                    response.json({error : "رکورد مورد نظر تکراری میباشد"})}
+                    response.json({error : "رکورد مورد نظر  یکتا نیست"})}
 
         }else{
             response.json({error:"فیلد های اجباری وارد شود"})
         }
       
         }catch (error){
-            response.json({error:"1رکورد مورد نظر درج نشد"})
+            response.json({error:"رکورد مورد نظر درج نشد"})
         }
 
-    }   
-
+    }
+//update charity accounts       
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     module.exports.updateTblCharityAccountsController = async function(request,response){
         try{
             let findRequest = {...request.body}
             
-            if(findRequest.AccountNumber != null && findRequest.BaseTypeCode !=null && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
+            if(findRequest.AccountNumber != null  && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
                 
-                let findById = await tblCharityAccountsModel.getTblCharityAccounts({CharityAccountId : findRequest.CharityAccountId,
-                    BaseTypeCode : findRequest.BaseTypeCode})
+                let findById = await tblCharityAccountsModel.getForInsert({CharityAccountId : findRequest.CharityAccountId })
                 
                 if (findById[0] != null){
                     let findIndex = {
-                        AccountNumber : findRequest.AccountNumber,
-                        BaseTypeCode : findRequest.BaseTypeCode
+                        AccountNumber : findRequest.AccountNumber
+                        
                     }
                     
                     
-                    let resultGet = await tblCharityAccountsModel.getTblCharityAccounts(findIndex)
+                    let resultGet = await tblCharityAccountsModel.getForInsert(findIndex)
                     
            
                     if(resultGet[0] == null || (resultGet[0].CharityAccountId == findRequest.CharityAccountId && resultGet[0] != null )){
-                       await delete findRequest.BaseTypeCode
-                       await tblCharityAccountsModel.updateTblCharityAccounts(findRequest).then(result =>{
+                      // await delete findRequest.BaseTypeCode
+                       await tblCharityAccountsModel.ws_updateCharityAccounts(findRequest).then(result =>{
                         
                             response.json(result[0])}
                             
@@ -119,21 +120,22 @@ module.exports.getTblCharityAccountsController = async function(request,response
           
        
     }
-
+//delete charity accounts    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     module.exports.deleteTblCharityAccountsController = async function(request,response){
     try {
             let findRequest = {...request.body}
             
 
             let findIndex = {
-                CharityAccountId : findRequest.CharityAccountId,
-                BaseTypeCode : findRequest.BaseTypeCode
+                CharityAccountId : findRequest.CharityAccountId
+                
             }
             
             
-            let resultGet = await tblCharityAccountsModel.getTblCharityAccounts(findIndex) 
+            let resultGet = await tblCharityAccountsModel.getForInsert(findIndex) 
             if (resultGet[0] != null){
-                await tblCharityAccountsModel.deleteTblCharityAccounts(findRequest).then(result =>{
+                await tblCharityAccountsModel.ws_deleteCharityAccounts(findRequest).then(result =>{
     
                     if (result == 1 ){
                         response.json({message:"عملیات حذف با موفقیت انجام شد"})
@@ -149,7 +151,20 @@ module.exports.getTblCharityAccountsController = async function(request,response
             response.json({error:"عملیات حذف انجام نشد دوباره سعی کنید"})
         }
      }
+//get for other tables       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports.getForOtherTablesController = async function(request,response){
+    try{
+        let findRequest = {...request.body}
        
-
-    
+            await tblCharityAccountsModel.getForInsert(findRequest).then(result =>{ 
+      
+                    response.json(result)
+                
+            })
+    }catch (error){
+            response.json({error:" رکوردی یافت نشد"})
+        }
+       
+}  
 

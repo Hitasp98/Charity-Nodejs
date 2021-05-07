@@ -2,7 +2,7 @@
 
 
 const tblCommonBaseDataModel = require('../Models/commonBaseDataModel')
-
+const api = require('../Utils/urlConfig')
 
 
 
@@ -16,14 +16,15 @@ var app = express()
 
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
-
+//get controller
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getTblCommonBaseDataController = function(request,response){
     let findRequest = {...request.body}
    
-    tblCommonBaseDataModel.getTblCommonBaseData(findRequest).then(result =>{ 
+    tblCommonBaseDataModel.ws_loadBaseValue(findRequest).then(result =>{ 
         
         
-                if(result == null){
+                if(result[0] == null){
                     response.json({error:"هیچ رکوردی موجود نیست"})
                 }else{
                     response.json(result)
@@ -42,20 +43,20 @@ module.exports.getTblCommonBaseDataController = function(request,response){
         let findRequest = {...request.body}
        
         //for creating code check commonBaseTypeId
-       
+        //for checking mandatory
         if (findRequest.CommonBaseTypeId != null){
        
         //create common base code 6 char
         //check correct commonBaseType
        
-       await requestApi.post({url:'http://localhost:8090/tblCommonBaseType/getTblCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+       await requestApi.post({url: api.url+'/CommonBaseType/getCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
            let resultGet = JSON.parse(body).BaseTypeCode
         
         
            //if create BaseCode it will insert data
             
            if (resultGet != null ){
-                await tblCommonBaseDataModel.insertTblCommonBaseData(findRequest).then(result => 
+                await tblCommonBaseDataModel.ws_createBaseValue(findRequest).then(result => 
                 
                     response.json(result[0][0].CommonBaseDataId)
                 ).catch (error=>
@@ -75,7 +76,7 @@ module.exports.getTblCommonBaseDataController = function(request,response){
             }  
 
     }
-//update    
+//update controller   
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 module.exports.updateTblCommonBaseDataController = async function(request,response){
@@ -84,16 +85,16 @@ try{
      if (findRequest.CommonBaseTypeId != null && findRequest.CommonBaseDataId != null){
     // request to commonBaseTypeId
         
-    let findGet = await tblCommonBaseDataModel.getTblCommonBaseData({CommonBaseDataId : findRequest.CommonBaseDataId})
+    let findGet = await tblCommonBaseDataModel.ws_loadBaseValue({CommonBaseDataId : findRequest.CommonBaseDataId})
        
         if(findGet[0] != null){
-            await requestApi.post({url:'http://localhost:8090/tblCommonBaseType/getTblCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
+            await requestApi.post({url: api.url +'/CommonBaseType/getCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
                 let resultGet = JSON.parse(body).BaseTypeCode
                     
     // check commonBaseTypeId for create code
                     
                 if(resultGet != null){
-                     await tblCommonBaseDataModel.updateTblCommonBaseData(findRequest).then(result =>{
+                     await tblCommonBaseDataModel.ws_updateBaseValue(findRequest).then(result =>{
                         
                             if(result==null){
                                 response.json({error:" دوباره سعی کنید عملیات ویرایش با موفقیت انجام نشد"})
@@ -123,23 +124,24 @@ try{
             }  
        
     }
-
+//delete controller    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     module.exports.deleteTblCommonBaseDataController = async function(request,response){
     try{
 
         let findRequest = {...request.body}
      
             if (findRequest.CommonBaseDataId != null){
-                let findGet = await tblCommonBaseDataModel.getTblCommonBaseData({CommonBaseDataId : findRequest.CommonBaseDataId})
+                let findGet = await tblCommonBaseDataModel.ws_loadBaseValue({CommonBaseDataId : findRequest.CommonBaseDataId})
                    
                     if(findGet[0] != null){
-                        requestApi.post({url:'http://localhost:8090/tblCharityAccounts/getTblCharityAccounts', form: {BankId : findRequest.CommonBaseDataId,
-                        BaseTypeCode : findRequest.BaseTypeCode}},async function(err,res,body){
-                           
+                        requestApi.post({url: api.url +'/CharityAccounts/checkCharityAccounts', form: {BankId : findRequest.CommonBaseDataId
+                        }},async function(err,res,body){
+ 
                                 if (await JSON.parse(body)[0] !=null && await JSON.parse(body)[0].BankId == findRequest.CommonBaseDataId){
                                     response.json({error : "امکان حذف بدليل وابستگي امکان پذير نمي باشد"})
                                 }else{
-                                    await tblCommonBaseDataModel.deleteTblCommonBaseData(findRequest).then(result =>{
+                                    await tblCommonBaseDataModel.ws_deleteBaseValue(findRequest).then(result =>{
                             
                                         if (result == 1 ){
                                             response.json({message:"عملیات حذف با موفقیت انجام شد"})

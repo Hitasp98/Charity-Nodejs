@@ -1,12 +1,12 @@
 var config = require('../Utils/dbconfig');
 const sql = require('mssql');
-//const { request } = require('express');
 
 
 
 
-
-async function getTblCharityAccounts(findRequest){
+//ws_loadCharityAccounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_loadCharityAccounts(findRequest){
     try{
         let pool = await sql.connect(config)
    
@@ -59,7 +59,9 @@ async function getTblCharityAccounts(findRequest){
 }
 
 
-async function insertTblCharityAccounts(findRequest){
+//ws_CreateCharityAccounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_CreateCharityAccounts(findRequest){
    
     
     try{
@@ -94,7 +96,9 @@ async function insertTblCharityAccounts(findRequest){
     }
 
 }
-async function updateTblCharityAccounts(findRequest){
+//ws_updateCharityAccounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_updateCharityAccounts(findRequest){
 
     try{
         let updateTblCharityAccounts
@@ -106,7 +110,7 @@ async function updateTblCharityAccounts(findRequest){
         for(x in findRequest){
             if(x == "CharityAccountId" ){
 
-               }
+            }
             else if( findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ){
                 value = value + " "+` ${x} = ${findRequest[String(x)]}`+`,`
                
@@ -132,9 +136,11 @@ async function updateTblCharityAccounts(findRequest){
         console.log(error.message);
         
     }
-}
 
-async function deleteTblCharityAccounts(findRequest){
+}
+//ws_deleteCharityAccounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_deleteCharityAccounts(findRequest){
     try{
         let pool = await sql.connect(config)
         
@@ -156,11 +162,49 @@ async function deleteTblCharityAccounts(findRequest){
         console.log(error);
     }
 }
+// just for check charity accounts (without any join)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = {getTblCharityAccounts : getTblCharityAccounts,
+async function getForInsert(findRequest){
+    try{
+        let pool = await sql.connect(config)
+   
+        let getTblCharityAccounts; 
+            let whereclause = ""
+            for (x in findRequest) {
+                
+                
+                if (typeof(findRequest[String(x)])=="string" ){
+                     whereclause = whereclause + " "+`${x} = N`+ '\''+ findRequest[String(x)] +'\''+` AND`;
+                    
+                    
+                }else if(typeof(findRequest[String(x)]) == 'number'){
+                     whereclause = whereclause + " "+`${x} =  ${findRequest[String(x)]}`+` AND`;
+                   
+                    
+                }else if(findRequest[String(x)]==null){
+                    
+                    whereclause = whereclause +  " "+`${x} =  ${findRequest[String(x)]}`+` AND`;
+        
+                }
+              
+              whereclause = whereclause.slice(0, -3)
+              getTblCharityAccounts = await pool.request().query(`select * from tblCharityAccounts
+              where`+ whereclause )
+              return getTblCharityAccounts.recordsets[0];
+        }      
+    }
+    catch (error){
+        console.log(error.message);
+    }
+}
 
-insertTblCharityAccounts:insertTblCharityAccounts,
-updateTblCharityAccounts:updateTblCharityAccounts,
-deleteTblCharityAccounts:deleteTblCharityAccounts
+
+module.exports = {
+ws_loadCharityAccounts : ws_loadCharityAccounts,
+getForInsert : getForInsert,
+ws_CreateCharityAccounts : ws_CreateCharityAccounts,
+ws_updateCharityAccounts : ws_updateCharityAccounts,
+ws_deleteCharityAccounts : ws_deleteCharityAccounts
 
 } 

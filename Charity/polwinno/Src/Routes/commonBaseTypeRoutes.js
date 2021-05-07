@@ -1,6 +1,6 @@
 
 
-const tblCommonBaseTypeControllers = require('../Controllers/commonBaseTypeController')
+const commonBaseTypeControllers = require('../Controllers/commonBaseTypeController')
 
 
 
@@ -17,9 +17,9 @@ app.use(bodyParser.json())
 
 //commonBaseType routes
 
-router.route('/getCommonBaseType').post(tblCommonBaseTypeControllers.getTblCommonBaseTypeController);
-router.route('/insertCommonBaseType').post(tblCommonBaseTypeControllers.insertTblCommonBaseTypeController);
-router.route('/updateCommonBaseType').put(tblCommonBaseTypeControllers.updateTblCommonBaseTypeController);
-router.route('/deleteCommonBaseType').delete(tblCommonBaseTypeControllers.deleteTblCommonBaseTypeController);
+router.route('/getCommonBaseType').post(commonBaseTypeControllers.getTblCommonBaseTypeController);
+router.route('/insertCommonBaseType').post(commonBaseTypeControllers.insertTblCommonBaseTypeController);
+router.route('/updateCommonBaseType').put(commonBaseTypeControllers.updateTblCommonBaseTypeController);
+router.route('/deleteCommonBaseType').delete(commonBaseTypeControllers.deleteTblCommonBaseTypeController);
 
 module.exports = router
