@@ -7,7 +7,8 @@ const sql = require('mssql')
 
 
 
-//TODO: select tblNeedyAccounts
+//ws_loadNeedyAccount
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadNeedyAccount(findRequest) {
   try {
 
@@ -21,25 +22,16 @@ async function ws_loadNeedyAccount(findRequest) {
     if (
       (
         findRequest.NeedyAccountId === null &&  
-        findRequest.BankId === null &&
-        findRequest.NeedyId === null &&
-        findRequest.OwnerName === null && 
-        findRequest.CardNumber === null &&
-        findRequest.AccountNumber === null &&
-        findRequest.AccountName === null &&
-        findRequest.ShebaNumber === null
+        findRequest.NeedyId === null 
+       
         ) ||
       (
         findRequest.NeedyAccountId === undefined &&   
-        findRequest.BankId === undefined &&
-        findRequest.NeedyId === undefined &&
-        findRequest.OwnerName === undefined && 
-        findRequest.CardNumber === undefined &&
-        findRequest.AccountNumber === undefined &&
-        findRequest.AccountName === undefined &&
-        findRequest.ShebaNumber === undefined)
-    ) {
-      //!!joining tb tblPersonal & tblCommonBaseData & tblCommonBaseType
+       
+        findRequest.NeedyId === undefined 
+      
+    ) ){
+      //joining tb tblPersonal & tblCommonBaseData & tblCommonBaseType
       tblPersonal = await pool.request()
         .query(`SELECT tblNeedyAccounts.*,tblPersonal.PersonId , tblCommonBaseData.CommonBaseDataId,tblCommonBaseType.BaseTypeCode
             FROM tblNeedyAccounts
@@ -62,7 +54,7 @@ async function ws_loadNeedyAccount(findRequest) {
       let whereclause = ` BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\''+` AND`
       
 
-      //Todo: find value on proprty with string or number ||null and add to whereclause build query
+      //find value on proprty with string or number ||null and add to whereclause build query
       for (x in findRequest) {
 
 
@@ -72,7 +64,7 @@ async function ws_loadNeedyAccount(findRequest) {
 
 
 
-          whereclause = whereclause + ' ' + `${x} = ` + "'" + findRequest[String(x)] + "'" + ` AND `
+          whereclause = whereclause + ' ' + `${x} = N` + "'" + findRequest[String(x)] + "'" + ` AND `
 
 
 
@@ -160,7 +152,6 @@ try {
     //!! end value have ',' delete
     value = await value.slice(0, -1)
 
-   
     let insertTblPersonal = await pool.request().query(
       `INSERT INTO tblNeedyAccounts
                       (   
@@ -187,8 +178,8 @@ try {
   }
 }
 
-
-
+//ws_UpdateNeedyAccount
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_UpdateNeedyAccount(findRequest) {
   
     try {
@@ -247,37 +238,95 @@ console.log(value);
  
 }
 
-
-
+//ws_deleteNeedyAccount
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_deleteNeedyAccount(findRequest) {
   try {
     let pool = await sql.connect(config)
 
-    let deleteTblPersonal
-    // let getTblPersonal = await pool.request().query(`select * from [CharityDB].[dbo].[tblPersonal] where PersonId =  ${findRequest.PersonId};`)
+    let deleteTblNeedyAccounts
+    
 
+      deleteTblNeedyAccounts = await pool.request().query(`DELETE FROM tblNeedyAccounts WHERE NeedyAccountId = ${findRequest.NeedyAccountId};`)
 
+  
 
-
-    // if(getTblPersonal != ''){
-
-    deleteTblPersonal = await pool.request().query(`DELETE FROM tblNeedyAccounts WHERE NeedyAccountId = ${findRequest.NeedyAccountId};`)
-
-    // }
-
-    return deleteTblPersonal.rowsAffected[0];
+    return deleteTblNeedyAccounts.rowsAffected[0];
 
   } catch (error) {
     console.log(error.message)
   }
 }
+//check Needy account (just get Needy account table)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+async function checkNeedyAccount(findRequest) {
+  try {
+
+    let pool = await sql.connect(config)
+
+    let tblNeedyAccounts 
+
+      let whereclause = ""
+      
+      //create whereclause
+      for (x in findRequest) {
 
 
+
+        //?check value for insert string or number 
+        if (typeof findRequest[String(x)] == 'string') {
+
+
+
+          whereclause = whereclause + ' ' + `${x} = N` + "'" + findRequest[String(x)] + "'" + ` AND `
+
+
+
+        } else if (typeof findRequest[String(x)] == 'number') {
+
+
+
+          whereclause = whereclause + ' ' + `${x} =  ${findRequest[String(x)]}` + ` AND`
+
+
+
+        } else if (findRequest[String(x)] == null) {
+
+
+
+          whereclause + ' ' + `${x} is null AND`
+
+
+
+        }
+      }
+      whereclause = whereclause.slice(0, -4)
+
+      tblNeedyAccounts = await pool
+        .request()
+        .query(
+          `SELECT *
+          FROM tblNeedyAccounts
+          where `+ whereclause
+        )
+     
+      return tblNeedyAccounts.recordsets[0] 
+
+    
+  } catch (error) {
+
+
+    console.log(error.message)
+
+
+  }
+
+}
 
 
 module.exports = {
-  
   ws_loadNeedyAccount: ws_loadNeedyAccount,
+  checkNeedyAccount : checkNeedyAccount,
   ws_createNeedyAccount: ws_createNeedyAccount,
   ws_UpdateNeedyAccount: ws_UpdateNeedyAccount,
   ws_deleteNeedyAccount: ws_deleteNeedyAccount

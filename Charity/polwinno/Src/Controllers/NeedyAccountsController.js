@@ -15,16 +15,22 @@ app.use(bodyParser.json());
 
 
 
-
-
+//get neede accounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getNeedyAccountsController = async function (request, response) {
   try {
+   
     let findRequest = { ...request.body };
-
-
+    // base on document limit input
+    findRequest = {
+      BaseTypeCode : findRequest.BaseTypeCode,
+      NeedyAccountId : findRequest.NeedyAccountId,
+      NeedyId : findRequest.NeedyId
+    }
+ 
     await NeedyAccountsModels.ws_loadNeedyAccount(findRequest).then(result => {
 
-      if (result == null) {
+      if (result[0] == null) {
 
 
         response.json({ error: "هیچ رکوردی موجود نیست" });
@@ -50,8 +56,8 @@ module.exports.getNeedyAccountsController = async function (request, response) {
 
 
 
-
-
+//insert Needy accounts
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.insertNeedyAccountsController = async function (request, response) {
   try {
     let findRequest = { ...request.body };
@@ -63,16 +69,16 @@ module.exports.insertNeedyAccountsController = async function (request, response
       findRequest.AccountNumber != null &&
       findRequest.ShebaNumber != null) {
 
-
-      let resultGetSheba = await NeedyAccountsModels.ws_loadNeedyAccount({
-         BaseTypeCode : findRequest.BaseTypeCode,
-         ShebaNumber: findRequest.ShebaNumber,})
-      let resultGetAccount =  await NeedyAccountsModels.ws_loadNeedyAccount({
-        BaseTypeCode : findRequest.BaseTypeCode,
+// find by index 
+      let resultGetSheba = await NeedyAccountsModels.checkNeedyAccount({
+         ShebaNumber: findRequest.ShebaNumber})
+      let resultGetAccount =  await NeedyAccountsModels.checkNeedyAccount({
         AccountNumber: findRequest.AccountNumber,
-        NeedyId : findRequest.NeedyId})   
+        NeedyId : findRequest.NeedyId})
+      
+// condition before insert           
         if(resultGetSheba[0] == null && resultGetAccount[0] == null){
-            await delete findRequest.BaseTypeCode
+           
             await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
               .then(result => 
                 response.json(result[0][0].NeedyAccountId)
@@ -96,33 +102,34 @@ module.exports.insertNeedyAccountsController = async function (request, response
   };
 }
 
-
-
-
-
+//update NeedyAccounts
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.updateNeedyAccountsController = async function (request, response) {
 try {
     let findRequest = { ...request.body };
    
 
     if (
+        findRequest.NeedyAccountId != null &&
         findRequest.NeedyId != null &&
         findRequest.BankId != null &&
         findRequest.OwnerName != null &&
         findRequest.AccountNumber != null &&
         findRequest.ShebaNumber != null) {
-            let findById = await NeedyAccountsModels.ws_loadNeedyAccount({
-                BaseTypeCode : findRequest.BaseTypeCode,
-                NeedyAccountId : findRequest.NeedyAccountId,})
+          //find by id before edit
+            let findById = await NeedyAccountsModels.checkNeedyAccount({
+                NeedyAccountId : findRequest.NeedyAccountId})
             if(findById[0] != null){
-                let resultGetSheba = await NeedyAccountsModels.ws_loadNeedyAccount({
-                    BaseTypeCode : findRequest.BaseTypeCode,
+              //find by index for unique input  
+                let resultGetSheba = await NeedyAccountsModels.checkNeedyAccount({
+                   
                     ShebaNumber: findRequest.ShebaNumber,})
-                let resultGetAccount =  await NeedyAccountsModels.ws_loadNeedyAccount({
-                    BaseTypeCode : findRequest.BaseTypeCode,
+                let resultGetAccount =  await NeedyAccountsModels.checkNeedyAccount({
+                    
                     AccountNumber: findRequest.AccountNumber,
                     NeedyId : findRequest.NeedyId})
-                    if((resultGetSheba[0] == null || (resultGetSheba[0] != null && resultGetSheba[0].NeedyAccountId == findRequest.NeedyAccountId)) && (resultGetSheba[0] == null || (resultGetAccount[0] != null && resultGetAccount[0].NeedyAccountId == findRequest.NeedyAccountId))){
+                   
+                    if((resultGetSheba[0] == null || ( resultGetSheba[0].NeedyAccountId == findRequest.NeedyAccountId)) && (resultGetAccount[0] == null || (  resultGetAccount[0].NeedyAccountId == findRequest.NeedyAccountId))){
                        
                         //requestApi.post({ url: 'http://localhost:8090/Payment/getPayment ', form: { findRequest: findRequest } }, async function (err, res, body) {
                                 //if (await JSON.parse(body).AccountNumber == findRequest.AccountNumber) {
@@ -157,23 +164,24 @@ try {
 
 
 
-
-
+// delete Needy Accounts
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.deleteNeedyAccountsController = async function (request, response) {
   try {
     let findRequest = {...request.body}
             
 
     let findIndex = {
-        NeedyAccountId : findRequest.NeedyAccountId,
-        BaseTypeCode : findRequest.BaseTypeCode
+        NeedyAccountId : findRequest.NeedyAccountId
+      
     }
     
-    console.log(findIndex);
-    let resultGet = await NeedyAccountsModels.ws_loadNeedyAccount(findIndex) 
+
+    
+    let resultGet = await NeedyAccountsModels.checkNeedyAccount(findIndex) 
    
     if (resultGet[0] != null){
-        await NeedyAccountsModels.ws_deleteNeedyAccount(findRequest).then(result =>{
+        await NeedyAccountsModels.ws_deleteNeedyAccount(findIndex).then(result =>{
 
             if (result == 1 ){
                 response.json({message:"عملیات حذف با موفقیت انجام شد"})
@@ -191,3 +199,28 @@ module.exports.deleteNeedyAccountsController = async function (request, response
 
   }
 }
+//check Needy Accounts
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports.checkNeedyAccountsController = async function (request, response) {
+  try {
+   
+    let findRequest = { ...request.body };
+ 
+    await NeedyAccountsModels.checkNeedyAccount(findRequest).then(result => {
+
+      if (result[0] == null) {
+
+        response.json({ error: "هیچ رکوردی موجود نیست" });
+
+      } else {
+
+        response.json(result);
+
+      }
+    });
+  } catch (error) {
+
+    response.json({ error: "هیچ رکوردی موجود نیست" });
+
+  }
+};

@@ -16,6 +16,8 @@ router.route('/getNeedyAccounts').post(NeedyAccountsControllers.getNeedyAccounts
 router.route('/insertNeedyAccounts').post(NeedyAccountsControllers.insertNeedyAccountsController);
 router.route('/updateNeedyAccounts').put(NeedyAccountsControllers.updateNeedyAccountsController);
 router.route('/deleteNeedyAccounts').delete(NeedyAccountsControllers.deleteNeedyAccountsController);
+// for check NeedyAccount table 
+router.route('/checkNeedyAccounts').post(NeedyAccountsControllers.checkNeedyAccountsController);
 
 
 module.exports = router
