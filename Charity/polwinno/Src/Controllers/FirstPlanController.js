@@ -5,11 +5,15 @@ var bodyParser = require("body-parser");
 const requestApi = require("request");
 
 var checkDate = require("../Utils/compareDate");
+const api = require('../Utils/urlConfig')
+
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//get plan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.loadPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
@@ -26,15 +30,19 @@ module.exports.loadPlan = async function(request, response) {
     });
   }
 };
-
+//insert plan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.createPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
-   
+   //check mandatory
     if (
-      findRequest.PlanName !== null &&
-      findRequest.PlanNature !== null 
+      findRequest.PlanName != null &&
+      findRequest.PlanNature != null &&
+      findRequest.neededLogin != null
     ) {
+
+    //check date  
       if (checkDate.datechack(findRequest.Fdate,findRequest.Tdate)) {
         let findIndex = {
             
@@ -43,7 +51,7 @@ module.exports.createPlan = async function(request, response) {
           ParentPlanId: findRequest.ParentPlanId,
         };
        
-        
+        //check index
         let resultGet = await PlanModel.ws_loadPlan(findIndex);
        
        
@@ -72,7 +80,8 @@ module.exports.createPlan = async function(request, response) {
     response.json({ error: "رکورد مورد نظر درج نشد" });
   }
 };
-
+//update
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.UpdatePlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
@@ -86,17 +95,20 @@ module.exports.UpdatePlan = async function(request, response) {
         if(findById[0] != null){
          
                   if (checkDate.datechack(findRequest.Fdate,findRequest.Tdate)) {
-                    await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
-                          if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature )){
-                            await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
-                                if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature)){
+                    // await requestApi.post({url: api.url +'/CashAssistanceDetail/getCashAssistanceDetail', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+                         
+                    //     if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature )){
+                    //         await requestApi.post({url: api.url +'/SecondPlan/getPlan', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
+                                
+                               // if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature)){
                                   let findIndex = {
                                     PlanName: findRequest.PlanName,
                                     PlanId: findRequest.PlanId,
                                     ParentPlanId: findRequest.ParentPlanId,
                                   };
                                   let resultGet = await PlanModel.ws_loadPlan(findIndex);
-                                  if (resultGet[0] == null || (resultGet[0] != null && resultGet[0].PlanId == findRequest.PlanId)) {
+                                  console.log(resultGet[0]);
+                                  if (resultGet[0] == null || (resultGet[0].PlanId == findRequest.PlanId)) {
                                     await PlanModel.ws_UpdatePlan(findRequest).then(result => {
                                         response.json(result[0])}
                             
@@ -108,16 +120,16 @@ module.exports.UpdatePlan = async function(request, response) {
                                   }else{
                                     response.json({ error: "رکورد ویرایش شده یکتا نیست " });
                                   }
-                                }else{
-                                  response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
-                                }
+                                // }else{
+                                //   response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
+                                // }
                                    
 
-                            })             
-                      }else{
-                        response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
-                      }
-                    })
+                    //         })             
+                    //   }else{
+                    //     response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
+                    //   }
+                    // })
                 }else{
                     response.json({ error: "تاریخ پایان باید از تاریخ شروع بیشتر باشد " });
                 }
@@ -132,16 +144,8 @@ module.exports.UpdatePlan = async function(request, response) {
     response.json({ error: " عملیات ویرایش انجام نشد" });
   }
 };
-
-
-
-
-
-
-
-
-
-
+//delete plan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.deletePlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };

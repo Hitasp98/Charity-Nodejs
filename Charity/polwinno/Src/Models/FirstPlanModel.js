@@ -1,8 +1,8 @@
 var config = require("../Utils/dbconfig");
 const sql = require("mssql");
 
-
-
+//ws_loadPlan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadPlan(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -54,8 +54,7 @@ async function ws_loadPlan(findRequest) {
 
       
       whereclause = await whereclause.slice(0, -3);
-      
-      await console.log(whereclause);
+   
       //show records with whereclause
 
       getPlan = await pool
@@ -67,8 +66,8 @@ async function ws_loadPlan(findRequest) {
     console.log(error.message);
   }
 }
-
-
+//ws_createPlan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_createPlan(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -105,8 +104,8 @@ async function ws_createPlan(findRequest) {
     console.log(error.message);
   }
 }
-
-
+//ws_UpdatePlan
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_UpdatePlan(findRequest) {
   try {
     let updateTblPlan;
@@ -144,7 +143,8 @@ async function ws_UpdatePlan(findRequest) {
     console.log(error.message);
   }
 }
-
+//ws_deletePlan
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_deletePlan(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -160,6 +160,7 @@ async function ws_deletePlan(findRequest) {
     console.log(error.message);
   }
 }
+
 module.exports = {
   ws_loadPlan: ws_loadPlan,
   ws_createPlan: ws_createPlan,

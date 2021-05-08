@@ -1,0 +1,38 @@
+    
+    body{
+        font-size: 20px;
+    }
+    .btn {
+    font-size: 20px;
+    }
+    .btn1 {
+    font-size: 20px;
+    margin: 20px;
+    height: 50px;
+    width: 70px;
+    }
+    .btn2 {
+        width: 500px;
+    font-size: 20px;
+    margin: 70px;
+    margin-left: 20px;
+    }
+    .rounded {
+    font-size: 30px;
+    height: 50px;
+    }
+    
+    span {
+    display: inline-block;
+    width: 700px;
+    height: 500px;
+    margin: 6px;
+    background-color: #555;
+    }
+    .row1{
+        width: 3000px;
+        height: 3000px;
+    }
+    .container1{
+        margin-left: -600px;
+    }
