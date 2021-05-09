@@ -18,7 +18,7 @@ function getmsgs1() {
     contentType: "application/json",
     data: JSON.stringify({
       doc_id_msgs: $("#doct_id").val(),
-      BaseTypeCode: "lkMuzl",
+      BaseTypeCode: "IkM",
     }),
     dataType: "json",
     success: function(data) {
@@ -84,7 +84,7 @@ btnnew.addEventListener('click',()=>{
   const CardNumber = document.getElementById("CardNumber").value;
   const AccountNumber = document.getElementById("AccountNumber").value;
   const AccountName = document.getElementById("AccountName").value;
-  console.log(BankIdd)
+  console.log(BankId)
 
   // const CharityAccountIdd = document.getElementById("CharityAccountId").value;
   BankId = parseInt(BankId);
@@ -101,7 +101,7 @@ btnnew.addEventListener('click',()=>{
   } else {
     $.ajax({
       type: "POST",
-      url: "http://localhost:8090/CharityAccounts/insertCharityAccounts",
+      url: "/CharityAccounts/insertCharityAccounts",
       contentType: "application/json",
       data: JSON.stringify({
         BankId: BankId,
@@ -129,7 +129,7 @@ btnedit.addEventListener('click',()=>{
   const AccountNumber = document.getElementById("AccountNumber1").value;
   const AccountName = document.getElementById("AccountName1").value;
   const CharityAccountIdd = document.getElementById("CharityAccountId").value;
-  console.log(BankIdd)
+  console.log(BankId)
 
   BankId = parseInt(BankId);
   CharityAccountId = parseInt(CharityAccountIdd);
@@ -146,7 +146,7 @@ btnedit.addEventListener('click',()=>{
   } else {
     $.ajax({
       type: "PUT",
-      url: "/tblCharityAccounts/updateTblCharityAccounts",
+      url: "/CharityAccounts/updateCharityAccounts",
       contentType: "application/json",
       data: JSON.stringify({
         CharityAccountId: CharityAccountId,
@@ -164,7 +164,6 @@ btnedit.addEventListener('click',()=>{
     });
     // location.reload();
   }
-  check();
 })
 btnDelete.addEventListener("click", () => {
   const CharityAccountIdd = document.getElementById("CharityAccountId1").value;
@@ -176,7 +175,7 @@ btnDelete.addEventListener("click", () => {
   } else {
     $.ajax({
       type: "Delete",
-      url: "/tblCharityAccounts/deleteTblCharityAccounts",
+      url: "/CharityAccounts/deleteCharityAccounts",
       contentType: "application/json",
       data: JSON.stringify({
         CharityAccountId: CharityAccountId,
@@ -188,7 +187,6 @@ btnDelete.addEventListener("click", () => {
     });
     // location.reload();
   }
-  check();
 });
 
 

@@ -1,5 +1,8 @@
 const config = { 
     user : "sa",
+    // password : 'A12345678n',
+    // server : 'localhost',
+    // database : "CharityDB", 
     password : '123456',
     server : 'localhost',
     database : "sabkad4",
