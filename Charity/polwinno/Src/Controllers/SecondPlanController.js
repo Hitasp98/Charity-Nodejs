@@ -27,7 +27,7 @@ module.exports.loadNeedyForPlan = async function(request, response) {
     });
   }
 };
-//تست نشده
+
 
 module.exports.AssignNeedyToPlan = async function(request, response) {
   try {
@@ -121,7 +121,7 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
     });
   }
 };
-//تست نشده
+
 
 module.exports.deleteNeedyFromPlan = async function(request, response) {
   try {
@@ -132,24 +132,52 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
         for (let i=0; i<findAssignNeedyPlanId.length;i++){
            deleteAssignNeedyPlanId.push(findAssignNeedyPlanId[i].AssignNeedyPlanId)
         }
-        let deleteRecord = 0
-        let notDeleteRecord = 0
-        for(let j=0 ; j<deleteAssignNeedyPlanId.length ;j++){
+            let deleteRecord = 0
+            let notDeleteRecord = 0
+            for(let j=0 ; j<deleteAssignNeedyPlanId.length ;j++){
 
-          await PlanModel.ws_deleteNeedyFromPlan({AssignNeedyPlanId : deleteAssignNeedyPlanId[j]}).then(result =>{
-            if (result == 1 ){
-              deleteRecord = deleteRecord + 1
-          }else{
-            notDeleteRecord = notDeleteRecord +1
-          }
-          
-          
-          })
+              await PlanModel.ws_deleteNeedyFromPlan({AssignNeedyPlanId : deleteAssignNeedyPlanId[j]}).then(result =>{
+                if (result == 1 ){
+                  deleteRecord = deleteRecord + 1
+              }else{
+                notDeleteRecord = notDeleteRecord +1
+              }
+            })
          
         }
-        response.json({message:`${deleteRecord} رکورد حذف شد `})
-      }else {
+          response.json({message:`${deleteRecord} رکورد حذف شد `})
+      }else if(findRequest.PlanId == null && findRequest.AssignNeedyPlanId != null) {
+                   // await requestApi.post({url: api.url +'/CashAssistanceDetail/getCashAssistanceDetail', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+                         
+                    //     if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature )){
+                    //         await requestApi.post({url: api.url +'/SecondPlan/getPlan', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
+                                
+                               // if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature)){
+                                let findIndex = {
+                                 AssignNeedyPlanId : findRequest.AssignNeedyPlanId
+                                };
+                                let resultGet = await PlanModel.ws_loadNeedyForPlan(findIndex);
+                             
+                                if (resultGet[0] != null ) {
+                                  await PlanModel.ws_deleteNeedyFromPlan(findRequest).then(result => {
+                                    if (result == 1 ){
+                                      response.json({message:"عملیات حذف با موفقیت انجام شد"})
+                                  }else{
+                                      response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
+                                  }})  
+                                }else{
+                                  response.json({ error: "هیچ رکوردی برای حذف موجود نیست" });
+                                }
+                              // }else{
+                              //   response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
+                              // }
+                                 
 
+                  //         })             
+                  //   }else{
+                  //     response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
+                  //   }
+                  // })
       }
     }catch (error) {
           response.json({

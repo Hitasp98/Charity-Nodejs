@@ -3,7 +3,7 @@ const sql = require("mssql");
 
 
 
-//تست نشده
+
 
 async function ws_loadNeedyForPlan(findRequest) {
   try {
@@ -17,10 +17,12 @@ async function ws_loadNeedyForPlan(findRequest) {
       (findRequest.NeedyId === undefined &&
         findRequest.PlanId === undefined &&
         findRequest.AssignNeedyPlanId === undefined 
+        
        ) ||
       (findRequest.NeedyId === null &&
         findRequest.PlanId === null &&
         findRequest.AssignNeedyPlanId === null 
+       
         )
     ) {
       //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
@@ -57,7 +59,7 @@ async function ws_loadNeedyForPlan(findRequest) {
       whereclause = whereclause.slice(0, -3);
      
       //show records with whereclause
-      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+      
 
       getAssignNeedyToPlans = await pool.request().query(
         `SELECT tblAssignNeedyToPlans.*

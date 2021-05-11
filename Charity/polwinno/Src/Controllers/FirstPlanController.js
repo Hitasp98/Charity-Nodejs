@@ -107,7 +107,7 @@ module.exports.UpdatePlan = async function(request, response) {
                                     ParentPlanId: findRequest.ParentPlanId,
                                   };
                                   let resultGet = await PlanModel.ws_loadPlan(findIndex);
-                                  console.log(resultGet[0]);
+                                
                                   if (resultGet[0] == null || (resultGet[0].PlanId == findRequest.PlanId)) {
                                     await PlanModel.ws_UpdatePlan(findRequest).then(result => {
                                         response.json(result[0])}
@@ -154,31 +154,31 @@ module.exports.deletePlan = async function(request, response) {
       if(findRequest.PlanId != null ){
         
           let resultGet = await PlanModel.ws_loadPlan({PlanId : findRequest.PlanId}) 
-    
+     
           if (resultGet[0] != null){
 
-            await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
-              if (await JSON.parse(body)[0] != null){
+            // await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+            //   if (await JSON.parse(body)[0] != null){
 
-                await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
-                    if(await JSON.parse(body)[0] != null){
-                      await PlanModel.ws_deleteNeedyFromPlan(findRequest).then(result =>{
-          
+            //     await requestApi.post({url:'http://localhost:8090/tblCommonBaseData/getTblCommonBaseData', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+            //         if(await JSON.parse(body)[0] != null){
+                      await PlanModel.ws_deletePlan(findRequest).then(result =>{
+                        
                         if (result == 1 ){
                             response.json({message:"عملیات حذف با موفقیت انجام شد"})
                         }else{
                             response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
                         }})
-                    }else{
-                      response.json({error : "به دلیل وابستگی عمل حذف امکان پذیر نمیباشد"})
-                    }
+            //         }else{
+            //           response.json({error : "به دلیل وابستگی عمل حذف امکان پذیر نمیباشد"})
+            //         }
 
-                })
+            //     })
                 
-              }else{
-                response.json({error : "به دلیل وابستگی عمل حذف امکان پذیر نمیباشد"})
-              }
-            })
+            //   }else{
+            //     response.json({error : "به دلیل وابستگی عمل حذف امکان پذیر نمیباشد"})
+            //   }
+            // })
           }else{
               response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
           }                  

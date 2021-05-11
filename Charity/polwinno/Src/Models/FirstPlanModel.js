@@ -117,13 +117,13 @@ async function ws_UpdatePlan(findRequest) {
       if (x == "PlanId"){
 
       }else if (
-        findRequest[String(x)] == null || typeof findRequest[String(x)] == "number" || typeof findRequest[String(x)] == "boolean" ) {
+        findRequest[String(x)] == null || typeof findRequest[String(x)] == "number" ) {
         value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`;
-      } else {
+      }else{
         value =
           value + " " + `${x} = N` + "'" + findRequest[String(x)] + "'" + `,`;
       }
-      //console.log(value);
+
     }
 
     value = await value.slice(0, -1);
