@@ -28,7 +28,7 @@ function ws_loadBaseType(
 ) {
   $.ajax({
     type: "POST",
-    url: "/CommonBaseType/getTblCommonBaseType",
+    url: "/CommonBaseType/getCommonBaseType",
     contentType: "application/json",
     data: JSON.stringify({
       doc_id_msgs: $("#doct_id").val(),
@@ -69,7 +69,7 @@ function ws_loadBaseValue(
   //one try
   $.ajax({
     type: "POST",
-    url: "/tblCommonBaseData/getTblCommonBaseData",
+    url: "/CommonBaseData/getCommonBaseData",
     contentType: "application/json",
     data: JSON.stringify({
       doc_id_msgs: $("#doct_id").val(),
@@ -164,7 +164,7 @@ function ws_CreateBaseType(BaseTypeTitle) {
   } else {
     $.ajax({
       type: "POST",
-      url: "/tblCommonBaseType/insertTblCommonBaseType",
+      url: "/tblCommonBaseType/insertCommonBaseType",
       contentType: "application/json",
       data: JSON.stringify({
         // BaseTypeCode: BaseTypeCode,
@@ -185,7 +185,7 @@ function ws_UpdateBaseType(BaseTypeCode, BaseTypeTitle, CommonBaseTypeId) {
   } else {
     $.ajax({
       type: "patch",
-      url: "/tblCommonBaseType/updateTblCommonBaseType",
+      url: "/tblCommonBaseType/updateCommonBaseType",
       contentType: "application/json",
       data: JSON.stringify({
         BaseTypeTitle: BaseTypeTitle,
@@ -205,7 +205,7 @@ function ws_UpdateBaseType(BaseTypeCode, BaseTypeTitle, CommonBaseTypeId) {
 function ws_DeleteBaseType(CommonBaseTypeId) {
   $.ajax({
     type: "delete",
-    url: "/tblCommonBaseType/deleteTblCommonBaseType",
+    url: "/tblCommonBaseType/deleteCommonBaseType",
     contentType: "application/json",
     data: JSON.stringify({
       CommonBaseTypeId: CommonBaseTypeId,
@@ -298,7 +298,7 @@ function ws_createBaseValue(BaseValue, BaseTypeCode) {
   console.log(typeof BaseTypeCode);
   $.ajax({
     type: "POST",
-    url: "/tblCommonBaseData/insertTblCommonBaseData",
+    url: "/CommonBaseData/insertCommonBaseData",
     contentType: "application/json",
     data: JSON.stringify({
       BaseValue: BaseValue,
@@ -316,7 +316,7 @@ function ws_updateBaseValue(BaseValue, CommonBaseTypeId, CommonBaseDataId) {
   CommonBaseDataId = parseInt(CommonBaseDataId);
   $.ajax({
     type: "PUT",
-    url: "/tblCommonBaseData/updateTblCommonBaseData",
+    url: "/CommonBaseData/updateCommonBaseData",
     contentType: "application/json",
     data: JSON.stringify({
       BaseValue: BaseValue,
@@ -332,7 +332,7 @@ function ws_updateBaseValue(BaseValue, CommonBaseTypeId, CommonBaseDataId) {
 function ws_deleteBaseValue(CommonBaseDataId) {
   $.ajax({
     type: "Delete",
-    url: "/tblCommonBaseData/deleteTblCommonBaseData",
+    url: "/CommonBaseData/deleteCommonBaseData",
     contentType: "application/json",
     data: JSON.stringify({
       CommonBaseDataId: CommonBaseDataId,

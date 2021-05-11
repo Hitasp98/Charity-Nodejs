@@ -15,14 +15,15 @@ async function ws_loadCharityAccounts(findRequest){
    
         if((findRequest.CharityAccountId===null && findRequest.BankId===null && findRequest.BranchName===null && findRequest.OwnerName===null && findRequest.CardNumber===null && findRequest.AccountNumber ===null && findRequest.AccountName ===null) || ((findRequest.CharityAccountId===undefined && findRequest.BankId===undefined && findRequest.BranchName===undefined && findRequest.OwnerName===undefined && findRequest.CardNumber===undefined && findRequest.AccountNumber ===undefined && findRequest.AccountName ===undefined))){
           
-            getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode
+            getTblCharityAccounts = await pool.request()
+            .query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode
             from tblCharityAccounts 
             join tblCommonBaseData
             on tblCharityAccounts.BankId=tblCommonBaseData.CommonBaseDataId 
             join tblCommonBaseType
             on tblCommonBaseData.CommonBaseTypeId=tblCommonBaseType.CommonBaseTypeId
              where BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\'')
-           
+        //    .query('select * from tblCharityAccounts')
             return getTblCharityAccounts.recordsets[0]
         }else{
             

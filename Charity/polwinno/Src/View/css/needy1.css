@@ -31,6 +31,7 @@ table {
     background-color: chartreuse;
   }
   .border1 {
+    visibility: hidden;
     margin: 50px;
     margin-left: -180px;
     width: 1000px;
@@ -42,6 +43,40 @@ table {
     flex-wrap: wrap;
   }
   .border1 div {
+    margin-top: 20px;
+    padding: 0.5rem;
+    margin-right: 1rem;
+  }
+  .border2 {
+    visibility: hidden;
+    margin: 50px;
+    margin-left: -180px;
+    width: 1000px;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .border2 div {
+    margin-top: 20px;
+    padding: 0.5rem;
+    margin-right: 1rem;
+  }
+  .border3 {
+    visibility: hidden;
+    margin: 50px;
+    margin-left: -180px;
+    width: 1000px;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .border3 div {
     margin-top: 20px;
     padding: 0.5rem;
     margin-right: 1rem;

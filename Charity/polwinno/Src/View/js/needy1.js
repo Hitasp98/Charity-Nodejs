@@ -4,7 +4,27 @@ const btnnew = document.querySelector("#new");
 const btnEdit = document.querySelector("#edit");
 const btnDelete = document.querySelector("#delete");
 const btnSearch = document.querySelector("#btnSearch");
+let bord1=document.getElementById("bord1")
+let bord2=document.getElementById("bord2")
+let bord3=document.getElementById("bord3")
 
+document.querySelector('#newshow').addEventListener('click',()=>{
+  bord1.style.visibility='inherit'
+  bord2.style.visibility='hidden'
+  bord3.style.visibility='hidden'
+
+})
+document.querySelector('#editshow').addEventListener('click',()=>{
+  bord1.style.visibility='hidden'
+  bord2.style.visibility='inherit'
+  bord3.style.visibility='hidden'
+
+})
+document.querySelector('#deleteshow').addEventListener('click',()=>{
+  bord1.style.visibility='hidden'
+  bord2.style.visibility='hidden'
+  bord3.style.visibility='inherit'
+})
 //connect selector
 function getmsgs1() {
   $.ajax({
@@ -104,21 +124,21 @@ btnnew.addEventListener("click", () => {
   // check();
 });
 btnEdit.addEventListener("click", () => {
-  const PersonIdd = document.getElementById("PersonId").value;
-  const Name = document.getElementById("Name").value;
-  const Family = document.getElementById("Family").value;
-  const NationalCode = document.getElementById("NationalCode").value;
-  const IdNumber = document.getElementById("IdNumber").value;
-  const BirthDate = document.getElementById("BirthDate").value;
-  const BirthPlace = document.getElementById("BirthPlace").value;
+  const PersonIdd = document.getElementById("PersonId1").value;
+  const Name = document.getElementById("Name1").value;
+  const Family = document.getElementById("Family1").value;
+  const NationalCode = document.getElementById("NationalCode1").value;
+  const IdNumber = document.getElementById("IdNumber1").value;
+  const BirthDate = document.getElementById("BirthDate1").value;
+  const BirthPlace = document.getElementById("BirthPlace1").value;
 
-  const PersonTypee = document.getElementById("PersonType").value;
-  const PersonPhoto = document.getElementById("PersonPhoto").value;
-  const SecretCode = document.getElementById("SecretCode").value;
+  const PersonTypee = document.getElementById("PersonType1").value;
+  const PersonPhoto = document.getElementById("PersonPhoto1").value;
+  const SecretCode = document.getElementById("SecretCode1").value;
   PersonId=parseInt(PersonIdd)
   let PersonType = parseInt(PersonTypee);
-  let male = document.getElementById("male").checked;
-  let female = document.getElementById("female").checked;
+  let male = document.getElementById("male1").checked;
+  let female = document.getElementById("female1").checked;
   let checked;
   if (male == true) {
     checked = true;
@@ -169,7 +189,7 @@ btnEdit.addEventListener("click", () => {
   check();
 });
 btnDelete.addEventListener("click", () => {
-  const PersonId = document.getElementById("PersonId").value;
+  const PersonId = document.getElementById("PersonId2").value;
 
   if (PersonId == "") {
     alert("epmty");
