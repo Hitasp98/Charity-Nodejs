@@ -34,30 +34,35 @@ button {
 .right {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+
   width: 500px;
   margin: 50px;
   margin-top: -90px;
+  height: 500px;
 }
 .left {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   margin-left: -300px;
-  margin-top: -290px;
+  margin-top: -590px;
+  height: 500px;
 }
 .main {
+  visibility: hidden;
   display: flex;
   flex-direction: row-reverse;
-  justify-self: end;
-  margin-left:400px;
+  /* justify-self: center; */
+  margin-left: 400px;
   width: 1200px;
   margin-top: 200px;
-  height: 400px;
+  height: 700px;
   border-style: groove;
 
   /* width: 400px; */
 }
+
 input {
   margin: 25px;
   height: 20px;

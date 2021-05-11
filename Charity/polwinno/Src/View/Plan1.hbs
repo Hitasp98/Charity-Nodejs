@@ -34,29 +34,26 @@
 
       <span class="rounded-lg">
 
-        <div class="btn-group">
-          <button id="showPlan" class="btn btn2 btn-secondary btn-lg dropdown-toggle" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            کمک هزینه </button>
-          <class  class="dropdown-menu">
-            <p>جهیزیه نو عروس</p>
-            <p>جهیزیه ازدواج مجدد بانوان</p>
-            <p>کمک هزینه پسران</p>
+        <div class="tablewhere">
+          <table class="table table-dark" id="msg_q">
+            <tr>
+              <th> نام طرح </th>
 
-              <p>وام</p>
-              <p>وام دانشجویی</p>
-          </div>
+            </tr>
+          </table>
+
+        </div>
       </span>
 
     </div>
 
   </div>
   <div style="margin-top: 100px; margin-left: 40%;">
-    <button type="button" class="btn btn1 btn-danger">حذف</button>
-    <button type="button" class="btn btn1 btn-warning">ویرایش </button>
-    <button type="button" class="btn btn1 btn-success">جدید</button>
+    <button type="button" class="btn btn1 btn-danger" id="deleteShow">حذف</button>
+    <button type="button" class="btn btn1 btn-warning" id="editShow">ویرایش </button>
+    <button type="button" class="btn btn1 btn-success" id="newShow">جدید</button>
   </div>
-  <div class="container1 container">
+  <div class="container1 container" id="bord1">
     <div class="row1 row centered-form">
       <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
         <div class="panel panel-default">
@@ -68,21 +65,33 @@
               <div class="row">
                 <div class="col-xs-6 col-sm-6 col-md-6">
                   <div class="form-group">
-                    <input type="text" name="first_name" id="first_name" class="form-control input-sm"
-                      placeholder="طرح اصلی ">
+                    <input type="text" name="first_name" id="PlanId" class="form-control input-sm"
+                      placeholder="شناسه طرح   ">
                   </div>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6">
                   <div class="form-group">
-                    <input type="text" name="last_name" id="last_name" class="form-control input-sm"
+                    <input type="text" name="first_name" id="PlanName" class="form-control input-sm"
+                      placeholder="توضیح طرح  ">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="last_name" id="Description" class="form-control input-sm"
                       placeholder="عنوان طرح">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="first_name" id="ParentPlanId" class="form-control input-sm"
+                      placeholder="شناسه پدر   ">
                   </div>
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="exampleFormControlFile1">عکس را انتخاب کنید</label>
-                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                <input type="file" class="form-control-file" id="icon">
               </div>
 
               <div class="row">
@@ -90,13 +99,13 @@
                 <div class="col-xs-6 col-sm-6 col-md-6" style="display: flex; flex-direction: row; ">
                   <div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                      <input class="form-check-input" type="radio" name="PlanNature1" id="PlanNature1"
                         style="margin-left: -10px;">
                       <label class="form-check-label" for="flexRadioDefault1" style="margin-left: 10px;">
                         کمک نقدی </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                      <input class="form-check-input" type="radio" name="PlanNature2" id="PlanNature2"
                         style="margin-left: -10px;">
                       <label class="form-check-label" for="flexRadioDefault2" style="margin-left: 10px;">
                         کمک غیر نقدی
@@ -110,7 +119,7 @@
                   <div class=" form-check" style="display: flex; justify-content: flex-start;  ">
                     <label class="form-check-label" for="flexCheckDefault" style="margin-left:100px ;">
                       ایا در این طرح خیر نیاز به لاگین دارد؟ </label>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="1" id="neededLogin">
 
                   </div>
                 </div>
@@ -118,17 +127,137 @@
               </div>
               <div class="row">
                 <div style="margin-left: 20px;">
-                  <input type="date" id="birthday" name="birthday">
+                  <input type="date" id="Tdate" name="birthday">
                   <label for="birthday">مدت خاتمه</label>
                 </div>
                 <div style="margin-left:190px;">
-                  <input type="date" id="birthday" name="birthday">
+                  <input type="date" id="Fdate" name="birthday">
                   <label for="birthday">زمان شروع</label>
                 </div>
               </div>
               <div style="margin-left: 300px;">
-                <button type="button" class="btn btn1 btn-danger">انصراف </button>
-                <button type="button" class="btn btn1 btn-success">ذخیره</button>
+                <button type="button" class="btn btn1 btn-danger" id="close">انصراف </button>
+                <button type="button" class="btn btn1 btn-success" id="insert">ذخیره</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container1 container" id="bord2" style="margin-top: -3000px;">
+    <div class="row1 row centered-form">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class=" panel-title" id="ph3">ورودی ها</h3>
+          </div>
+          <div class="panel-body">
+            <form role="form">
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="PlanId" id="PlanId2" class="form-control input-sm"
+                      placeholder="شناسه طرح  ">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="first_name" id="Description1" class="form-control input-sm"
+                      placeholder="توضيح طرح  ">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="last_name" id="PlanName1" class="form-control input-sm"
+                      placeholder="عنوان طرح">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="first_name" id="ParentPlanId1" class="form-control input-sm"
+                      placeholder="شناسه پدر   ">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="exampleFormControlFile1">عکس را انتخاب کنید</label>
+                <input type="file" class="form-control-file" id="icon1">
+              </div>
+
+              <div class="row">
+
+                <div class="col-xs-6 col-sm-6 col-md-6" style="display: flex; flex-direction: row; ">
+                  <div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="PlanNature21"
+                        style="margin-left: -10px;">
+                      <label class="form-check-label" for="flexRadioDefault1" style="margin-left: 10px;">
+                        کمک نقدی </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="PlanNature22"
+                        style="margin-left: -10px;">
+                      <label class="form-check-label" for="flexRadioDefault2" style="margin-left: 10px;">
+                        کمک غیر نقدی
+                      </label>
+                    </div>
+                  </div>
+                  <p>ماهیت طرح</p>
+
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class=" form-check" style="display: flex; justify-content: flex-start;  ">
+                    <label class="form-check-label" for="flexCheckDefault" style="margin-left:100px ;">
+                      ایا در این طرح خیر نیاز به لاگین دارد؟ </label>
+                    <input class="form-check-input" type="checkbox" value="1" id="neededLogin1">
+
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div style="margin-left: 20px;">
+                  <input type="date" id="Tdate1" name="birthday">
+                  <label for="birthday">مدت خاتمه</label>
+                </div>
+                <div style="margin-left:190px;">
+                  <input type="date" id="Fdate1" name="birthday">
+                  <label for="birthday">زمان شروع</label>
+                </div>
+              </div>
+              <div style="margin-left: 300px;">
+                <button type="button" class="btn btn1 btn-danger" id="close1">انصراف </button>
+                <button type="button" class="btn btn1 btn-success" id="edit">ذخیره</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container1 container" id="bord3" style="margin-top: -3000px;">
+    <div class="row1 row centered-form">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class=" panel-title" id="ph3">ورودی ها</h3>
+          </div>
+          <div class="panel-body">
+            <form role="form">
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="form-group">
+                    <input type="text" name="first_name" id="PlanId1" class="form-control input-sm"
+                      placeholder="شناسه طرح   ">
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-left: 300px;">
+                <button type="button" class="btn btn1 btn-danger" id="close2">انصراف </button>
+                <button type="button" class="btn btn1 btn-success" id="delete">ذخیره</button>
               </div>
             </form>
           </div>
@@ -148,6 +277,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/Plan1.js"></script>
 </body>
 
 </html>

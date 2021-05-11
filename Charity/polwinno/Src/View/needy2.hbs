@@ -21,9 +21,21 @@
                 <th>نام بانک </th>
             </tr>
         </table>
+        <div class="btnShow">
+            <button id="deleteShow">حذف</button>
+            <button id="editShow">ویرایش</button>
+            <button id="newShow">جدید</button>
+
+        </div>
     </div>
-    <div class="main">
-        <div class="right" style="margin-top: -90px;">
+    <div class="main" id="main">
+        <div
+            style="height: 30px;margin-top: 500px; margin-right: 700px; width: 100px; display: flex; flex-direction: row;">
+
+            <button id="close">انصراف</button>
+            <button id="new">ذخیره</button>
+        </div>
+        <div class="right" style="margin-top: -100px; margin-bottom: -0px; margin-right: -700px;">
             <div>
 
                 <input type="text" id="AccountNumber">
@@ -40,7 +52,7 @@
                 <label> نام حساب</label>
             </div>
         </div>
-        <div class="left">
+        <div class="left" style="margin-top: -100px; margin-right: -50px;">
             <div>
 
                 <input type="text" id="CardNumber">
@@ -64,17 +76,74 @@
             </div>
         </div>
     </div>
-    <div class="btnShow">
-        <button id="delete">حذف</button>
-        <button id="edit">ویرایش</button>
-        <button id="new">جدید</button>
+    <div class="main" id="main1" style="margin-top: -700px;">
+        <div
+            style="height: 30px;margin-top: 500px; margin-right: 700px; width: 100px; display: flex; flex-direction: row;">
 
-    </div>
-    <div style="margin-left: 1000px; margin-top: -260px;">
-        <input style="width: 200px;" id="NeedyAccountId">
+            <button id="close1">انصراف</button>
+            <button id="edit">ذخیره</button>
+        </div>
+        <div class="right" style="margin-top: -100px; margin-bottom: -0px; margin-right: -700px;">
+            <div>
 
-        <label>شناسه حساب نيازمند</label>
+                <input type="text" id="AccountNumber1">
+                <label> شماره حساب</label>
+            </div>
+            <div>
+
+                <input type="text" id="OwnerName1">
+                <label>نام صاحب حساب</label>
+            </div>
+            <div>
+
+                <input type="text" id="AccountName1">
+                <label> نام حساب</label>
+            </div>
+            <div>
+                <input style="width: 200px;" id="NeedyAccountId1">
+
+                <label>شناسه حساب نيازمند</label>
+            </div>
+        </div>
+        <div class="left" style="margin-top: -100px; margin-right: -50px;">
+            <div>
+
+                <input type="text" id="CardNumber1">
+                <label> شماره کارت</label>
+            </div>
+            <div>
+
+
+                <input style="width: 200px;" type="text" id="NeedyId1">
+                <label> شناسه بانک </label>
+            </div>
+            <div>
+                <input type="text" id="numberAccountshaba1">
+                <label>شماره شبا</label>
+
+            </div>
+            <div>
+                <input style="width: 200px;" id="BankId1">
+
+                <label style="margin-right:130px;">شناسه نيازمند</label>
+            </div>
+        </div>
     </div>
+    <div class="main" id="main2" style="margin-top: -700px;">
+        <div
+            style="height: 30px;margin-top: 500px; margin-right: 700px; width: 100px; display: flex; flex-direction: row;">
+
+            <button id="close2">انصراف</button>
+            <button id="delete">ذخیره</button>
+        </div>
+        <div style="margin-top: 200px; margin-right: -30%; height: 200px;">
+            <input style="width: 200px;" id="NeedyAccountId">
+
+            <label>شناسه حساب نيازمند</label>
+        </div>
+    </div>
+
+
     <script src="js/needy2.js"></script>
 </body>
 

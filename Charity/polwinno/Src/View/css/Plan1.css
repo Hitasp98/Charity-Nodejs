@@ -35,4 +35,8 @@
     }
     .container1{
         margin-left: -600px;
+        visibility: hidden;
+    }
+    .bord1{
+        visibility: hidden;
     }
