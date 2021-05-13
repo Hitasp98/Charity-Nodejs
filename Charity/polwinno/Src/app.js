@@ -25,6 +25,7 @@ app.use("/FirstPlan", require("./Routes/FirstPlanRouter"));
 app.use("/SecondPlan", require("./Routes/SecondPlanRouter"));
 app.use("/Settelment", require("./Routes/SettelmentRoutes"));
 app.use("/Payment", require("./Routes/PaymentRoutes"));
+app.use("/Succor", require('./Routes/SuccorRouter'));
 
 hbs.registerPartials(partialsPath);
 app.get("/info12", (req, res) => {

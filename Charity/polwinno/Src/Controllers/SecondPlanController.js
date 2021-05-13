@@ -10,7 +10,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//تست نشده
+
 module.exports.loadNeedyForPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
