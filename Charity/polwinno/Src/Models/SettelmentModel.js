@@ -1,9 +1,9 @@
 var config = require("../Utils/dbconfig");
 const sql = require("mssql");
-var crypto = require("crypto");
-const { log } = require("console");
 
 
+//ws_loadPayment
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadPayment(findRequest) {
   try {
     let pool = await sql.connect(config);
@@ -29,7 +29,7 @@ async function ws_loadPayment(findRequest) {
          findRequest.NeedyId === null &&
          findRequest.PaymentId === null )
     ) {
-        getPayment = await pool.request().query(`SELECT *
+        getPayment = await pool.request().query(`SELECT tblPayment.*
             FROM tblPayment 
             join tblCashAssistanceDetail 
             on tblPayment.CashAssistanceDetailId = tblCashAssistanceDetail.CashAssistanceDetailId
@@ -48,14 +48,14 @@ async function ws_loadPayment(findRequest) {
           whereclause =
             whereclause +
             " " +
-            `${x} = N` +
+            `tblPayment.${x} = N` +
             "'" +
             findRequest[String(x)] +
             "'" +
             ` AND`;
         } else if (typeof findRequest[String(x)] == "number") {
           whereclause =
-            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + " " + `tblPayment.${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
           whereclause =
             whereclause + " " + `${x} is null` + ` AND`;
@@ -85,6 +85,8 @@ async function ws_loadPayment(findRequest) {
   }
 }
 
+//ws_loadCashAssistanceDetail
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_loadCashAssistanceDetail(findRequest) {
     try {
       let pool = await sql.connect(config);
@@ -101,7 +103,7 @@ async function ws_loadCashAssistanceDetail(findRequest) {
             findRequest.PlanId === null &&
             findRequest.CashAssistanceDetailId === null )
       ) {
-          CashAssistanceDetail = await pool.request().query(`SELECT *
+          CashAssistanceDetail = await pool.request().query(`SELECT tblCashAssistanceDetail.*
               FROM tblCashAssistanceDetail 
               join tblAssignNeedyToPlans
               on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
@@ -119,17 +121,17 @@ async function ws_loadCashAssistanceDetail(findRequest) {
             whereclause =
               whereclause +
               " " +
-              `${x} = N` +
+              `tblCashAssistanceDetail.${x} = N` +
               "'" +
               findRequest[String(x)] +
               "'" +
               ` AND`;
           } else if (typeof findRequest[String(x)] == "number") {
             whereclause =
-              whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+              whereclause + " " + `tblCashAssistanceDetail.${x} =  ${findRequest[String(x)]}` + ` AND`;
           } else if (findRequest[String(x)] == null) {
             whereclause =
-              whereclause + " " + `${x} is null` + ` AND`;
+              whereclause + " " + `tblCashAssistanceDetail.${x} is null` + ` AND`;
           }
         }
   
@@ -139,7 +141,7 @@ async function ws_loadCashAssistanceDetail(findRequest) {
   
         CashAssistanceDetail = await pool
           .request()
-          .query(`SELECT *
+          .query(`SELECT tblCashAssistanceDetail.*
           FROM tblCashAssistanceDetail 
           join tblAssignNeedyToPlans
           on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId

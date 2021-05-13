@@ -76,7 +76,7 @@ async function ws_createPlan(findRequest) {
 
     for (x in findRequest) {
       if (
-        findRequest[String(x)] == null ||   typeof findRequest[String(x)] == "number" || typeof(findRequest[String(x)])=="boolean") {
+        findRequest[String(x)] == null ||   typeof findRequest[String(x)] == "number") {
         value = value + " " + `${findRequest[String(x)]}` + `,`;
       } else {
         value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;

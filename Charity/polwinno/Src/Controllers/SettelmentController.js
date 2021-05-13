@@ -7,7 +7,8 @@ const requestApi = require("request");
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+//getPayment
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getPayment = async function(request, response) {
   try {
     let findRequest = { ...request.body };
@@ -24,7 +25,8 @@ module.exports.getPayment = async function(request, response) {
     });
   }
 };
-
+//getCashAssistanceDetail
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.getCashAssistanceDetail = async function(request, response) {
     try {
       let findRequest = { ...request.body };

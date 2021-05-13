@@ -112,13 +112,13 @@ try {
         }else{
             hashInputBase64 = null
         }
-           
+         
    
       let value = ''
 
       for(x in findRequest){
          
-          if ( (findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ||  typeof(findRequest[String(x)])=="boolean") && x != "SecretCode"  ){
+          if ( (findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number") && x != "SecretCode"  ){
               value = value + " "+`${findRequest[String(x)]}`+`,`
              
           }else{
