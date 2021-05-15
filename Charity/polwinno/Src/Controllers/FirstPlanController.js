@@ -95,15 +95,17 @@ module.exports.UpdatePlan = async function(request, response) {
         if(findById[0] != null){
          
                   if (checkDate.datechack(findRequest.Fdate,findRequest.Tdate)) {
-                    // await requestApi.post({url: api.url +'/CashAssistanceDetail/getCashAssistanceDetail', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+                    await requestApi.post({url: api.url +'/Succor/loadCashAssistanceDetail', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
                          
-                    //     if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature )){
-                    //         await requestApi.post({url: api.url +'/SecondPlan/getPlan', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
+                        if(await JSON.parse(body)[0] == null || (findById[0].PlanNature == findRequest.PlanNature )){
+                         
+                          await requestApi.post({url: api.url +'/SecondPlan/getPlan', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
                                 
-                               // if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature)){
-                                  let findIndex = {
+                               if(await JSON.parse(body)[0] == null || (findById[0].Fdate == findRequest.Fdate && findById[0].Tdate == findRequest.Tdate)){
+                                  
+                                let findIndex = {
                                     PlanName: findRequest.PlanName,
-                                    PlanId: findRequest.PlanId,
+                                    PlanNature: findRequest.PlanNature,
                                     ParentPlanId: findRequest.ParentPlanId,
                                   };
                                   let resultGet = await PlanModel.ws_loadPlan(findIndex);
@@ -120,16 +122,16 @@ module.exports.UpdatePlan = async function(request, response) {
                                   }else{
                                     response.json({ error: "رکورد ویرایش شده یکتا نیست " });
                                   }
-                                // }else{
-                                //   response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
-                                // }
+                                }else{
+                                  response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
+                                }
                                    
 
-                    //         })             
-                    //   }else{
-                    //     response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
-                    //   }
-                    // })
+                            })             
+                      }else{
+                        response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
+                      }
+                    })
                 }else{
                     response.json({ error: "تاریخ پایان باید از تاریخ شروع بیشتر باشد " });
                 }

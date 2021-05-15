@@ -1,6 +1,7 @@
 const NeedyAccountsModels = require("../Models/NeedyAccountsModel");
-
-
+const requestApi = require('request');
+// create url for example http://localhost:8090
+const api = require('../Utils/urlConfig')
 
 
 
@@ -78,17 +79,27 @@ module.exports.insertNeedyAccountsController = async function (request, response
       
 // condition before insert           
         if(resultGetSheba[0] == null && resultGetAccount[0] == null){
-           
-            await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
+          await requestApi.post({url: api.url + '/Personal/getPersonal', form : { PersonType : 2,
+          personId : findRequest.NeedyId}},async function(err,res,body){
+            if(await JSON.parse(body)[0] != null){
+              await NeedyAccountsModels.ws_createNeedyAccount(findRequest)
               .then(result => 
                 response.json(result[0][0].NeedyAccountId)
                 ).catch (error=>
                     response.json({error:"رکورد مورد نظر درج نشد"})
-                )  
+                ) 
+            }else{
+              response.json({error:" شخص انتخاب شده نیازمند نیست"})
+            }
+                
 
-        }else{
-            response.json({ error: "ورودی ها یکتا نیستند" }); 
-        }      
+          })
+
+                   
+
+      }else{
+          response.json({ error: "ورودی ها یکتا نیستند" }); 
+      }      
     }else{
         response.json({ error: "فیلدهای اجباری را پر کنید" });
     }
@@ -128,24 +139,28 @@ try {
                     
                     AccountNumber: findRequest.AccountNumber,
                     NeedyId : findRequest.NeedyId})
-                   
+                    
                     if((resultGetSheba[0] == null || ( resultGetSheba[0].NeedyAccountId == findRequest.NeedyAccountId)) && (resultGetAccount[0] == null || (  resultGetAccount[0].NeedyAccountId == findRequest.NeedyAccountId))){
+                      await requestApi.post({url: api.url + '/Personal/getPersonal', form : { PersonType : 2,
+                        personId : findRequest.NeedyId}},async function(err,res,body){
+
+                          if(await JSON.parse(body)[0] != null){
+                            await NeedyAccountsModels.ws_UpdateNeedyAccount(findRequest).then(result => {
+                              response.json(result[0])}
+                  
+                           ).catch(error=>
+          
+                           response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
+                           )
+                          }else{
+                            response.json({error:" شخص ویرایش شده نیازمند نیست"})
+                          }         
+                        })
                        
-                        //requestApi.post({ url: 'http://localhost:8090/Payment/getPayment ', form: { findRequest: findRequest } }, async function (err, res, body) {
-                                //if (await JSON.parse(body).AccountNumber == findRequest.AccountNumber) {
-                    
-                                //let checked = await NeedyAccountsModels.ws_loadNeedyAccount(findRequest);
-                                // if (checked[0] != ' ') {
-                                    await delete findRequest.BaseTypeCode
-                                    await NeedyAccountsModels.ws_UpdateNeedyAccount(findRequest).then(result => {
-                                        response.json(result[0])}
-                            
-                                     ).catch(error=>
-                    
-                                     response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
+                                    
                     
                                     
-                        )}else{
+                        }else{
                         response.json({error : "رکورد ویرایش شده یکتا نیست"});
                     }
                             
@@ -180,14 +195,25 @@ module.exports.deleteNeedyAccountsController = async function (request, response
     
     let resultGet = await NeedyAccountsModels.checkNeedyAccount(findIndex) 
    
-    if (resultGet[0] != null){
-        await NeedyAccountsModels.ws_deleteNeedyAccount(findIndex).then(result =>{
+        if (resultGet[0] != null){
+          requestApi.post({url: api.url +'/Payment/getPayment', form: {CharityAccountId : findRequest.CharityAccountId,
+            NeedyId : findRequest.NeedyId
+          }},async function(err,res,body){
+            
+            if(await JSON.parse(body)[0] == null){
+                await NeedyAccountsModels.ws_deleteNeedyAccount(findIndex).then(result =>{
 
-            if (result == 1 ){
-                response.json({message:"عملیات حذف با موفقیت انجام شد"})
+                  if (result == 1 ){
+                      response.json({message:"عملیات حذف با موفقیت انجام شد"})
+                  }else{
+                      response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
+                  }})
             }else{
-                response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
-            }})
+
+            }
+            
+          })
+              
     }else{
         response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
     }

@@ -211,7 +211,7 @@ async function ws_updatePersonal(findRequest) {
           
          personIdValue = findRequest.PersonId
         
-        } else if ((findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ||  typeof(findRequest[String(x)])=="boolean") && x != "SecretCode") {
+        } else if ((findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number") && x != "SecretCode") {
  
           value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`
 

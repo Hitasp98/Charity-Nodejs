@@ -18,12 +18,12 @@ async function ws_loadCharityAccounts(findRequest){
             getTblCharityAccounts = await pool.request()
             .query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode
             from tblCharityAccounts 
-            join tblCommonBaseData
+            inner join tblCommonBaseData
             on tblCharityAccounts.BankId=tblCommonBaseData.CommonBaseDataId 
-            join tblCommonBaseType
+            inner join tblCommonBaseType
             on tblCommonBaseData.CommonBaseTypeId=tblCommonBaseType.CommonBaseTypeId
              where BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\'')
-        //    .query('select * from tblCharityAccounts')
+     
             return getTblCharityAccounts.recordsets[0]
         }else{
             
@@ -41,15 +41,15 @@ async function ws_loadCharityAccounts(findRequest){
                     
                 }else if(findRequest[String(x)]==null){
                     
-                    whereclause = whereclause +  " "+`${x} =  ${findRequest[String(x)]}`+` AND`;
+                    whereclause = whereclause +  " "+`${x} IS null`+` AND`;
         
                 }
               }
               whereclause = whereclause.slice(0, -3)
               getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue from tblCharityAccounts 
-              join tblCommonBaseData
+              inner join tblCommonBaseData
               on tblCharityAccounts.BankId=tblCommonBaseData.CommonBaseDataId 
-              join tblCommonBaseType
+              inner join tblCommonBaseType
               on tblCommonBaseData.CommonBaseTypeId=tblCommonBaseType.CommonBaseTypeId where`+ whereclause )
               return getTblCharityAccounts.recordsets[0];
         }      

@@ -41,6 +41,7 @@ try {
                 let nationalCodeChecker = fnCheckCodeMeli.fnCheckCodeMeli(findRequest.NationalCode)
             
                 if(nationalCodeChecker == true ){
+                    //check personType = 2 mandatory or check needy person mandatory fields
                     if(findRequest.PersonType == 2 && findRequest.IdNumber !=null && findRequest.NationalCode !=null && findRequest.BirthDate !=null && findRequest.BirthPlace != null && findRequest.PersonPhoto != null ){
                     
                         
@@ -118,7 +119,7 @@ module.exports.updatePersonalController = async function (request, response) {
                             NationalCode : findRequest.NationalCode
                         }
                         let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                   
+                        console.log(resultGet);
                         if(resultGet[0] == null || (resultGet[0].PersonId == findRequest.PersonId && resultGet[0] != null )){
                             await tblPersonalModel.ws_updatePersonal(findRequest).then(result => 
                                 
@@ -139,7 +140,9 @@ module.exports.updatePersonalController = async function (request, response) {
                             NationalCode : findRequest.NationalCode
                         }
                         let resultGet = await tblPersonalModel.ws_loadPersonal(findIndex)
-                        if(resultGet[0] == null || (resultGet[0].PersonId == findRequest.PersonId && resultGet[0] != null)){
+ 
+                        if(resultGet[0] == null || ((resultGet[0].PersonId == findRequest.PersonId) && resultGet[0] != null)){
+                           
                             await tblPersonalModel.ws_updatePersonal(findRequest).then(result => 
                                 
                                 response.json(result)
@@ -148,7 +151,7 @@ module.exports.updatePersonalController = async function (request, response) {
                                 response.json({error:"رکورد مورد نظر ویرایش نشد"})
                             )
                         }else{
-                            response.json({error:"رکورد مورد نظر تکراری میباشد"})
+                            response.json({error:"رکورد مورد نظر یکتا نیست"})
                         }
                     }else{
                         response.json({ error:" فیلد های اجباری برای شخص نیازمند را پر کنید "}); 

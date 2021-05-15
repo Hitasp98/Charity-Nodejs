@@ -35,13 +35,13 @@ async function ws_loadNeedyAccount(findRequest) {
       tblPersonal = await pool.request()
         .query(`SELECT tblNeedyAccounts.*,tblPersonal.PersonId , tblCommonBaseData.CommonBaseDataId,tblCommonBaseType.BaseTypeCode
             FROM tblNeedyAccounts
-            join tblPersonal
+            inner join tblPersonal
             on tblNeedyAccounts.NeedyId = tblPersonal.PersonId
-            join tblCommonBaseData
+            inner join tblCommonBaseData
             on tblNeedyAccounts.BankId = tblCommonBaseData.CommonBaseDataId
             join tblCommonBaseType
             on tblCommonBaseData.CommonBaseTypeId=tblCommonBaseType.CommonBaseTypeId
-            where BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\'')
+            where BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\'' + `and personType = 2 `)
 
 
       return tblPersonal.recordsets[0]
@@ -51,7 +51,7 @@ async function ws_loadNeedyAccount(findRequest) {
 
 
 
-      let whereclause = ` BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\''+` AND`
+      let whereclause = ` BaseTypeCode =N`+ '\''+findRequest.BaseTypeCode+'\''+` AND personType = 2 AND `
       
 
       //find value on proprty with string or number ||null and add to whereclause build query
@@ -122,7 +122,7 @@ async function ws_loadNeedyAccount(findRequest) {
 
 
 
-//TODO : insert tblNeedyAccounts
+//insert tblNeedyAccounts
 async function ws_createNeedyAccount(findRequest) {
 try {
 
@@ -206,7 +206,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
       value = await value.slice(0, -1)
 
 
-console.log(value);
+
       updateTblPersonal = await pool.request().query(
         `UPDATE tblNeedyAccounts
       SET  ` + value +
@@ -257,6 +257,7 @@ async function ws_deleteNeedyAccount(findRequest) {
     console.log(error.message)
   }
 }
+
 //check Needy account (just get Needy account table)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 async function checkNeedyAccount(findRequest) {

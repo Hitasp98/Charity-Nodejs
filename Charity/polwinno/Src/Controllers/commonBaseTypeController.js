@@ -43,10 +43,10 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
 //first get for cecking index property
         let resultGet = await tblCommonBaseTypeModel.ws_loadBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
    
-            if(resultGet == null){
+            if(resultGet[0] == null){
                 tblCommonBaseTypeModel.ws_CreateBaseType(findRequest).then(result => 
             
-                    response.json(result[0][0].CommonBaseTypeId)
+                    response.json(result)
                 ).catch (error=>
                 
                    response.json({error:"رکورد مورد نظر ثبت نشد"})
@@ -71,20 +71,21 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         if(findRequest.BaseTypeTitle != null  && findRequest.CommonBaseTypeId !=null){
      //for checking indexes        
             let findGet = []
-                findGet[0] = await tblCommonBaseTypeModel.ws_loadBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
+                findGet = await tblCommonBaseTypeModel.ws_loadBaseType({BaseTypeTitle : findRequest.BaseTypeTitle})
              
               
            
-                    if ((findGet[0] == null || (findGet[0].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[0] != null) ) && ( findGet[1] == null )){
+                    if ((findGet[0] == null || (findGet[0].CommonBaseTypeId == findRequest.CommonBaseTypeId && findGet[0] != null))){
+                     
                         tblCommonBaseTypeModel.ws_UpdateBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId,
                         BaseTypeTitle : findRequest.BaseTypeTitle  
                         }).then(result =>{
                             
-                            if(result[0][0]==null){
+                            if(result == null){
                                 response.json({error:"رکوردی برای ویرایش یافت نشد"})
                             }else{
                     
-                            response.json(result[0])
+                            response.json(result)
                             }
                             
                         }).catch (error=>
@@ -110,7 +111,7 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
        if(findRequest.CommonBaseTypeId != null){
             let findGet = await tblCommonBaseTypeModel.ws_loadBaseType({CommonBaseTypeId : findRequest.CommonBaseTypeId})
               
-                if(findGet != null){
+                if(findGet[0] != null){
                     await requestApi.post({url: api.url + '/CommonBaseData/getCommonBaseData', form : { CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
                         
                         if (await JSON.parse(body)[0] !=null && await JSON.parse(body)[0].CommonBaseTypeId == findRequest.CommonBaseTypeId){

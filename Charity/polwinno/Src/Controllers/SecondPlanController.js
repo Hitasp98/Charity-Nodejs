@@ -159,7 +159,8 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
                                 let resultGet = await PlanModel.ws_loadNeedyForPlan(findIndex);
                              
                                 if (resultGet[0] != null ) {
-                                  await PlanModel.ws_deleteNeedyFromPlan(findRequest).then(result => {
+               
+                                   await PlanModel.ws_deleteNeedyFromPlan(findRequest).then(result => {
                                     if (result == 1 ){
                                       response.json({message:"عملیات حذف با موفقیت انجام شد"})
                                   }else{

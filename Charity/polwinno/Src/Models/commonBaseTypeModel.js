@@ -43,7 +43,7 @@ async function ws_loadBaseType(findRequest){
               //show records with whereclause
               
               getTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where`+ whereclause)
-              return getTblCommonBaseType.recordsets[0][0];
+              return getTblCommonBaseType.recordsets[0];
         }      
     }
     catch (error){
@@ -69,7 +69,7 @@ async function ws_CreateBaseType(findRequest){
         //get after insert
        
         let getTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where BaseTypeTitle = N`+'\'' + findRequest.BaseTypeTitle + '\'')
-        return getTblCommonBaseType.recordsets;
+        return getTblCommonBaseType.recordsets[0][0].CommonBaseTypeId;
        
        
     }
@@ -107,7 +107,7 @@ async function ws_UpdateBaseType(findRequest){
             
            updateTblCommonBaseType = await pool.request().query(`select * from tblCommonBaseType where CommonBaseTypeId =` + CommonBaseTypeValue )    
                 
-            return updateTblCommonBaseType.recordsets;
+            return updateTblCommonBaseType.recordsets[0];
     }
     catch (error){
         console.log(error.message);

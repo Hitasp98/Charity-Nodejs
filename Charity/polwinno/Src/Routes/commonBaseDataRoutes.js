@@ -15,7 +15,6 @@ app.use(bodyParser.json())
 
 
 
-
 router.route('/getCommonBaseData').post(tblCommonBaseDataControllers.getTblCommonBaseDataController);
 router.route('/insertCommonBaseData').post(tblCommonBaseDataControllers.insertTblCommonBaseDataController);
 router.route('/updateCommonBaseData').put(tblCommonBaseDataControllers.updateTblCommonBaseDataController);

@@ -50,12 +50,10 @@ module.exports.getTblCommonBaseDataController = function(request,response){
         //check correct commonBaseType
        
        await requestApi.post({url: api.url+'/CommonBaseType/getCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
-           let resultGet = JSON.parse(body).BaseTypeCode
-        
-        
+           
            //if create BaseCode it will insert data
-            
-           if (resultGet != null ){
+           
+           if (JSON.parse(body)[0] != null ){
                 await tblCommonBaseDataModel.ws_createBaseValue(findRequest).then(result => 
                 
                     response.json(result[0][0].CommonBaseDataId)
@@ -64,7 +62,7 @@ module.exports.getTblCommonBaseDataController = function(request,response){
                 response.json({error:"رکورد مورد نظر ثبت نشد دوباره سعی کنید"})
                 )
             }else{
-                response.json({error:"صحیح وارد نشده است commonBaseTypeId "})
+                response.json({error:"شناسه نوع صحیح وارد نشده است "})
             }
         })}else{
             response.json({error:"فیلد اجباری را پرکنید  "}) 
@@ -86,14 +84,14 @@ try{
     // request to commonBaseTypeId
         
     let findGet = await tblCommonBaseDataModel.ws_loadBaseValue({CommonBaseDataId : findRequest.CommonBaseDataId})
-       
+    
         if(findGet[0] != null){
             await requestApi.post({url: api.url +'/CommonBaseType/getCommonBaseType', form: {CommonBaseTypeId : findRequest.CommonBaseTypeId}},async function(err,res,body){
-                let resultGet = JSON.parse(body).BaseTypeCode
+           
                     
     // check commonBaseTypeId for create code
                     
-                if(resultGet != null){
+                if(JSON.parse(body)[0] != null){
                      await tblCommonBaseDataModel.ws_updateBaseValue(findRequest).then(result =>{
                         
                             if(result==null){
@@ -135,10 +133,15 @@ try{
                 let findGet = await tblCommonBaseDataModel.ws_loadBaseValue({CommonBaseDataId : findRequest.CommonBaseDataId})
                    
                     if(findGet[0] != null){
+                        //check dependency
                         requestApi.post({url: api.url +'/CharityAccounts/checkCharityAccounts', form: {BankId : findRequest.CommonBaseDataId
                         }},async function(err,res,body){
- 
-                                if (await JSON.parse(body)[0] !=null && await JSON.parse(body)[0].BankId == findRequest.CommonBaseDataId){
+                             let findCharity = await JSON.parse(body)[0]
+                            requestApi.post({url: api.url +'/NeedyAccounts/checkNeedyAccounts', form: {BankId : findRequest.CommonBaseDataId
+                            }},async function(err,res,body){
+                                let findNeedyAccount = await JSON.parse(body)[0]
+                               
+                                if (findCharity != null || findNeedyAccount != null ){
                                     response.json({error : "امکان حذف بدليل وابستگي امکان پذير نمي باشد"})
                                 }else{
                                     await tblCommonBaseDataModel.ws_deleteBaseValue(findRequest).then(result =>{
@@ -152,6 +155,8 @@ try{
                                     })
                                 
                                 }
+                            })
+                                       
                         })
                     }else{
                         response.json({error : "چنین رکوردی موجود نیست"})

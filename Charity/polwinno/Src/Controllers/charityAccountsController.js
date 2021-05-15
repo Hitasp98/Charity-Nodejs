@@ -1,5 +1,6 @@
 
 const tblCharityAccountsModel = require('../Models/charityAccountsModel')
+const requestApi = require('request')
 const api = require('../Utils/urlConfig')
 var fnCheckCardNumber = require('../Utils/cardNumberChecker');
 
@@ -46,29 +47,29 @@ module.exports.getTblCharityAccountsController = async function(request,response
         if(findRequest.AccountNumber != null  && findRequest.BankId != null && findRequest.OwnerName != null && findRequest.BranchName !=null){
            
             let cardNumberChecker = await fnCheckCardNumber.fnCheckCartDigit(findRequest.CardNumber)
-          
-           if(cardNumberChecker == true){
-            let findIndex = {
-                AccountNumber : findRequest.AccountNumber,
-                }
-            // check index    
-            let resultGet = await tblCharityAccountsModel.checkCharity(findIndex)
             
-                if (resultGet[0] == null){
-                 
-                    
-                    await tblCharityAccountsModel.ws_CreateCharityAccounts(findRequest).then(result => 
+            if(cardNumberChecker == true){
+                let findIndex = {
+                    AccountNumber : findRequest.AccountNumber,
+                    }
+                // check index    
+                let resultGet = await tblCharityAccountsModel.checkCharity(findIndex)
                 
-                        response.json(result[0][0].CharityAccountId)
-                    ).catch (error=>
+                    if (resultGet[0] == null){
                     
-                        response.json({error:"رکورد مورد نظر درج نشد"})
-                        )
-                }else{
-                    response.json({error : "رکورد مورد نظر  یکتا نیست"})}
-           }else{
-            response.json({error:"شماره کارت صحیح نیست"})
-           }
+                        
+                        await tblCharityAccountsModel.ws_CreateCharityAccounts(findRequest).then(result => 
+                    
+                            response.json(result[0][0].CharityAccountId)
+                        ).catch (error=>
+                        
+                            response.json({error:"رکورد مورد نظر درج نشد"})
+                            )
+                    }else{
+                        response.json({error : "رکورد مورد نظر  یکتا نیست"})}
+            }else{
+                response.json({error:"شماره کارت صحیح نیست"})
+            }
            
 
         }else{
@@ -76,7 +77,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
         }
       
         }catch (error){
-            response.json({error:"رکورد مورد نظر درج نشد"})
+            response.json({error:" ورودی ها را صحیح وارد کنید رکورد مورد نظر درج نشد"})
         }
 
     }
@@ -127,7 +128,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
                
                
         }catch (error){
-            response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
+            response.json({error:"عملیات ویرایش با موفقیت انجام نشد ورودی هارا صحیح وارد کنید  "})
         }
           
        
@@ -145,20 +146,29 @@ module.exports.getTblCharityAccountsController = async function(request,response
             }
             
             
-            let resultGet = await tblCharityAccountsModel.checkCharity(findIndex) 
-            if (resultGet[0] != null){
-                await tblCharityAccountsModel.ws_deleteCharityAccounts(findRequest).then(result =>{
-    
-                    if (result == 1 ){
-                        response.json({message:"عملیات حذف با موفقیت انجام شد"})
-                    }else{
-                        response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
-                    }})
+              let resultGet = await tblCharityAccountsModel.checkCharity(findIndex)
+              if (resultGet[0] != null){
+                  //check dependency
+                    requestApi.post({url: api.url +'/Payment/getPayment', form: {CharityAccountId : findRequest.CharityAccountId
+                    }},async function(err,res,body){
+                        
+                                if(await JSON.parse(body)[0] == null){
+                                
+                                        await tblCharityAccountsModel.ws_deleteCharityAccounts(findRequest).then(result =>{
+                            
+                                            if (result == 1 ){
+                                                response.json({message:"عملیات حذف با موفقیت انجام شد"})
+                                            }else{
+                                                response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
+                                            }})
+                                }else{
+                                    response.json({error : "به دلیل وابستگی امکان حذف وجود ندارد"})
+                                }
+                        })
             }else{
-                response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
+                 response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
             }
-          
-         
+            
       }catch (error){
             response.json({error:"عملیات حذف انجام نشد دوباره سعی کنید"})
         }

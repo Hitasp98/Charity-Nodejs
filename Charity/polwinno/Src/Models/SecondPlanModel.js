@@ -32,7 +32,8 @@ async function ws_loadNeedyForPlan(findRequest) {
         join tblPersonal
         on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
         join tblPlans
-        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId `);
+        on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId 
+        where personType = 2`);
       return getAssignNeedyToPlans.recordsets[0];
     } else {
       //create  whereclause
@@ -104,13 +105,14 @@ async function ws_AssignNeedyToPlan(findRequest) {
       join tblPersonal
       on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
       join tblPlans
-      on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId `);
+      on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
+     `);
     return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
     console.log(error.message);
   }
 }
-//تست نشده
+
   
 async function ws_deleteNeedyFromPlan(findRequest) {
   try {

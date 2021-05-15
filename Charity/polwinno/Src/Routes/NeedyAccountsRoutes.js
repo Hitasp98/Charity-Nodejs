@@ -11,7 +11,6 @@ var router = express.Router()
 app.use(bodyParser.urlencoded({ extended:true}))
 app.use(bodyParser.json())
 
-
 router.route('/getNeedyAccounts').post(NeedyAccountsControllers.getNeedyAccountsController);
 router.route('/insertNeedyAccounts').post(NeedyAccountsControllers.insertNeedyAccountsController);
 router.route('/updateNeedyAccounts').put(NeedyAccountsControllers.updateNeedyAccountsController);
