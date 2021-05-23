@@ -102,7 +102,7 @@ try{
                             }
                             
                         })}else{
-                            response.json({error:"صحیح وارد نشده است commonBaseTypeId"})
+                            response.json({error:"شناسه نوع صحیح وارد نشده است"})
                         }
                     
                     
