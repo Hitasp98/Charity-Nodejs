@@ -79,7 +79,7 @@ module.exports.insertPayment = async function(request, response) {
               let A = await paymentModel.paymentPriceSum(findA)
               
               A = A + findRequest.PaymentPrice
-              console.log(A);
+            
               if(A < C ){
                   await paymentModel.ws_Payment(findRequest).then(result => 
                   response.json(result)
@@ -89,6 +89,12 @@ module.exports.insertPayment = async function(request, response) {
               }else{
                 response.json({ error: " جمع مبالغ پرداختی از مبلغ مورد نیاز بیشتر میشود " });
               }
+          }else if(findRequest.CharityAccountId != null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
+                await paymentModel.ws_Payment(findRequest).then(result => 
+                  response.json(result)
+                  ).catch (error =>
+                  response.json({error:"رکورد مورد نظر درج نشد"})
+                  )  
           }else{
             response.json({ error: " پرداخت موفق نیست " });
           }
