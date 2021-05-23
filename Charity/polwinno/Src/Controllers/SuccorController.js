@@ -183,7 +183,7 @@ module.exports.deleteCashAssistanceDetail = async function(request, response) {
         //   },
         //   async function(err, res, body) {
         //     if ((await JSON.parse(body).CashAssistanceDetailId) == null) {
-        //       //سپس درصورت عدم وابستگي اطلاعات عمل حذف انجام مي شود
+       
               await succorModel.ws_deleteCashAssistanceDetail({CashAssistanceDetailId : findRequest.CashAssistanceDetailId} ).then(result => {
                 if (result == 1) {
                   response.json({ message : "رکورد مورد نظر با موفقیت حذف شد " });
