@@ -22,7 +22,7 @@ module.exports.getTblCommonBaseTypeController = function(request,response){
         tblCommonBaseTypeModel.ws_loadBaseType(findRequest).then(result =>{ 
         
             
-                if(result == null){
+                if(result[0] == null){
                     response.json({error:"هیچ رکوردی موجود نیست"})
                 }else{
                     response.json(result)
