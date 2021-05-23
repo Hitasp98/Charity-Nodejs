@@ -16,7 +16,7 @@ async function ws_loadPayment(findRequest) {
         findRequest.PaymentGatewayId === undefined &&
         findRequest.PaymentDate === undefined &&
         findRequest.PaymentStatus === undefined &&
-        findRequest.CharityAccountId === undefined &&
+        
         findRequest.FollowCode === undefined &&
         findRequest.NeedyId === undefined &&
         findRequest.PaymentId === undefined ) ||
@@ -24,7 +24,7 @@ async function ws_loadPayment(findRequest) {
          findRequest.PaymentGatewayId === null &&
          findRequest.PaymentDate === null &&
          findRequest.PaymentStatus === null &&
-         findRequest.CharityAccountId === null &&
+         
          findRequest.FollowCode === null &&
          findRequest.NeedyId === null &&
          findRequest.PaymentId === null )
@@ -37,8 +37,9 @@ async function ws_loadPayment(findRequest) {
             on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
             join tblPersonal 
             on tblPayment.NeedyId = tblPersonal.PersonId
-            join tblCharityAccounts 
-            on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId `);
+            left join tblCharityAccounts 
+            on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId`);
+            
       return getPayment.recordsets[0];
     } else {
       //create  whereclause
@@ -58,17 +59,17 @@ async function ws_loadPayment(findRequest) {
             whereclause + " " + `tblPayment.${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
           whereclause =
-            whereclause + " " + `${x} is null` + ` AND`;
+            whereclause + " " + `tblPayment.${x} is null` + ` AND`;
         }
       }
 
       whereclause = await whereclause.slice(0, -3);
-    
+   
       //show records with whereclause
 
       getPayment = await pool
         .request()
-        .query(`SELECT *
+        .query(`SELECT tblPayment.*
         FROM tblPayment 
         join tblCashAssistanceDetail 
         on tblPayment.CashAssistanceDetailId = tblCashAssistanceDetail.CashAssistanceDetailId
@@ -76,14 +77,16 @@ async function ws_loadPayment(findRequest) {
         on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
         join tblPersonal 
         on tblPayment.NeedyId = tblPersonal.PersonId
-        join tblCharityAccounts 
-        on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId  where` + whereclause);
+        left join tblCharityAccounts 
+        on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId 
+         where` + whereclause);
       return getPayment.recordsets[0];
     }
   } catch (error) {
     console.log(error.message);
   }
 }
+
 
 //ws_loadCashAssistanceDetail
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,104 +158,203 @@ async function ws_loadCashAssistanceDetail(findRequest) {
       console.log(error.message);
     }
   }
+//ws_Settelment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////  
+async function ws_Settelment(findRequest) {
+  try {
+    let pool = await sql.connect(config);
 
+    let value = "";
 
+    for (x in findRequest) {
+      if (
+        findRequest[String(x)] == null ||   typeof findRequest[String(x)] == "number") {
+        value = value + " " + `${findRequest[String(x)]}` + `,`;
+      } else {
+        value = value + " " + `N`+ "'" + findRequest[String(x)] + "'" + `,`;
+      }
+    }
 
-// async function ws_createPlan(findRequest) {
-//   try {
-//     let pool = await sql.connect(config);
+    value = await value.slice(0, -1);
+  
+    let insertTblPayment = await pool.request().query(
+      `INSERT INTO tblPayment  (DonatorId,CashAssistanceDetailId,PaymentPrice,PaymentGatewayId,PaymentDate,PaymentTime,PaymentStatus,SourceAccoutNumber,TargetAccountNumber,CharityAccountId,FollowCode,NeedyId)
+            VALUES (` +
+        value +
+        `)`
+    );
 
-//     let value = "";
-
-//     for (x in findRequest) {
-//       if (
-//         findRequest[String(x)] == null ||   typeof findRequest[String(x)] == "number" || typeof(findRequest[String(x)])=="boolean") {
-//         value = value + " " + `${findRequest[String(x)]}` + `,`;
-//       } else {
-//         value = value + " " + `N` + "'" + findRequest[String(x)] + "'" + `,`;
-//       }
-//     }
-
-//     value = await value.slice(0, -1);
-//     await console.log(value);
-//     let insertTblCharityAccounts = await pool.request().query(
-//       `INSERT INTO tblPlans  (PlanName,Description,PlanNature,ParentPlanId,icon,Fdate,Tdate,neededLogin)
-//             VALUES (` +
-//         value +
-//         `)`
-//     );
-
-//     let findIndex = {
-//         PlanName : findRequest.PlanName,
-//         PlanNature : findRequest.PlanNature,
-//         ParentPlanId : findRequest.ParentPlanId
-//     } 
-//     let getPlan = await ws_loadPlan(findIndex)
-     
-//     return getPlan;
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
-
-
-// async function ws_UpdatePlan(findRequest) {
-//   try {
-//     let updateTblPlan;
-//     let pool = await sql.connect(config);
-
-//     let value = "";
-
-//     for (x in findRequest) {
-//       if (x == "PlanId"){
-
-//       }else if (
-//         findRequest[String(x)] == null || typeof findRequest[String(x)] == "number" || typeof findRequest[String(x)] == "boolean" ) {
-//         value = value + " " + ` ${x} = ${findRequest[String(x)]}` + `,`;
-//       } else {
-//         value =
-//           value + " " + `${x} = N` + "'" + findRequest[String(x)] + "'" + `,`;
-//       }
-//       //console.log(value);
-//     }
-
-//     value = await value.slice(0, -1);
     
-//     updateTblPlan = await pool.request().query(
-//       `UPDATE tblPlans
-//     SET  ` +
-//         value +
-//         ` WHERE PlanId = ${findRequest.PlanId};`
-//     );
+    let getPayment = await pool.request().query(`SELECT top 1 * FROM tblPayment ORDER By PaymentId DESC`)
+    
+    return getPayment.recordsets[0][0].PaymentId;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//ws_UpdatePayment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_UpdatePayment(findRequest) {
+  
+  try {
 
-//     updateTblPlan = await pool
-//       .request()
-//       .query(`select * from tblPlans where PlanId =` + findRequest["PlanId"]);
-//     return updateTblPlan.recordsets;
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
+   
+    let updatePayment
+    let pool = await sql.connect(config)
 
-// async function ws_deletePlan(findRequest) {
-//   try {
-//     let pool = await sql.connect(config);
+    let value = ''
 
-//     let deletePlan;
 
-//     deletePlan = await pool
-//       .request()
-//       .query(`DELETE FROM tblPlans WHERE PlanId = ${findRequest.PlanId};`);
+    for (x in findRequest) {
+    if(x == "PaymentId"){
 
-//     return deletePlan.rowsAffected[0];
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
+    }else if (
+        findRequest[String(x)] == null || typeof findRequest[String(x)] == 'number') {
+
+        value = value + ' ' + ` ${x} = ${findRequest[String(x)]}` + `,`
+      } else {
+        value = value + ' ' + `${x} = ` + "N'" + findRequest[String(x)] + "'" + `,`
+      }
+    }
+
+    value = await value.slice(0, -1)
+
+
+
+    updatePayment = await pool.request().query(
+      `UPDATE tblPayment
+    SET  ` + value +
+      ` WHERE PaymentId = ${findRequest.PaymentId};`
+    )
+    updatePayment = await pool
+      .request()
+      .query(
+        `SELECT * FROM tblPayment where PaymentId = ` +
+        findRequest.PaymentId
+      )
+
+
+    return updatePayment.recordsets
+
+
+
+
+  } catch (error) {
+
+
+    console.log(error.message)
+
+
+  }
+
+}
+//ws_deletePayment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function ws_deletePayment(findRequest) {
+  try {
+
+   
+    let pool = await sql.connect(config)
+        
+    let deleteTblPayment
+   
+        
+    deleteTblPayment =  await pool.request().query(`DELETE FROM tblPayment WHERE PaymentId = ${findRequest.PaymentId};`)
+           
+        
+      
+        return deleteTblPayment.rowsAffected[0];
+
+
+
+   } catch (error) {
+    console.log(error.message);
+  }
+}
+//check payment 
+// just for check tblPayment with various whereclause
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function checkPayment(findRequest) {
+  try {
+    let pool = await sql.connect(config);
+    let getPayment;
+
+      //create  whereclause
+      let whereclause = "";
+      for (x in findRequest) {
+        if (typeof findRequest[String(x)] == "string") {
+          whereclause =
+            whereclause +
+            " " +
+            `tblPayment.${x} = N` +
+            "'" +
+            findRequest[String(x)] +
+            "'" +
+            ` AND`;
+        } else if (typeof findRequest[String(x)] == "number") {
+          whereclause =
+            whereclause + " " + `tblPayment.${x} =  ${findRequest[String(x)]}` + ` AND`;
+        } else if (findRequest[String(x)] == null) {
+          whereclause =
+            whereclause + " " + `tblPayment.${x} is null` + ` AND`;
+        }
+      
+
+      whereclause = await whereclause.slice(0, -3);
+   
+      //show records with whereclause
+
+      getPayment = await pool
+        .request()
+        .query(`SELECT *
+        FROM tblPayment 
+         where` + whereclause);
+      return getPayment.recordsets[0];
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+//payment price sum
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function paymentPriceSum(findRequest) {
+  let pool = await sql.connect(config);
+  let whereclause = "";
+  for (x in findRequest) {
+    if (typeof findRequest[String(x)] == "string") {
+      whereclause =
+        whereclause +
+        " " +
+        `${x} = N` +
+        "'" +
+        findRequest[String(x)] +
+        "'" +
+        ` AND`;
+    } else if (typeof findRequest[String(x)] == "number") {
+      whereclause =
+        whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
+    } else if (findRequest[String(x)] == null) {
+      whereclause =
+        whereclause + " " + `${x} is null` + ` AND`;
+    }
+  }
+
+  whereclause = await whereclause.slice(0, -3);
+
+
+  let A = await pool.request().query(`SELECT SUM(paymentPrice) as totalPaymentPrice
+  FROM tblPayment
+  WHERE `+ whereclause)
+  return A.recordsets[0][0].totalPaymentPrice
+}
+
+
 module.exports = {
   ws_loadPayment : ws_loadPayment,
   ws_loadCashAssistanceDetail : ws_loadCashAssistanceDetail,
-//   ws_createPlan: ws_createPlan,
-//   ws_UpdatePlan: ws_UpdatePlan,
-//   ws_deletePlan: ws_deletePlan,
+   paymentPriceSum: paymentPriceSum,
+   ws_Settelment: ws_Settelment,
+   ws_UpdatePayment : ws_UpdatePayment,
+   ws_deletePayment: ws_deletePayment,
+   checkPayment : checkPayment
 };

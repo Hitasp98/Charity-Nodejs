@@ -184,8 +184,8 @@ async function ws_UpdateNeedyAccount(findRequest) {
   
     try {
 
-      //is  like ws_createNeedyAccount
-      let updateTblPersonal
+     
+      let updateNeedyAccounts
       let pool = await sql.connect(config)
 
       let value = ''
@@ -207,7 +207,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
 
 
 
-      updateTblPersonal = await pool.request().query(
+      updateNeedyAccounts = await pool.request().query(
         `UPDATE tblNeedyAccounts
       SET  ` + value +
         ` WHERE NeedyAccountId = ${findRequest.NeedyAccountId};`
@@ -215,7 +215,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
 
 
 
-      updateTblPersonal = await pool
+      updateNeedyAccounts = await pool
         .request()
         .query(
           `SELECT * FROM [tblNeedyAccounts] where [NeedyAccountId]=` +
@@ -223,7 +223,7 @@ async function ws_UpdateNeedyAccount(findRequest) {
         )
 
 
-      return updateTblPersonal.recordsets
+      return updateNeedyAccounts.recordsets
 
 
 

@@ -1,4 +1,5 @@
 const PlanModel = require("../Models/SecondPlanModel");
+
 var express = require("express");
 var bodyParser = require("body-parser");
 
@@ -27,8 +28,8 @@ module.exports.loadNeedyForPlan = async function(request, response) {
     });
   }
 };
-
-
+//AssignNeedyToPlan
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.AssignNeedyToPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
@@ -47,8 +48,7 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
       // let checkDate = date.datechack(findRequest.Fdate, findRequest.Tdate);
       
       if (checkDate.datechack(findRequest.Fdate,findRequest.Tdate)) {
-        // تاريخ هاروئ بگيريم  tblPlans در اينجا بايد از جدول
-        //ادرس درست است
+       
 
         requestApi.post(
           {
@@ -58,15 +58,17 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
             }
           },
           async function(err, res, body) {
+
+
             let fPlan = await JSON.parse(body);
            if(fPlan[0] != null){
-               // //در اینجا رنج تاریخ را چک میکنیم
-            // //ابتدا تاریخ شروع کوچک تر را تاریخ جدول پلن یک میگیریم
+            
             let startdate = checkDate.datechack(fPlan[0].Fdate, findRequest.Fdate);
             let finshdate = checkDate.datechack(findRequest.Tdate, fPlan[0].Tdate);
 
             if (startdate == true && finshdate == true) {
-                let flag
+              //check index  
+              let flag
                 for (let i=0;i<findRequest.NeedyId.length;i++){
                     let fNeedyId = {
                       NeedyId: findRequest.NeedyId[i],
@@ -74,6 +76,7 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
                     };
                   
                     let findNeedyId = await PlanModel.ws_loadNeedyForPlan(fNeedyId);
+                    
                           flag = 0
                           if(findNeedyId[0] != null){
                            break
@@ -82,7 +85,9 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
                           }
 
                  }
+                 
                 
+                 
                 if(flag == 1 ){
                   await PlanModel.ws_AssignNeedyToPlan(
                     findRequest
@@ -121,12 +126,12 @@ module.exports.AssignNeedyToPlan = async function(request, response) {
     });
   }
 };
-
-
+//deleteNeedyFromPlan
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports.deleteNeedyFromPlan = async function(request, response) {
   try {
     let findRequest = { ...request.body };
-      if (findRequest.PlanId != null && findRequest.AssignNeedyPlanId ==null) {
+      if (findRequest.PlanId != null && findRequest.AssignNeedyPlanId == null) {
         let findAssignNeedyPlanId = await PlanModel.ws_loadNeedyForPlan({PlanId : findRequest.PlanId});
         let deleteAssignNeedyPlanId = []
         for (let i=0; i<findAssignNeedyPlanId.length;i++){
@@ -147,12 +152,10 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
         }
           response.json({message:`${deleteRecord} رکورد حذف شد `})
       }else if(findRequest.PlanId == null && findRequest.AssignNeedyPlanId != null) {
-                   // await requestApi.post({url: api.url +'/CashAssistanceDetail/getCashAssistanceDetail', form : { PlanId : findRequest.PlanId}},async function(err,res,body){
+                   await requestApi.post({url: api.url +'/Succor/loadCashAssistanceDetail', form : { AssignNeedyPlanId : findRequest.AssignNeedyPlanId}},async function(err,res,body){
                          
-                    //     if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature )){
-                    //         await requestApi.post({url: api.url +'/SecondPlan/getPlan', form : { PlanId : findRequest.PlanId}},async function(err,res,body){ 
-                                
-                               // if(await JSON.parse(body)[0] == null || (await JSON.parse(body)[0].PlanNature == findRequest.PlanNature)){
+                        if(await JSON.parse(body)[0] == null){
+                           
                                 let findIndex = {
                                  AssignNeedyPlanId : findRequest.AssignNeedyPlanId
                                 };
@@ -169,16 +172,11 @@ module.exports.deleteNeedyFromPlan = async function(request, response) {
                                 }else{
                                   response.json({ error: "هیچ رکوردی برای حذف موجود نیست" });
                                 }
-                              // }else{
-                              //   response.json({ error: "  به دلیل وابستگی ویرایش تاریخ شروع یا پایان امکان پذیر نمیباشد " });
-                              // }
-                                 
-
-                  //         })             
-                  //   }else{
-                  //     response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
-                  //   }
-                  // })
+                                          
+                    }else{
+                      response.json({ error: "  به دلیل وابستگی ویرایش ماهيت طرح امکان پذیر نمیباشد " });
+                    }
+                  })
       }
     }catch (error) {
           response.json({

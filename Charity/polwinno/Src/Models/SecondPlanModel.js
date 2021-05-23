@@ -25,7 +25,7 @@ async function ws_loadNeedyForPlan(findRequest) {
        
         )
     ) {
-      //!!!!!!!!!!!!!!!!!!!!تغییر کویر ها
+     
       getAssignNeedyToPlans = await pool.request()
         .query(`SELECT tblAssignNeedyToPlans.*
         FROM tblAssignNeedyToPlans   
@@ -37,7 +37,8 @@ async function ws_loadNeedyForPlan(findRequest) {
       return getAssignNeedyToPlans.recordsets[0];
     } else {
       //create  whereclause
-      let whereclause = "";
+    
+      let whereclause = " PersonType = 2 AND ";
       for (x in findRequest) {
         if (typeof findRequest[String(x)] == "string") {
           whereclause =
@@ -58,7 +59,7 @@ async function ws_loadNeedyForPlan(findRequest) {
       }
 
       whereclause = whereclause.slice(0, -3);
-     
+    
       //show records with whereclause
       
 
@@ -78,9 +79,8 @@ async function ws_loadNeedyForPlan(findRequest) {
     console.log(error.message);
   }
 }
-//????????????????شناسه نيازمند NeedyId يا هش مپي از ليست نيازمندان (ليستي از شناسه هاي NeedyId )
-//????????????????این مطلب در این مدل قرار نگرفته
-//تست نشده
+//ws_AssignNeedyToPlan
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 async function ws_AssignNeedyToPlan(findRequest) {
   try {
@@ -107,13 +107,14 @@ async function ws_AssignNeedyToPlan(findRequest) {
       join tblPlans
       on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
      `);
+     console.log(tblAssignNeedyToPlans.recordsets);
     return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
     console.log(error.message);
   }
 }
-
-  
+//ws_deleteNeedyFromPlan
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function ws_deleteNeedyFromPlan(findRequest) {
   try {
     let pool = await sql.connect(config);

@@ -17,7 +17,7 @@ async function ws_loadPayment(findRequest) {
         findRequest.PaymentGatewayId === undefined &&
         findRequest.PaymentDate === undefined &&
         findRequest.PaymentStatus === undefined &&
-        findRequest.CharityAccountId === undefined &&
+       
         findRequest.FollowCode === undefined &&
         findRequest.NeedyId === undefined &&
         findRequest.PaymentId === undefined ) ||
@@ -25,7 +25,7 @@ async function ws_loadPayment(findRequest) {
          findRequest.PaymentGatewayId === null &&
          findRequest.PaymentDate === null &&
          findRequest.PaymentStatus === null &&
-         findRequest.CharityAccountId === null &&
+        
          findRequest.FollowCode === null &&
          findRequest.NeedyId === null &&
          findRequest.PaymentId === null )
@@ -38,6 +38,8 @@ async function ws_loadPayment(findRequest) {
             on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
             join tblPersonal 
             on tblPayment.NeedyId = tblPersonal.PersonId
+            left join tblCharityAccounts 
+            on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId
             `);
             
       return getPayment.recordsets[0];
@@ -69,7 +71,7 @@ async function ws_loadPayment(findRequest) {
 
       getPayment = await pool
         .request()
-        .query(`SELECT *
+        .query(`SELECT tblPayment.*
         FROM tblPayment 
         join tblCashAssistanceDetail 
         on tblPayment.CashAssistanceDetailId = tblCashAssistanceDetail.CashAssistanceDetailId
@@ -77,8 +79,9 @@ async function ws_loadPayment(findRequest) {
         on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
         join tblPersonal 
         on tblPayment.NeedyId = tblPersonal.PersonId
-        join tblCharityAccounts 
-        on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId  where` + whereclause);
+        left join tblCharityAccounts 
+        on tblPayment.CharityAccountId = tblCharityAccounts.CharityAccountId
+         where` + whereclause);
       return getPayment.recordsets[0];
     }
   } catch (error) {

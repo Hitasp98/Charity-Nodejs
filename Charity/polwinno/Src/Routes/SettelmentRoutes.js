@@ -14,8 +14,9 @@ app.use(bodyParser.json())
 
 router.route('/getPayment').post(settelmentControllers.getPayment);
 router.route('/getCashAssistanceDetail').post(settelmentControllers.getCashAssistanceDetail);
-// router.route('/updatePlan').put(settelmentControllers.UpdatePlan);
-// router.route('/deletePlan').delete(settelmentControllers.deletePlan);
+router.route('/insertSettelment').post(settelmentControllers.insertSettelment);
+router.route('/updateSettelment').put(settelmentControllers.updateSettelment);
+router.route('/deletePayment').delete(settelmentControllers.deletePayment);
 
 
 

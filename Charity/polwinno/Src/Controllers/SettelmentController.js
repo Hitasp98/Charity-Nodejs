@@ -43,45 +43,78 @@ module.exports.getCashAssistanceDetail = async function(request, response) {
       });
     }
   };
-
-module.exports.createPlan = async function(request, response) {
+//insert Settelment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports.insertSettelment = async function(request, response) {
   try {
     let findRequest = { ...request.body };
-   
+   //check mandatory
     if (
-      findRequest.PlanName !== null &&
-      findRequest.PlanNature !== null 
+      findRequest.CashAssistanceDetailId != null &&
+      findRequest.PaymentPrice != null &&
+      findRequest.PaymentDate != null &&
+      findRequest.PaymentTime != null &&
+      findRequest.PaymentStatus != null &&
+      findRequest.TargetAccountNumber != null &&
+      findRequest.FollowCode != null
     ) {
-      if (1==1) {
-        let findIndex = {
-            
-          PlanName: findRequest.PlanName,
-          PlanNature: findRequest.PlanNature,
-          ParentPlanId: findRequest.ParentPlanId,
-        };
-       
-        
-        let resultGet = await PlanModel.ws_loadPlan(findIndex);
-       
-       
-        if (resultGet[0] == null) {
-          
-
-            await PlanModel.ws_createPlan(findRequest).then(result => 
-                
-             
-               response.json(result[0].PlanId)
-              ).catch (error =>
-                response.json({error:"رکورد مورد نظر درج نشد"})
-              )  
-           
-          } else {
-            response.json({ error: "ورودی ها یکتا نیستند  " });
+        let getCashAssistanceDetail = await paymentModel.ws_loadCashAssistanceDetail({CashAssistanceDetailId : findRequest.CashAssistanceDetailId})
+    
+        if(getCashAssistanceDetail[0] != null){
+          let findA = {
+            CashAssistanceDetailId : findRequest.CashAssistanceDetailId,
+            CharityAccountId : null,
+            PaymentStatus : findRequest.PaymentStatus
           }
+          let C = getCashAssistanceDetail[0].NeededPrice 
+          let A = await settelmentModel.paymentPriceSum(findA)
+          if (findRequest.CharityAccountId == null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
+             
+              
+             
+            
+              if(findRequest.PaymentPrice == A  && A<C){
+                  await settelmentModel.ws_Settelment(findRequest).then(result => 
+                  response.json(result)
+                  ).catch (error =>
+                   response.json({error:"رکورد مورد نظر درج نشد"})
+                  )  
+              }else{
+                response.json({ error: " مبلغ پرداختی خیریه باید دقیقا برابر با مبلغ پرداختی خیرین باشد " });
+              }
+          }else if(findRequest.CharityAccountId != null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
+                  if(getCashAssistanceDetail[0].AssignNeedyPlanId == null){
+                    let findB = {
+                      CashAssistanceDetailId : findRequest.CashAssistanceDetailId,
+                      CharityAccountId : findRequest.CharityAccountId,
+                      PaymentStatus : findRequest.PaymentStatus
+                    }  
+                    let B = await settelmentModel.paymentPriceSum(findB)
+                    B = B + findRequest.PaymentPrice 
+  
+                    if (B<C && B<A){
+                      
+                      await settelmentModel.ws_Settelment(findRequest).then(result => 
+                        response.json(result)
+                        ).catch (error =>
+                        response.json({error:"رکورد مورد نظر درج نشد"})
+                        ) 
+                    }else{
+                      response.json({error:"مقدار پرداخت شده از مقدار مجاز بیشتر است"})
+                    }
+                  }else{
+                    
+                    response.json({error:"جزییات پرداخت دارای نیازمند نسبت داده شده به طرح است"})
+                  }
+                   
+                  
+          }else{
+            response.json({ error: " پرداخت موفق نیست " });
+          }
+       }else{
+        response.json({ error: " مقدار پارامتر کمک نقدی صحیح نیست " });
+       }
         
-      } else {
-        response.json({ error: " مدت پایان باید از مدت شروع بیشتر باشد"  });
-      }
     } else {
       response.json({ error: " فیلدهای اجباری را پر کنید " });
     }
@@ -89,287 +122,112 @@ module.exports.createPlan = async function(request, response) {
     response.json({ error: "رکورد مورد نظر درج نشد" });
   }
 };
-
-module.exports.UpdatePlan = async function(request, response) {
+//update settelment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports.updateSettelment = async function(request, response) {
   try {
     let findRequest = { ...request.body };
+   //check mandatory
     if (
-      findRequest.PlanId!=null&&
-      findRequest.PlanName != null &&
-      findRequest.PlanNature != null )
-     {
-        let findById = await PlanModel.ws_loadPlan({PlanId : findRequest.PlanId}); 
-
-        if(findById[0] != null){
-            let findIndex = {
-                PlanName: findRequest.PlanName,
-                PlanId: findRequest.PlanId,
-                ParentPlanId: findRequest.ParentPlanId,
-              };
-              let resultGet = await PlanModel.ws_loadPlan(findIndex);
-              if (resultGet[0] == null || (resultGet[0] != null && resultGet[0].PlanId == findRequest.PlanId)) {
-                await PlanModel.ws_UpdatePlan(findRequest).then(result => {
-                    response.json(result[0])}
-        
-                ).catch(error=>
-
-                 response.json({error:"عملیات ویرایش با موفقیت انجام نشد"})
-                
-                )
-                //!error here
-                // requestApi.post(
-                //   {
-                //     url:
-                //       "http://localhost:8090/tblCommonBaseData/tblNonCashAssistanceDetail ",
-                //     form: { findRequest: findRequest.PlanId },
-                //   },
-                //   async function(err, res, body) {
-                //     //امكان تغيير ماهيت  وجود ندارد
-                //     if ((await JSON.parse(body).PlanId) == findRequest.PlanId) {
-                //       let Nature = {
-                //         PlandId: findRequest.PlanId,
-                //         PlanNature: findRequest.PlanNature,
-                //       };
-                //       //check PlanNature is here database
-                //       //ارسال ماهیت و شناسه برای تشخیص 
-                //       let resultPlanNature = await PlanModel.ws_loadPlan(Nature);
-                //       //اگر چيزي برگردوند يعني ماهيت طرح را نميخواهد تغيير دهد
-                //       //یعنی فیلد عوض نشده 
-                //       if (resultPlanNature != null) {
-                //         //!error here
-                //         requestApi.post(
-                //           {
-                //             url:
-                //               "http://localhost:8090/tblCommonBaseData/tblAssignNeedyToPlans   ",
-                //             form: { PlanId: findRequest.PlanId },
-                //           },
-                //           async function(err, res, body) {
-                //             //!اينجا در نظر داشته باشيد اگه برگرده برابر باشد نميتوان تغيير داد تاريخ را ولي در درست نبودن شرط ميتوان تغيير داد
-                //             if ((await JSON.parse(body).PlanId) == findRequest.PlanId) {
-                //               let date = {
-                //                 PlanId: findRequest.PlanId,
-                //                 fdate: findRequest.Fdate,
-                //                 tdate: findRequest.Tdate,
-                //               };
-        
-                //               //check in Fdate and Tdate base
-                //               let resultDate = await PlanModel.ws_loadPlan(date);
-        
-                //               if (resultDate != null) {
-                //                 if (findRequest.Fdate < findRequest.Tdate) {
-                //                   //update
-                //                   await PlanModel.ws_UpdatePlan(
-                //                     findRequest
-                //                   ).then(result => {
-                //                     if (result != null) {
-                //                       response.json(result);
-                //                     } else {
-                //                       response.json({
-                //                         error: " قابل تغییر نیست ",
-                //                       });
-                //                     }
-                //                   });
-                //                 } else {
-                //                   response.json({
-                //                     error: "تاریخ شروع و پایان  را چك كنيد ",
-                //                   });
-                //                 }
-                //               } else {
-                //                 response.json({
-                //                   error: "تاریخ شروع و پایان قابل تغییر نیست ",
-                //                 });
-                //               }
-                //               //!!اينجا امكان تغيير تاريخ وجود دارد
-                //             } else {
-                //               if (findRequest.Fdate < findRequest.Tdate) {
-                //                 //update
-                //                 await PlanModel.ws_UpdatePlan(
-                //                   findRequest
-                //                 ).then(result => {
-                //                   if (result != null) {
-                //                     response.json(result);
-                //                   } else {
-                //                     response.json({
-                //                       error: " قابل تغییر نیست ",
-                //                     });
-                //                   }
-                //                 });
-                //               } else {
-                //                 response.json({
-                //                   error: "تاریخ شروع و پایان  را چك كنيد ",
-                //                 });
-                //               }
-                //             }
-                //           }
-                //         );
-                //       } else {
-                //         response.json({ error: "ماهیت را نمیتوان تغییر داد" });
-                //       }
-                //     } else {
-                //       //امكان تغيير ماهيت وجود دارد
-                //       requestApi.post(
-                //         {
-                //           url:
-                //             "http://localhost:8090/tblCommonBaseData/tblAssignNeedyToPlans   ",
-                //           form: { findRequest: findRequest.planId },
-                //         },
-                //         async function(err, res, body) {
-                //           //!اينجا در نظر داشته باشيد اگه برگرده برابر باشد نميتوان تغيير داد تاريخ را ولي در درست نبودن شرط ميتوان تغيير داد
-                //           if ((await JSON.parse(body).PlanId) == findRequest.PlanId) {
-                //             let date = {
-                //               PlanId: findRequest.PlanId,
-                //               fdate: findRequest.Fdate,
-                //               tdate: findRequest.Tdate,
-                //             };
-        
-                //             //check in Fdate and Tdate base
-                //             let resultDate = await PlanModel.ws_loadPlan(date);
-        
-                //             if (resultDate != null) {
-                //               if (findRequest.Fdate < findRequest.Tdate) {
-                //                 //update
-                //                 await PlanModel.ws_UpdatePlan(
-                //                   findRequest
-                //                 ).then(result => {
-                //                   if (result != null) {
-                //                     response.json(result);
-                //                   } else {
-                //                     response.json({
-                //                       error: " قابل تغییر نیست ",
-                //                     });
-                //                   }
-                //                 });
-                //               } else {
-                //                 response.json({
-                //                   error: "تاریخ شروع و پایان  را چك كنيد ",
-                //                 });
-                //               }
-                //             } else {
-                //               response.json({
-                //                 error: "تاریخ شروع و پایان قابل تغییر نیست ",
-                //               });
-                //             }
-                //             //امكان تغيير تاريخ وجود دارد
-                //           } else {
-                //             //!!اينجا امكان تغيير تاريخ وجود دارد
-                //             if (findRequest.Fdate < findRequest.Tdate) {
-                //               //update
-                //               await PlanModel.ws_UpdatePlan(
-                //                 findRequest
-                //               ).then(result => {
-                //                 if (result != null) {
-                //                   response.json(result);
-                //                 } else {
-                //                   response.json({
-                //                     error: " قابل تغییر نیست ",
-                //                   });
-                //                 }
-                //               });
-                //             } else {
-                //               response.json({
-                //                 error: "تاریخ شروع و پایان  را چك كنيد ",
-                //               });
-                //             }
-                //           }
-                //         }
-                //       );
-                //     }
-                //   }
-                // );
+      findRequest.CashAssistanceDetailId != null &&
+      findRequest.PaymentPrice != null &&
+      findRequest.PaymentDate != null &&
+      findRequest.PaymentTime != null &&
+      findRequest.PaymentStatus != null &&
+      findRequest.TargetAccountNumber != null &&
+      findRequest.FollowCode != null
+    ) {
+      let findById = await settelmentModel.checkPayment({PaymentId : findRequest.PaymentId })
+      if(findById != null){
+        if(findRequest.CharityAccountId != null && findRequest.PaymentStatus != "پرداخت موفق" && findRequest.TargetAccountNumber !=null ){
+          let getCashAssistanceDetail = await paymentModel.ws_loadCashAssistanceDetail({CashAssistanceDetailId : findRequest.CashAssistanceDetailId})
+    
+          if(getCashAssistanceDetail[0] != null){
+            let findA = {
+              CashAssistanceDetailId : findRequest.CashAssistanceDetailId,
+              CharityAccountId : null,
+              PaymentStatus : findRequest.PaymentStatus
+            }
+            let C = getCashAssistanceDetail[0].NeededPrice 
+            let A = await settelmentModel.paymentPriceSum(findA)
+           
+                    if(getCashAssistanceDetail[0].AssignNeedyPlanId == null){
+                      let findB = {
+                        CashAssistanceDetailId : findRequest.CashAssistanceDetailId,
+                        CharityAccountId : findRequest.CharityAccountId,
+                        PaymentStatus : findRequest.PaymentStatus
+                      }  
+                      let B = await settelmentModel.paymentPriceSum(findB)
+                      B = B + findRequest.PaymentPrice 
+    
+                      if (B<C && B<A){
+                        
+                        await settelmentModel.ws_UpdatePayment(findRequest).then(result => 
+                          response.json(result)
+                          ).catch (error =>
+                          response.json({error:"رکورد مورد نظر ویرایش نشد"})
+                          ) 
+                      }else{
+                        response.json({error:"مقدار پرداخت شده از مقدار مجاز بیشتر است"})
+                      }
+                    }else{
+                      
+                      response.json({error:"جزییات پرداخت دارای نیازمند نسبت داده شده به طرح است"})
+                    }
+         }else{
+          response.json({ error: " مقدار پارامتر کمک نقدی صحیح نیست " });
+         }
         }else{
-            response.json({ error: "رکورد ویرایش شده یکتا نیست " });
+          response.json({ error: " عملیات ویرایش فقط برای کمک هایی که حساب خیریه ندارند و شماره حساب مقصد دارند و پرداخت موفق نیست امکان پذیر است " });
         }
-      
       }else{
         response.json({ error: " چنین رکوردی برای ویرایش موجود نیست " });
-      }
+      } 
     } else {
       response.json({ error: " فیلدهای اجباری را پر کنید " });
     }
   } catch (error) {
-    response.json({ error: " عملیات ویرایش انجام نشد" });
+    response.json({ error: "رکورد مورد نظر ویرایش نشد" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-module.exports.deletePlan = async function(request, response) {
+//delete settelment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports.deletePayment = async  function (request, response) {
   try {
     let findRequest = { ...request.body };
-    // requestApi.post(
-    //   {
-    //     url: "http://localhost:8090/tblCommonBaseData/tblAssignNeedyToPlans",
-    //     form: { findRequest: findRequest.planId },
-    //   },
-    //   async function(err, res, body) {
-    //     if ((await JSON.parse(body).PlanId) != findRequest.PlanId) {
-    //       requestApi.post(
-    //         {
-    //           url:
-    //             "http://localhost:8090/tblCommonBaseData/tblCashAssistanceDetail",
-    //           form: { findRequest: findRequest.planId },
-    //         },
-    //         async function(err, res, body) {
-    //           if ((await JSON.parse(body).PlanId) != findRequest.PlanId) {
-    //             requestApi.post(
-    //               {
-    //                 url:
-    //                   "http://localhost:8090/tblCommonBaseData/tblNonCashAssistanceDetail ",
-    //                 form: { findRequest: findRequest.planId },
-    //               },
-    //               async function(err, res, body) {
-    //                 if ((await JSON.parse(body).PlanId) != findRequest.PlanId) {
-      if(findRequest.PlanId != null ){
-        let resultGet = await PlanModel.ws_loadPlan({PlanId : findRequest.PlanId}) 
-   
-        if (resultGet[0] != null){
-            await PlanModel.ws_deletePlan(findRequest).then(result =>{
+    let findById = await settelmentModel.checkPayment({PaymentId : findRequest.PaymentId })
+    if(findById[0] != null){
+        await settelmentModel.ws_deletePayment(findRequest).then(result =>{
     
-                if (result == 1 ){
-                    response.json({message:"عملیات حذف با موفقیت انجام شد"})
-                }else{
-                    response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
-                }})
-        }else{
-            response.json({error : "هیچ رکوردی برای حذف موجود نیست"})
-        }                  
-
-      }else{
-        response.json({error : "فیلد های ضروری را پر کنید"})
-      }
-        
-
-                    
-    //                 } else {
-    //                   response.json({
-    //                     error:
-    //                       "به علت عدم وابستگي اطلاعات عمل حذف انجام نمي شود",
-    //                   });
-    //                 }
-    //               }
-    //             );
-    //           } else {
-    //             response.json({
-    //               error: "به علت عدم وابستگي اطلاعات عمل حذف انجام نمي شود",
-    //             });
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       response.json({
-    //         error: "به علت عدم وابستگي اطلاعات عمل حذف انجام نمي شود",
-    //       });
-    //     }
-    //   }
-    // );
+            if (result == 1 ){
+                response.json({message:"عملیات حذف با موفقیت انجام شد"})
+            }else{
+                response.json({error : " دوباره سعی کنید عملیات حذف انجام نشد"})
+            }})
+    }else{
+        response.json({
+            error: "چنین رکوردی برای حذف موجود نیست"
+          })
+    }
   } catch (error) {
-    response.json({ error: "رکورد مورد نظز پاک نشد" });
+    response.json({
+      error: "رکورد مورد نظر خذف نشد"
+    })
+
   }
-};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

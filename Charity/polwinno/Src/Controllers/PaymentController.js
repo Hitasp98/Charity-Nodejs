@@ -90,7 +90,7 @@ module.exports.insertPayment = async function(request, response) {
                 response.json({ error: " جمع مبالغ پرداختی از مبلغ مورد نیاز بیشتر میشود " });
               }
           }else{
-
+            response.json({ error: " پرداخت موفق نیست " });
           }
        }else{
         response.json({ error: " مقدار پارامتر کمک نقدی صحیح نیست " });
