@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="./css/needy1.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>homepage</title>
+</head>
+
+<body>
+  <div>
+    <div class="sizeTable">
+      <input type="text" placeholder="Search.." id="inputSearch" />
+      <button id="btnSearch">جستوجو</button>
+      <h1 id="setSearch"></h1>
+      <table id="msg_q" style="margin-top: 50px;margin-left: -400px;">
+        <tr>
+          <th>نوع شخص</th>
+          <th>جنسیت</th>
+          <th>نام خانوادگی</th>
+          <th>نام</th>
+        </tr>
+      </table>
+      <div style="margin-top: 20px;">
+        <button id="deleteshow">حذف</button>
+        <button id="editshow">ویرایش</button>
+        <button id="newshow">جدید</button>
+      </div>
+      <div class="border1" id="bord1" >
+        <div class="b1">
+          <div>
+            <input type="text" id="Family" />
+            <label> نام خانوادگی</label>
+          </div>
+          <div>
+            <label>جنسیت </label><br />
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">مرد</label><br>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">زن</label>
+            <div>
+              <input type="text" id="IdNumber" />
+              <label>شماره شناسنامه </label>
+            </div>
+            <div>
+              <input type="text" id="BirthPlace" />
+              <label> محل تولد </label>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="b1">
+          <div>
+            <input type="text" id="Name" />
+            <label>نام </label>
+          </div>
+          <div>
+            <input type="text" id="PersonType" />
+            <label>نوع شخص حقیقی </label>
+            <div>
+              <input type="text" id="NationalCode" />
+              <label>کد ملی </label>
+            </div>
+            <div>
+              <input type="text" id="BirthDate" />
+              <label> تاریخ تولد </label>
+            </div>
+            <div>
+              <input id='PersonPhoto' type="file" src='Plus_sign.jpg' alt="Submit" width="48" height="48">
+              <label> عکس </label>
+            </div>
+            <div>
+              <input type="text" id="SecretCode" />
+              <label> کد رمز </label>
+            </div>
+          </div>
+
+        </div>
+        <div class="nbtn" style="margin-right:400px ;">
+          <button id="close1">انصراف</button>
+
+          <button id="new">ذخیره</button>
+
+        </div>
+      </div>
+      <div class="border2" id="bord2"style="margin-top: -600px;">
+        <div class="b1">
+          <label>شناسه پرسنل </label>
+
+          <input type="number" id="PersonId1" />
+          <div>
+            <input type="text" id="Family1" />
+            <label style=""> نام خانوادگی</label>
+          </div>
+          <div>
+            <label>جنسیت </label><br />
+            <input type="radio" id="male1" name="gender" value="male">
+            <label for="male">مرد</label><br>
+            <input type="radio" id="female1" name="gender" value="female">
+            <label for="female">زن</label>
+            <div>
+              <input type="text" id="IdNumber1" />
+              <label>شماره شناسنامه </label>
+            </div>
+            <div>
+              <input type="text" id="BirthPlace1" />
+              <label> محل تولد </label>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="b1">
+          <div>
+            <input type="text" id="Name1" />
+            <label>نام </label>
+          </div>
+          <div>
+            <input type="text" id="PersonType1" />
+            <label>نوع شخص حقیقی </label>
+            <div>
+              <input type="text" id="NationalCode1" />
+              <label>کد ملی </label>
+            </div>
+            <div>
+              <input type="text" id="BirthDate1" />
+              <label> تاریخ تولد </label>
+            </div>
+            <div>
+              <input id='PersonPhoto1' type="file" src='Plus_sign.jpg' alt="Submit" width="48" height="48">
+              <label> عکس </label>
+            </div>
+            <div>
+              <input type="text" id="SecretCode1" />
+              <label> کد رمز </label>
+            </div>
+          </div>
+
+        </div>
+        <div class="nbtn" style="margin-right:400px ;">
+          <button id="close2">انصراف</button>
+
+          <button id="edit">ذخیره</button>
+
+        </div>
+      </div>
+      <div class="border3" id="bord3" style="margin-top: -600px;">
+        <input type="number" id="PersonId2" />
+        <label>شناسه پرسنل </label>
+        <div class="nbtn" style="margin-right:400px ;">
+          <button id="close2">انصراف</button>
+
+          <button id="delete">ذخیره</button>
+
+        </div>
+      </div>
+      <div>
+      </div>
+    
+    </div>
+  </div>
+  <script src="./js/needy1.js"></script>
+</body>
+
+</html>
