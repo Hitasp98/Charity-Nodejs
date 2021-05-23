@@ -107,7 +107,7 @@ async function ws_AssignNeedyToPlan(findRequest) {
       join tblPlans
       on tblAssignNeedyToPlans.PlanId= tblPlans.PlanId
      `);
-     console.log(tblAssignNeedyToPlans.recordsets);
+  
     return tblAssignNeedyToPlans.recordsets;
   } catch (error) {
     console.log(error.message);
