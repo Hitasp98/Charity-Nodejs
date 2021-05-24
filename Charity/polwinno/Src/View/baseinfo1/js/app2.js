@@ -119,7 +119,7 @@ catch (err){
 
 function btndelete() {
   try{
-  alert(rowjQuery[0].rowIndex-1)
+ 
 
   
   
