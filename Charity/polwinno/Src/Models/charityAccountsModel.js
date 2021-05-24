@@ -16,7 +16,7 @@ async function ws_loadCharityAccounts(findRequest){
         if((findRequest.CharityAccountId===null && findRequest.BankId===null && findRequest.BranchName===null && findRequest.OwnerName===null && findRequest.CardNumber===null && findRequest.AccountNumber ===null && findRequest.AccountName ===null) || ((findRequest.CharityAccountId===undefined && findRequest.BankId===undefined && findRequest.BranchName===undefined && findRequest.OwnerName===undefined && findRequest.CardNumber===undefined && findRequest.AccountNumber ===undefined && findRequest.AccountName ===undefined))){
           
             getTblCharityAccounts = await pool.request()
-            .query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode
+            .query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode,tblCommonBaseType.BaseTypeTitle,
             from tblCharityAccounts 
             inner join tblCommonBaseData
             on tblCharityAccounts.BankId=tblCommonBaseData.CommonBaseDataId 
@@ -45,8 +45,10 @@ async function ws_loadCharityAccounts(findRequest){
         
                 }
               }
-              whereclause = whereclause.slice(0, -3)
-              getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue from tblCharityAccounts 
+              whereclause = await whereclause.slice(0, -3)
+
+              getTblCharityAccounts = await pool.request().query(`select tblCharityAccounts.*,tblCommonBaseData.BaseCode,tblCommonBaseData.BaseValue,tblCommonBaseType.BaseTypeCode,tblCommonBaseType.BaseTypeTitle
+              from tblCharityAccounts 
               inner join tblCommonBaseData
               on tblCharityAccounts.BankId=tblCommonBaseData.CommonBaseDataId 
               inner join tblCommonBaseType
@@ -110,7 +112,7 @@ async function ws_updateCharityAccounts(findRequest){
 
         for(x in findRequest){
             if(x == "CharityAccountId" ){
-
+                charityAccountIdVlue = findRequest.CharityAccountId
             }
             else if( findRequest[String(x)] == null || typeof(findRequest[String(x)])=="number" ){
                 value = value + " "+` ${x} = ${findRequest[String(x)]}`+`,`
@@ -125,11 +127,9 @@ async function ws_updateCharityAccounts(findRequest){
         value = value.slice(0,-1)                    
         updateTblCharityAccounts = await pool.request().query(`UPDATE tblCharityAccounts
         SET  `+ value +
-        ` WHERE CharityAccountId = ${findRequest.CharityAccountId};`)
-
-        
-              
-        updateTblCharityAccounts = await pool.request().query(`select * from tblCharityAccounts where CharityAccountId =` + findRequest["CharityAccountId"] )   
+        ` WHERE CharityAccountId = ` + charityAccountIdVlue)
+   
+        updateTblCharityAccounts = await pool.request().query(`select * from tblCharityAccounts where CharityAccountId =` + charityAccountIdVlue )   
         return updateTblCharityAccounts.recordsets;
            
     }

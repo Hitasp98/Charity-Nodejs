@@ -151,7 +151,7 @@ module.exports.getTblCharityAccountsController = async function(request,response
                   //check dependency
                     requestApi.post({url: api.url +'/Payment/getPayment', form: {CharityAccountId : findRequest.CharityAccountId
                     }},async function(err,res,body){
-                        
+                       
                                 if(await JSON.parse(body)[0] == null){
                                 
                                         await tblCharityAccountsModel.ws_deleteCharityAccounts(findRequest).then(result =>{

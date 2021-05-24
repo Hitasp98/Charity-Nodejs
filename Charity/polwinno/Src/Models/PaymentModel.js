@@ -17,7 +17,7 @@ async function ws_loadPayment(findRequest) {
         findRequest.PaymentGatewayId === undefined &&
         findRequest.PaymentDate === undefined &&
         findRequest.PaymentStatus === undefined &&
-       
+        findRequest.CharityAccountId === undefined &&
         findRequest.FollowCode === undefined &&
         findRequest.NeedyId === undefined &&
         findRequest.PaymentId === undefined ) ||
@@ -25,7 +25,7 @@ async function ws_loadPayment(findRequest) {
          findRequest.PaymentGatewayId === null &&
          findRequest.PaymentDate === null &&
          findRequest.PaymentStatus === null &&
-        
+         findRequest.CharityAccountId === null &&
          findRequest.FollowCode === null &&
          findRequest.NeedyId === null &&
          findRequest.PaymentId === null )
@@ -61,12 +61,12 @@ async function ws_loadPayment(findRequest) {
             whereclause + " " + `tblPayment.${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
           whereclause =
-            whereclause + " " + `${x} is null` + ` AND`;
+            whereclause + " " + `tblPayment.${x} is null` + ` AND`;
         }
       }
 
       whereclause = await whereclause.slice(0, -3);
-   
+   console.log(whereclause);
       //show records with whereclause
 
       getPayment = await pool
