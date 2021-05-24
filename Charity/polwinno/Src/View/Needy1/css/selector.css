@@ -1,0 +1,153 @@
+
+.big {
+    font-size: 1.2em;
+  }
+  
+  .small {
+    font-size: 0.7em;
+  }
+  
+  .square {
+    width: 0.7em;
+    height: 0.7em;
+    margin: 0.5em;
+    display: inline-block;
+  }
+  
+  /* Custom dropdown */
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px; /* demo only */
+  }
+  
+  .custom-dropdown select {
+    background-color: #1abc9c;
+    color: #fff;
+    font-size: inherit;
+    padding: 0.5em;
+    padding-right: 2.5em;
+    border: 0;
+    margin: 0;
+    border-radius: 3px;
+    text-indent: 0.01px;
+    text-overflow: "";
+    -webkit-appearance: button; /* hide default arrow in chrome OSX */
+  }
+  
+  .custom-dropdown::before,
+  .custom-dropdown::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  .custom-dropdown::after {
+    /*  Custom dropdown arrow */
+    content: "\25BC";
+    height: 1em;
+    font-size: 0.625em;
+    line-height: 1;
+    right: 1.2em;
+    top: 50%;
+    margin-top: -0.5em;
+  }
+  
+  .custom-dropdown::before {
+    /*  Custom dropdown arrow cover */
+    width: 2em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0 3px 3px 0;
+  }
+  
+  .custom-dropdown select[disabled] {
+    color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .custom-dropdown select[disabled]::after {
+    color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-dropdown::before {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  
+  .custom-dropdown::after {
+    color: rgba(0, 0, 0, 0.4);
+  }
+  .form-1 {
+    width: 13.18%;
+  }
+  .form-2 {
+    width: 30.54%;
+  }
+  .form-3 {
+    width: 47.91%;
+  }
+  .form-4 {
+    width: 65.27%;
+  }
+  .form-6 {
+    width: 100%;
+  }
+  
+  ::-moz-input-placeholder {
+    color: #a5a5a5;
+  }
+  
+  ::-webkit-input-placeholder {
+    color: #a5a5a5;
+  }
+  
+  input[class^=form-] {
+    margin-right: 3.18%;
+  }
+  
+  input.form-end {
+    margin-right: 0;
+  }
+  
+  input[type=text],
+  input[type=tel] {
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    padding: 11px 10px;
+    font-size: 14px;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  input[type=text]:focus,
+  input[type=tel]:focus {
+    outline: none;
+    border-color: #249caa;
+  }
+
+
+
+  span[class^=form-] {
+    margin-right: 3.18%;
+  }
+  
+  span.form-end {
+    margin-right: 0;
+  }
+  
+  span[type=text],
+  span[type=tel] {
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    padding: 11px 10px;
+    font-size: 14px;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  span[type=text]:focus,
+  span[type=tel]:focus {
+    outline: none;
+    border-color: #249caa;
+  }

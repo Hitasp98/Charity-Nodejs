@@ -1,0 +1,101 @@
+.link {
+  text-decoration: none;
+  color: #55acee;
+  border-bottom: 2px dotted #55acee;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  cursor: url(http://cur.cursors-4u.net/symbols/sym-1/sym46.cur), auto;
+}
+
+.link:hover {
+  color: #2ecc71;
+  border-bottom: 2px dotted #2ecc71;
+}
+
+/* button div */
+#buttons {
+  padding-top: 50px;
+  text-align: center;
+}
+
+/* start da css for da buttons */
+.btn1 {
+  border-radius: 5px;
+  padding: 15px 25px;
+  font-size: 22px;
+  text-decoration: none;
+  margin: 20px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+}
+
+.btn1:active {
+  transform: translate(0px, 5px);
+  -webkit-transform: translate(0px, 5px);
+  box-shadow: 0px 1px 0px 0px;
+}
+
+.blue {
+  background-color: #55acee;
+  box-shadow: 0px 5px 0px 0px #3c93d5;
+}
+
+.blue:hover {
+  background-color: #6fc6ff;
+}
+
+.green {
+  background-color: #2ecc71;
+  box-shadow: 0px 5px 0px 0px #15b358;
+}
+
+.green:hover {
+  background-color: #48e68b;
+}
+
+.red {
+  background-color: #dd4c3c;
+  box-shadow: 0px 5px 0px 0px #ce3323;
+}
+
+.red:hover {
+  background-color: #ff6656;
+}
+
+.purple {
+  background-color: #9b59b6;
+  box-shadow: 0px 5px 0px 0px #82409d;
+}
+
+.purple:hover {
+  background-color: #b573d0;
+}
+
+.orange {
+  background-color: #e67e22;
+  box-shadow: 0px 5px 0px 0px #cd6509;
+}
+
+.orange:hover {
+  background-color: #ff983c;
+}
+
+.yellow {
+  background-color: #f1c40f;
+  box-shadow: 0px 5px 0px 0px #d8ab00;
+}
+
+.yellow:hover {
+  background-color: #ffde29;
+}
+
+/* copyright stuffs.. */
+p {
+  text-align: center;
+  color: #55acee;
+  padding-top: 20px;
+}
+

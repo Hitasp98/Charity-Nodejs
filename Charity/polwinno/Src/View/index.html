@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="img/handofcharity.jpg" />
+    <title>پروژه خیره سبکاد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      #preloader {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 99999;
+        background: #11b186;
+      }
+
+      .sk-cube-grid {
+        width: 40px;
+        height: 40px;
+        margin: 0px auto;
+        position: relative;
+        top: 50%;
+        margin-top: -20px;
+      }
+
+      .sk-cube-grid .sk-cube {
+        width: 33%;
+        height: 33%;
+        background-color: #333;
+        float: left;
+        -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+        animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+      }
+      .sk-cube-grid .sk-cube1 {
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+      }
+      .sk-cube-grid .sk-cube2 {
+        -webkit-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+      }
+      .sk-cube-grid .sk-cube3 {
+        -webkit-animation-delay: 0.4s;
+        animation-delay: 0.4s;
+      }
+      .sk-cube-grid .sk-cube4 {
+        -webkit-animation-delay: 0.1s;
+        animation-delay: 0.1s;
+      }
+      .sk-cube-grid .sk-cube5 {
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+      }
+      .sk-cube-grid .sk-cube6 {
+        -webkit-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+      }
+      .sk-cube-grid .sk-cube7 {
+        -webkit-animation-delay: 0s;
+        animation-delay: 0s;
+      }
+      .sk-cube-grid .sk-cube8 {
+        -webkit-animation-delay: 0.1s;
+        animation-delay: 0.1s;
+      }
+      .sk-cube-grid .sk-cube9 {
+        -webkit-animation-delay: 0.2s;
+        animation-delay: 0.2s;
+      }
+
+      @-webkit-keyframes sk-cubeGridScaleDelay {
+        0%,
+        70%,
+        100% {
+          -webkit-transform: scale3D(1, 1, 1);
+          transform: scale3D(1, 1, 1);
+        }
+        35% {
+          -webkit-transform: scale3D(0, 0, 1);
+          transform: scale3D(0, 0, 1);
+        }
+      }
+
+      @keyframes sk-cubeGridScaleDelay {
+        0%,
+        70%,
+        100% {
+          -webkit-transform: scale3D(1, 1, 1);
+          transform: scale3D(1, 1, 1);
+        }
+        35% {
+          -webkit-transform: scale3D(0, 0, 1);
+          transform: scale3D(0, 0, 1);
+        }
+      }
+    </style>
+    <!-- style Sheet -->
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/grids.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/jquery.mmenu.all.css" />
+    <link rel="stylesheet" href="css/jquery.mmenu.positioning.css" />
+    <link rel="stylesheet" href="css/jquery.mmenu.rtl.css" />
+    <link rel="stylesheet" href="css/fontawesome-all.css" />
+    <link rel="stylesheet" href="css/fontello-embedded.css" />
+    <link rel="stylesheet" href="css/linea.css" />
+    <link rel="stylesheet" href="css/owl.carousel.css" />
+    <link rel="stylesheet" href="css/owl.theme.default.css" />
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    <link rel="stylesheet" href="css/lightbox.css" />
+    <link rel="stylesheet" href="css/hover.css" />
+    <link rel="stylesheet" href="css/timeline.min.css" />
+    <link rel="stylesheet" href="css/animate.css" />
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" />
+    <!-- <link rel="stylesheet" href="css/jplayer.pink.flag.css"> -->
+    <link rel="stylesheet" href="css/jplayer.blue.monday.css" />
+    <link rel="stylesheet" href="css/jquery.maximage.css" />
+    <link rel="stylesheet" href="css/cocoen.min.css" />
+    <link rel="stylesheet" href="css/swiper.css" />
+    <link rel="stylesheet" href="css/slippry.css" />
+    <link rel="stylesheet" href="css/theme-default.css" />
+    <link rel="stylesheet" href="css/fullpage.css" />
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/jquery.mmenu.all.js"></script>
+    <script src="js/jquery.mmenu.rtl.js"></script>
+    <script src="js/theia-sticky-sidebar.js"></script>
+    <script src="js/ResizeSensor.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/jquery.elevatezoom.js"></script>
+    <script src="js/owl.carousel.js"></script>
+    <script src="js/jQuery.countdownTimer.js"></script>
+    <script src="js/jQuery.countdownTimer-fa.js"></script>
+    <script src="js/jquery.jplayer.js"></script>
+    <script src="js/lightbox.js"></script>
+    <script src="js/jquery.counterup.js"></script>
+    <script src="js/waypoints.min.js"></script>
+    <script src="js/timeline.min.js"></script>
+    <script src="js/parallax.js"></script>
+    <script src="js/imagesloaded.pkgd.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script src="js/shuffletext.jquery.js"></script>
+    <script src="js/circle-progress.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/jquery.mousewheel.js"></script>
+    <script src="js/packery-mode.pkgd.js"></script>
+    <script src="js/jquery.mCustomScrollbar.js"></script>
+    <script src="js/swiper.js"></script>
+    <script src="js/jquery.cycle.all.js"></script>
+    <script src="js/jquery.maximage.js"></script>
+    <script src="js/cocoen.min.js"></script>
+    <script src="js/cocoen-jquery.min.js"></script>
+    <script src="js/jquery.zaccordion.js"></script>
+    <script src="js/jquery.particleground.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/color-thief.js"></script>
+    <script src="js/slippry.min.js"></script>
+    <script src="js/jquery.form-validator.js"></script>
+    <script src="js/jquery.parallax.js"></script>
+    <script src="js/parallax2.js"></script>
+    <script src="js/fullpage.extensions.min.js"></script>
+    <script src="js/fullpage.js"></script>
+    <script src="js/theme.js"></script>
+  </head>
+  <body>
+    <div id="preloader">
+      <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+      </div>
+    </div>
+
+    <div id="poplogin">
+      <div>
+        <div>
+          <div>
+            <div class="loginform">
+              <span class="close tran">
+                <i class="fas fa-times"></i>
+              </span>
+              <form action="#">
+                <input type="text" placeholder="نام کاربری" />
+                <input type="password" placeholder="رمز عبور" />
+                <button class="tran">ورود</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="searchpop">
+      <span class="close tran"><i class="fas fa-times"></i></span>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-12 center-block">
+            <div>
+              <div class="search-pop-form">
+                <p>لطفا تایپ کنید و سپس دکمه اینتر را بزنید</p>
+                <form action="#">
+                  <input type="text" />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav id="my-menu">
+      <ul class="nav none">
+        <li class="active"><a href="#">صفحه نخست</a></li>
+        <li>
+          <a href="#">بلاگ</a>
+
+          <ul class="none">
+            <li><a href="#">سینما</a></li>
+            <li>
+              <a href="#">ورزش</a>
+
+              <ul class="none">
+                <li><a href="#">فوتبال</a></li>
+                <li><a href="#">بستکتبال</a></li>
+                <li><a href="#">کشتی</a></li>
+              </ul>
+            </li>
+            <li><a href="#">فرهنگ</a></li>
+            <li><a href="#">اقتصاد</a></li>
+          </ul>
+        </li>
+        <li><a href="#">محصولات</a></li>
+        <li><a href="#">درباره ما</a></li>
+        <li><a href="#">تماس با ما</a></li>
+        <li><a href="#">اخبار</a></li>
+      </ul>
+    </nav>
+
+    <div id="header" class="fix">
+      <div>
+        <div class="row">
+          <div class="col-lg-6 col-md-8">
+            <div id="logo">
+              <a href="#"></a>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="num">
+              <h1>سبکاد4</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="menu">
+      <ul id="myMenu" class="none">
+        <li data-menuanchor="firstPage" class="active">
+          <a href="#firstPage">سلاید ها</a>
+        </li>
+        <li data-menuanchor="secondPage">
+          <a href="#secondPage"> سرویس ها</a>
+        </li>
+        <li data-menuanchor="thirdPage"><a href="#thirdPage">درباره ما</a></li>
+      </ul>
+    </div>
+
+    <div id="fullpage">
+      <div id="#firstPage" class="section">
+        <div
+          class="fp-bg"
+          style="background: url('../images/gallery/5.jpg') center 80% / cover"
+        ></div>
+        <div
+          class="slide"
+          data-anchor="slide1"
+          style="
+            background: url('/index/img/Charity-blogs-top-10.jpg') center center /
+              cover;
+          "
+        ></div>
+        <div
+          class="slide"
+          data-anchor="slide2"
+          style="
+            background: url('/index/img/handofcharity.jpg') center center / cover;
+          "
+        ></div>
+        <div
+          class="slide"
+          data-anchor="slide3"
+          style="
+            background: url('/index/img/helping-hands-clipart.jpg') center center /
+              cover;
+          "
+        ></div>
+        <div
+          class="slide"
+          data-anchor="slide4"
+          style="
+            background: url('/index/img/helping-hands-clipart.jpg') center center /
+              cover;
+          "
+        ></div>
+      </div>
+      <div id="#secondPage" class="section">
+        <div class="fp-bg"></div>
+
+        <!-- Start item -->
+
+
+        <div class="massonry-item col-lg-4 col-md-6 col-sm-12"  style="margin-top: 100px;">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#">baseinfo1</a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					يک نوع اطلاعات پايه محسوب مي شود که دسته بندي يک سر...
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="http://localhost:8090/baseinfo1/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12"  style="margin-top: 100px;">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#">baseinfo2 </a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					يک نوع اطلاعات پايه محسوب مي شود که ...
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="baseinfo2/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12"  style="margin-top: 100px;">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#">baseinfo3</a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					يک نوع اطلاعات پايه محسوب مي شود که حسابهاي موسسات را ذخيره سازي مي نمايد.
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="baseinfo3/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#"> Needy1 </a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					در جامعه افرادي مي باشند که تحت پوشش و حمايت هاي مردمي قرار دارند. نياز است				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="Needy1/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#"> Needy2 </a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					براساس تعريف افراد محتاج نيازاست کمک هاي مردي براي ...
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="Needy2/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12" >
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="#">Plan1,Plan2,Succor1</a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					کمک هاي مردمي درراستاي طرح هاي موسسات خيريه صورت مي گيرد.
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="Plan1/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="massonry-item col-lg-4 col-md-6 col-sm-12">
+			<div>
+			  <div class="blog-item tran">
+				<!-- Start Image -->
+  
+				<div class="item-img">
+				  <a href="#">
+					<img src="../images/portfolio-in/1.jpg" alt="" />
+				  </a>
+				</div>
+  
+				<!-- End Image -->
+  
+				<!-- Start title -->
+  
+				<div class="" style="color: aliceblue;">
+				  <h3>
+					<a href="">Payment </a>
+				  </h3>
+				</div>
+  
+				<!-- End Title -->
+  
+				<!-- Start Item Info -->
+		
+				<!-- End Item Info -->
+  
+				<!-- Start Intro Text -->
+  
+				<div class="" style="color:aliceblue ;">
+				  <p>
+					پرداخت هاي مردمي به حساب موسسات مي باشد.
+				  </p>
+				</div>
+				<!-- End Intro Text -->
+  
+				<!-- STart Read More -->
+  
+				<div class="readmore">
+				  <a href="http://127.0.0.1:5500/Payment/">ادامه مطلب</a>
+				</div>
+  
+				<!-- End REadmore -->
+			  </div>
+			</div>
+		  </div>
+		  
+        <div class="massonry-item col-lg-4 col-md-6 col-sm-12">
+          <div>
+            <div class="blog-item tran">
+              <!-- Start Image -->
+
+              <div class="item-img">
+                <a href="#">
+                  <img src="../images/portfolio-in/1.jpg" alt="" />
+                </a>
+              </div>
+
+              <!-- End Image -->
+
+              <!-- Start title -->
+
+              <div class="" style="color: aliceblue;">
+                <h3>
+                  <a href="#">Settelment </a>
+                </h3>
+              </div>
+
+              <!-- End Title -->
+
+              <!-- Start Item Info -->
+      
+              <!-- End Item Info -->
+
+              <!-- Start Intro Text -->
+
+              <div class="" style="color:aliceblue ;">
+                <p>
+					جهت تعامل با سرويس موضوع شماره 2، فرمي جهت ورود اطلاعات تعبيه گردد.
+                </p>
+              </div>
+              <!-- End Intro Text -->
+
+              <!-- STart Read More -->
+
+              <div class="readmore">
+                <a href="http://127.0.0.1:5500/settelment/">ادامه مطلب</a>
+              </div>
+
+              <!-- End REadmore -->
+            </div>
+          </div>
+        </div>
+        <!-- End Item -->
+      </div>
+      <div id="#thirdPage" class="section">
+        <!-- Start Services -->
+        <div id="services" class="rows no-bg">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-12">
+                <div>
+                  <h3>خدمات ما</h3>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div>
+                  <div class="service flipds tran">
+                    <div class="service-icon tran">
+                      <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="service-title">
+                      <h4>
+                        <a href="#"> موسسات خیره (پروژه پلوینو) </a>
+                      </h4>
+                    </div>
+                    <div class="service-text">
+                      <p>
+                     
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div>
+                  <div class="service flipds tran">
+                    <div class="service-icon tran">
+                      <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="service-title">
+                      <h4>
+                        <a href="#"> بهینه سازی سایت شما </a>
+                      </h4>
+                    </div>
+                    <div class="service-text">
+                      <p>
+                     سامان هوشمند و ارمین نوری
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div>
+                  <div class="service flipds tran">
+                    <div class="service-icon tran">
+                      <i class="fas "></i>
+                    </div>
+                    <div class="service-title">
+                      <h4>
+                        <a href="#"> طراحی  </a>
+                      </h4>
+                    </div>
+                    <div class="service-text">
+                      <p>
+                     سایت خیریه با هدف انجام پروژه
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Services -->
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        var don = 0;
+        $("#fullpage").fullpage({
+          //options here
+          anchors: ["firstPage", "secondPage", "thirdPage", "fourthPage"],
+          menu: "#myMenu",
+          sectionsColor: ["#f2f2f2", "#202020", "#7BAABE", "#000"],
+          autoScrolling: true,
+          scrollHorizontally: true,
+          parallax: true,
+          parallaxOptions: {
+            type: "reveal",
+            percentage: 62,
+            property: "translate",
+          },
+
+          afterLoad: function (origin, destination, direction) {
+            var loadedSection = this;
+            //using index
+            if (destination.index == 1 && don == 0) {
+              don++;
+              $(".circle2").each(function () {
+                var a = $(this).data("value") * 100;
+
+                $(this)
+                  .circleProgress({})
+                  .on("circle-animation-progress", function (event, progress) {
+                    $(this)
+                      .find("strong")
+                      .html(Math.round(a * progress) + "<i>%</i>");
+                  });
+              });
+            }
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

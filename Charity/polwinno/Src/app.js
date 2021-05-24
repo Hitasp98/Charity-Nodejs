@@ -28,32 +28,35 @@ app.use("/Payment", require("./Routes/PaymentRoutes"));
 app.use("/Succor", require('./Routes/SuccorRouter'));
 
 hbs.registerPartials(partialsPath);
-app.get("/info12", (req, res) => {
-  res.render("baseinfo12");
+app.get("/baseinfo1", (req, res) => {
+  res.render("baseinfo1/index.html");
 });
-app.get("/info3", (req, res) => {
-  res.render("baseinfo3");
+app.get("/baseinfo2", (req, res) => {
+  res.render("baseinfo2/index.html");
 });
-app.get("/needy1", (req, res) => {
-  res.render("needy1");
+app.get("/baseinfo3", (req, res) => {
+  res.render("baseinfo3/index.html");
 });
-app.get("/needy2", (req, res) => {
-  res.render("needy2");
+app.get("/Needy1", (req, res) => {
+  res.render("Needy1/index.html");
 });
-app.get("/FirstPlan", (req, res) => {
-  res.render("Plan1");
+app.get("/Needy2", (req, res) => {
+  res.render("Needy2/index.html");
 });
-app.get("/SecondPlan", (req, res) => {
+app.get("/Plan1", (req, res) => {
+  res.render("Plan1/index.html");
+});
+app.get("/Plan2", (req, res) => {
   res.render("Plan2");
 });
 app.get("/Settelment", (req, res) => {
-  res.render("Settelment");
+  res.render("Settelment/index.html");
 });
 app.get("/Succor", (req, res) => {
-  res.render("Succor");
+  res.render("Succor/index.html");
 });
 app.get("/Payment", (req, res) => {
-  res.render("Payment");
+  res.render("Payment/index.html");
 });
 app.get("*", (req, res) => {
   res.render("404");
@@ -62,4 +65,3 @@ var port = process.env.port || 8090;
 app.listen(port, () => {
   console.log("running at " + port);
 });
-
