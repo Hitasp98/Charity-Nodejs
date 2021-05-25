@@ -59,7 +59,7 @@ async function ws_loadCashAssistanceDetail(findRequest) {
     ) {
      
         getLoadCashAssistanceDetail = await pool.request()
-        .query(`SELECT *
+        .query(`SELECT tblCashAssistanceDetail.*
         FROM tblCashAssistanceDetail   
         inner join tblAssignNeedyToPlans
         on tblCashAssistanceDetail.PlanId = tblAssignNeedyToPlans.PlanId
@@ -97,11 +97,14 @@ async function ws_loadCashAssistanceDetail(findRequest) {
       
       getLoadCashAssistanceDetail = await pool.request().query(
         `SELECT tblCashAssistanceDetail.*
-        FROM tblCashAssistanceDetail   
-        join tblAssignNeedyToPlans
-        on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
-        join tblPlans
-        on tblCashAssistanceDetail.PlanId= tblPlans.PlanId
+         FROM tblCashAssistanceDetail   
+        inner join tblAssignNeedyToPlans
+        on tblCashAssistanceDetail.PlanId = tblAssignNeedyToPlans.PlanId
+        and tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+        inner join tblPlans
+        on tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
+        inner join tblPersonal
+        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
       where ` + whereclause
       );
       return getLoadCashAssistanceDetail.recordsets[0];

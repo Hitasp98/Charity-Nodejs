@@ -16,7 +16,7 @@ async function ws_loadPayment(findRequest) {
         findRequest.PaymentGatewayId === undefined &&
         findRequest.PaymentDate === undefined &&
         findRequest.PaymentStatus === undefined &&
-        
+        findRequest.CharityAccountId === undefined &&
         findRequest.FollowCode === undefined &&
         findRequest.NeedyId === undefined &&
         findRequest.PaymentId === undefined ) ||
@@ -24,7 +24,7 @@ async function ws_loadPayment(findRequest) {
          findRequest.PaymentGatewayId === null &&
          findRequest.PaymentDate === null &&
          findRequest.PaymentStatus === null &&
-         
+         findRequest.CharityAccountId === null &&
          findRequest.FollowCode === null &&
          findRequest.NeedyId === null &&
          findRequest.PaymentId === null )
@@ -49,14 +49,14 @@ async function ws_loadPayment(findRequest) {
           whereclause =
             whereclause +
             " " +
-            `tblPayment.${x} = N` +
+            `${x} = N` +
             "'" +
             findRequest[String(x)] +
             "'" +
             ` AND`;
         } else if (typeof findRequest[String(x)] == "number") {
           whereclause =
-            whereclause + " " + `tblPayment.${x} =  ${findRequest[String(x)]}` + ` AND`;
+            whereclause + " " + `${x} =  ${findRequest[String(x)]}` + ` AND`;
         } else if (findRequest[String(x)] == null) {
           whereclause =
             whereclause + " " + `tblPayment.${x} is null` + ` AND`;
@@ -107,13 +107,14 @@ async function ws_loadCashAssistanceDetail(findRequest) {
             findRequest.CashAssistanceDetailId === null )
       ) {
           CashAssistanceDetail = await pool.request().query(`SELECT tblCashAssistanceDetail.*
-              FROM tblCashAssistanceDetail 
-              join tblAssignNeedyToPlans
-              on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
-              join tblPlans
-              on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
-              join tblPersonal 
-              on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
+         FROM tblCashAssistanceDetail   
+        inner join tblAssignNeedyToPlans
+        on tblCashAssistanceDetail.PlanId = tblAssignNeedyToPlans.PlanId
+        and tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+        inner join tblPlans
+        on tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
+        inner join tblPersonal
+        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
                `);
         return CashAssistanceDetail.recordsets[0];
       } else {
@@ -145,13 +146,14 @@ async function ws_loadCashAssistanceDetail(findRequest) {
         CashAssistanceDetail = await pool
           .request()
           .query(`SELECT tblCashAssistanceDetail.*
-          FROM tblCashAssistanceDetail 
-          join tblAssignNeedyToPlans
-          on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
-          join tblPlans
-          on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
-          join tblPersonal 
-          on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId  where` + whereclause);
+         FROM tblCashAssistanceDetail   
+        inner join tblAssignNeedyToPlans
+        on tblCashAssistanceDetail.PlanId = tblAssignNeedyToPlans.PlanId
+        and tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+        inner join tblPlans
+        on tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
+        inner join tblPersonal
+        on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId  where` + whereclause);
         return CashAssistanceDetail.recordsets[0];
       }
     } catch (error) {

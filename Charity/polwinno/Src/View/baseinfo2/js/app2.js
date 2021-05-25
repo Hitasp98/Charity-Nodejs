@@ -96,7 +96,8 @@ function btnnew() {
       }),
       dataType: "json",
       success: function(data) {
-        alert(JSON.stringify(data));
+        alert(JSON.stringify(data));//عدد که سرور دونه
+ 
       },
     });
     location.reload();
@@ -113,7 +114,7 @@ function EditRecordForEditDemo(element) {
 }
 function btnedit() {
   try {
-    alert(rowjQuery[0].rowIndex - 1);
+   
     const BaseTypeTitle = document.getElementById("BaseTypeTitle1").value;
 
     $.ajax({
@@ -165,7 +166,7 @@ function btnedit() {
 
 function btndelete() {
   try {
-    alert(rowjQuery[0].rowIndex - 1);
+   
     basevalue;
     $.ajax({
       type: "POST",
@@ -240,7 +241,7 @@ function ws_loadBasedata() {
 ws_loadBasedata();
 function btnNewInfo2() {
   try {
-    alert(rowjQuery[0].rowIndex - 1);
+
     const BaseValue = document.getElementById("basevalue").value;
 
     $.ajax({
@@ -312,7 +313,7 @@ function btnEditInfo2() {
         let i = 0;
         for (row of data) {
           if (i == rowjQuery1[0].rowIndex - 1) {
-            commonbasetypeid = row.CommonBaseTypeID;
+            commonbasetypeid = row.CommonBaseTypeId;
             commonbasedataid=row.CommonBaseDataId;
             break;
           }
