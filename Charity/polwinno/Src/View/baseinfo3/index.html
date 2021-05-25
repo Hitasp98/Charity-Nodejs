@@ -141,8 +141,25 @@
         </div>
         <div class="modal-body">
           <form>
+            <div style="overflow:scroll;height:200px;">
+              <table id="baseinfo2" class="container">
+              <thead>
+                <tr>
+                  <th>
+                    <h1>عنوان</h1>
+                  </th>
+                  <th>
+                    <h1>شناسه</h1>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              
+              </tbody>
+            </table>
+          </div>
             <!-- <div class="flex-container justify-center" > -->
-            <span class=" custom-dropdown" id="BranchName" style="margin-top: 50px;">
+            <span class=" custom-dropdown" style="margin-top: 50px;">
               <select id="BranchName">
                 <option>بانك ملت</option>
                 <option>بانك ملي</option>
@@ -152,8 +169,7 @@
               </select>
             </span>
          
-            <input type="text" id="BankId" placeholder=" بانک" class="form-4 form-end" style="margin-top: -50px;">
-            <input type="text" id="AccountNumber" placeholder="شماره حساب" class="form-4 form-end">
+            <input type="text" id="AccountNumber" placeholder=" شماره حساب" class="form-4 form-end" style="margin-top: -50px;">
             <input type="text" id="OwnerName" placeholder="نام صاحب حساب" class="form-4 form-end">
             <input type="text" id="CardNumber" placeholder="شماره كارت" class="form-4 form-end">
             <input type="text" id="AccountName" placeholder="نام حساب" class="form-4 form-end">
@@ -187,9 +203,26 @@
         </div>
         <div class="modal-body">
           <div>
+            <div style="overflow:scroll;height:200px;">
+              <table id="baseinfo22" class="container">
+              <thead>
+                <tr>
+                  <th>
+                    <h1>عنوان</h1>
+                  </th>
+                  <th>
+                    <h1>شناسه</h1>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              
+              </tbody>
+            </table>
+          </div>
             <!-- <div class="flex-container justify-center" > -->
             <span class=" custom-dropdown" style="margin-top: 50px;">
-              <select>
+              <select id="BranchName1">
                 <option>بانك ملت</option>
                 <option>بانك ملي</option>
                 <option>بانك سامان</option>
@@ -198,15 +231,14 @@
               </select>
             </span>
 
-            <input type="text" placeholder="نام صاحب حساب" class="form-4 form-end" style="margin-top: -50px;">
-            <input type="text" placeholder="شماره حساب" class="form-4 form-end">
-            <input type="text" placeholder=" نام شبعه افتتاح حساب" class="form-4 form-end">
-            <input type="text" placeholder="شماره كارت" class="form-4 form-end">
-            <input type="text" placeholder="نام حساب" class="form-4 form-end">
+            <input type="text" id="OwnerName1" placeholder="نام صاحب حساب" class="form-4 form-end" style="margin-top: -50px;">
+            <input type="text" id="AccountNumber1" placeholder="شماره حساب" class="form-4 form-end">
+            <input type="text"id="CardNumber1" placeholder="شماره كارت" class="form-4 form-end">
+            <input type="text" id="AccountName1" placeholder="نام حساب" class="form-4 form-end">
 
           </div>
           <div class="modal-footer">
-            <button id="" class="btn1 green" aria-hidden="true">
+            <button id="btnedit" onclick="btnedit()" class="btn1 green" aria-hidden="true">
               ذخیره
             </button>
 
@@ -233,7 +265,7 @@
           <h4>مطمئن هستید مورد نظر حذف شود؟</h4>
         </div>
         <div class="modal-footer">
-          <button id="btnedit" class="btn1 green" aria-hidden="true">
+          <button id="btndelete" onclick="btndelete()" class="btn1 green" aria-hidden="true">
             ذخیره
           </button>
 

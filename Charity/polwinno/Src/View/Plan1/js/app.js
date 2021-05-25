@@ -10,16 +10,7 @@ particlesJS.load('particles-js', 'particles.json', function() {
 */
 
 /* Otherwise just put the config content (json): */
-function ShowHideDiv1() {
-  var chkYes = document.getElementById("flexRadioDefault1");
-  var dvPassport = document.getElementById("dvPassport1");
-  dvPassport.style.display = chkYes.checked ? "block" : "none";
-}
-function ShowHideDiv2() {
-  var chkYes = document.getElementById("flexRadioDefault11");
-  var dvPassport = document.getElementById("dvPassport11");
-  dvPassport.style.display = chkYes.checked ? "block" : "none";
-}
+
 particlesJS('particles-js',
   
   {

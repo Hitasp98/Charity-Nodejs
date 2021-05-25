@@ -25,7 +25,60 @@ function ws_loadBaseType() {
   });
 }
 ws_loadBaseType();
+function ws_loadBaseType1() {
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8090/CommonBaseType/getCommonBaseType",
+    contentType: "application/json",
+    data: JSON.stringify({
+      doc_id_msgs: $("#doct_id").val(),
+    }),
+    dataType: "json",
+    success: function(data) {
+      console.log(data);
 
+      for (row of data) {
+        //TODO append table
+        $("#baseinfo11").append(
+          "<tr onclick=EditRecordForEditDemo(this)><td>" +
+            row.BaseTypeTitle +
+            "</td><td>" +
+            row.CommonBaseTypeId +
+            "</td></tr>"
+        );
+   
+      }
+    },
+  });
+}
+ws_loadBaseType1();
+function ws_loadBaseType2() {
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8090/CommonBaseType/getCommonBaseType",
+    contentType: "application/json",
+    data: JSON.stringify({
+      doc_id_msgs: $("#doct_id").val(),
+    }),
+    dataType: "json",
+    success: function(data) {
+      console.log(data);
+
+      for (row of data) {
+        //TODO append table
+        $("#baseinfo12").append(
+          "<tr onclick=EditRecordForEditDemo(this)><td>" +
+            row.BaseTypeTitle +
+            "</td><td>" +
+            row.CommonBaseTypeId +
+            "</td></tr>"
+        );
+   
+      }
+    },
+  });
+}
+ws_loadBaseType2();
 //
 
 function btnnew() {

@@ -82,7 +82,8 @@
   <script src="js/jquery.zaccordion.js"></script>
   <script src="js/jquery.particleground.js"></script>
   <script src="js/theme.js"></script>
-  <script src="js/app.js"></script>
+  <!-- <script src="js/app.js"></script> -->
+  <script src="js/app2.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
@@ -107,7 +108,7 @@
   <div style="height: auto">
     <h1>Plan1</h1>
 
-    <table class="container">
+    <table id="plan1" class="container">
       <thead>
         <tr>
           <th>
@@ -118,10 +119,7 @@
 
       </thead>
       <tbody>
-        <tr>
-          <td>Google</td>
-
-        </tr>
+       
       </tbody>
     </table>
   </div>
@@ -131,6 +129,8 @@
       <a href="#myModal4" role="button" class="btn1 green btn-default" data-toggle="modal">مورد جدید</a>
       <a href="#myModal5" role="button" class="btn1 yellow" data-toggle="modal">ویرایش</a>
       <a href="#myModal6" role="button" class="btn1 red" data-toggle="modal">حذف</a>
+      <a href="#myModal7" role="button" class="btn1 blue" data-toggle="modal">تخصیص نیازمند</a>
+
     </div>
   </div>
   <div id="myModal4" class="modal modal--align-top modal__bg" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
@@ -146,24 +146,26 @@
         <div class="modal-body">
           <div>
 
+            <input type="text" id="PlanName" placeholder="عنوان طرح" class="form-4 form-end">
 
-            <input type="text" placeholder=" طرح اصلی" class="form-4 form-end">
-            <input type="text" placeholder="عنوان طرح" class="form-4 form-end">
+            <input type="text" id="Description" placeholder=" طرح اصلی" class="form-4 form-end">
+            <input type="text" id="ParentPlanId" placeholder="شناسه پدر   " class="form-4 form-end">
+
             <p>ماهیت طرح </p>
             <div>
 
 
               <div style="display: flex; flex-direction: row;">
                 <li for="slideThree">آيا نياز به لاگين داريد؟ </li>
-                <input type="checkbox" style="margin-right: 200px" value="None" id="slideThree" name="check" checked />
+                <input type="checkbox" id="neededLogin" style="margin-right: 200px" value="None" id="slideThree" name="check" checked />
 
               </div>
             </div>
             <diV style="margin: 20px;">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="PlanNature1"
                   onclick="ShowHideDiv1()">
-                <label class="form-check-label" for="flexRadioDefault1" style="margin-top: 20px;">
+                <label class="form-check-label" for="PlanNature1" style="margin-top: 20px;">
                   نقدی
                 </label>
               </div>
@@ -174,9 +176,9 @@
 
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="PlanNature2" checked
                   onclick="ShowHideDiv1()">
-                <label class="form-check-label" for="flexRadioDefault2" style="margin-top: 20px;">
+                <label class="form-check-label" for="PlanNature2" style="margin-top: 20px;">
                   غیر نقدی
                 </label>
               </div>
@@ -185,26 +187,27 @@
 
             <div style="display: flex; flex-direction: row;">
               <li>تاریخ شروع</li>
-              <input type="date" placeholder="تاریخ " class="form-4 form-end">
+              <input type="date" id="Fdate" placeholder="تاریخ " class="form-4 form-end">
             </div>
             <div style="display: flex; flex-direction: row;">
               <li>تاریخ پایان</li>
-              <input type="date" placeholder="تاریخ " class="form-4 form-end">
+              <input type="date" id="Tdate" placeholder="تاریخ " class="form-4 form-end">
             </div>
 
 
 
           </div>
           <div class="modal-footer">
-            <a href="#btnnew" role="button" class="btn1 green btn-default" data-toggle="modal">ذخيره</a>
 
-
+            <button id="insert" onclick="insert()" class="btn1 red"  aria-hidden="true">
+              ذخيره
+            </button>
             <button class="btn1 red" data-dismiss="modal" aria-hidden="true">
               بستن
             </button>
           </div>
           <!-- </div> -->
-          </form>
+        </div>
         </div>
 
       </div>
@@ -272,6 +275,7 @@
               </tr>
             </tbody>
           </table>
+          
           <div id="buttons">
             <a href="#sucernew" role="button" class="btn1 green btn-default" data-toggle="modal">مورد جدید</a>
             <a href="#suceredit" role="button" class="btn1 yellow" data-toggle="modal">ویرایش</a>
@@ -287,6 +291,11 @@
               </tr>
             </tbody>
           </table>
+          <input type="text" placeholder=" طرح اصلی" class="form-4 form-end">
+          <input type="text" placeholder="عنوان طرح" class="form-4 form-end">
+          <textarea rows="4" cols="50"  placeholder="عنوان طرح" class="form-4 form-end">
+</textarea>
+
           <div class="modal-footer">
 
 
@@ -398,6 +407,94 @@
           <button class="btn1 red" data-dismiss="modal" aria-hidden="true">
             بستن
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="myModal7" class="modal" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            ×
+          </button>
+          <h4 class="modal-title"> مشخصات طرح</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+
+            <table class="container">
+              <thead>
+                <tr>
+                  <th>
+                    <h1>نام کمک </h1>
+                  </th>
+        
+        
+        
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Google</td>
+        
+                </tr>
+              </tbody>
+            </table>
+            <div style="display: flex; flex-direction: row;" w>
+            <button id="btnnew" class="btn1 green" aria-hidden="true">
+              ذخیره
+            </button>
+
+            <button class="btn1 red" data-dismiss="modal" aria-hidden="true">
+              بستن
+            </button>
+            <button id="btnnew" class="btn1 green" aria-hidden="true">
+              ذخیره
+            </button>
+
+            <button class="btn1 red" data-dismiss="modal" aria-hidden="true">
+              بستن
+            </button>
+          </div>
+            <table class="container">
+              <thead>
+                <tr>
+                  <th>
+                    <h1>نام کمک </h1>
+                  </th>
+        
+        
+        
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Google</td>
+        
+                </tr>
+              </tbody>
+            </table>
+            <div style="display: flex; flex-direction: row;">
+              <li>تاریخ شروع</li>
+              <input type="date" placeholder="تاریخ " class="form-4 form-end">
+            </div>
+            <div style="display: flex; flex-direction: row;">
+              <li>تاریخ پایان</li>
+              <input type="date" placeholder="تاریخ " class="form-4 form-end">
+            </div>
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button id="btnnew" class="btn1 green" aria-hidden="true">
+              ذخیره
+            </button>
+
+            <button class="btn1 red" data-dismiss="modal" aria-hidden="true">
+              بستن
+            </button>
+          </div>
         </div>
       </div>
     </div>
