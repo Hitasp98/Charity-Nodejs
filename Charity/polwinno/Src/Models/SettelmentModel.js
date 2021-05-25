@@ -107,14 +107,14 @@ async function ws_loadCashAssistanceDetail(findRequest) {
             findRequest.CashAssistanceDetailId === null )
       ) {
           CashAssistanceDetail = await pool.request().query(`SELECT tblCashAssistanceDetail.*
-              FROM tblCashAssistanceDetail 
-              left join tblAssignNeedyToPlans
-              on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
-              left join tblPlans
-              on tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
-              and tblCashAssistanceDetail.PlanId = tblPlans.PlanId
-              left join tblPersonal 
-              on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
+          FROM tblCashAssistanceDetail 
+          join tblPlans
+          on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
+          join tblAssignNeedyToPlans
+          on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
+          and  tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
+          join tblPersonal 
+          on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId
                `);
         return CashAssistanceDetail.recordsets[0];
       } else {
@@ -147,12 +147,12 @@ async function ws_loadCashAssistanceDetail(findRequest) {
           .request()
           .query(`SELECT tblCashAssistanceDetail.*
           FROM tblCashAssistanceDetail 
-          left join tblAssignNeedyToPlans
+          join tblPlans
+          on tblCashAssistanceDetail.PlanId = tblPlans.PlanId
+          join tblAssignNeedyToPlans
           on tblCashAssistanceDetail.AssignNeedyPlanId = tblAssignNeedyToPlans.AssignNeedyPlanId
-          left join tblPlans
-          on tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
-          and tblCashAssistanceDetail.PlanId = tblPlans.PlanId
-          left join tblPersonal 
+          and  tblAssignNeedyToPlans.PlanId = tblPlans.PlanId
+          join tblPersonal 
           on tblAssignNeedyToPlans.NeedyId = tblPersonal.PersonId  where` + whereclause);
         return CashAssistanceDetail.recordsets[0];
       }
