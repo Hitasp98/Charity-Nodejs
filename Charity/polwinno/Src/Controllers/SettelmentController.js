@@ -58,16 +58,22 @@ module.exports.insertSettelment = async function(request, response) {
       findRequest.TargetAccountNumber != null &&
       findRequest.FollowCode != null
     ) {
-        let getCashAssistanceDetail = await paymentModel.ws_loadCashAssistanceDetail({CashAssistanceDetailId : findRequest.CashAssistanceDetailId})
+        let getCashAssistanceDetail = await settelmentModel.ws_loadCashAssistanceDetail({CashAssistanceDetailId : findRequest.CashAssistanceDetailId
+       })
     
         if(getCashAssistanceDetail[0] != null){
+          
+      
+
           let findA = {
             CashAssistanceDetailId : findRequest.CashAssistanceDetailId,
             CharityAccountId : null,
             PaymentStatus : findRequest.PaymentStatus
           }
+          
           let C = getCashAssistanceDetail[0].NeededPrice 
           let A = await settelmentModel.paymentPriceSum(findA)
+         
           if (findRequest.CharityAccountId == null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
              
               
@@ -80,7 +86,7 @@ module.exports.insertSettelment = async function(request, response) {
                    response.json({error:"رکورد مورد نظر درج نشد"})
                   )  
               }else{
-                response.json({ error: " مبلغ پرداختی خیریه باید دقیقا برابر با مبلغ پرداختی خیرین باشد " });
+                response.json({ error: "  مبلغ وارد شده بیشتر از نیاز است یا مبلغ پرداختی خیریه باید دقیقا برابر با مبلغ پرداختی خیرین باشد " });
               }
           }else if(findRequest.CharityAccountId != null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
                   if(getCashAssistanceDetail[0].AssignNeedyPlanId == null){

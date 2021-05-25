@@ -90,11 +90,20 @@ module.exports.insertPayment = async function(request, response) {
                 response.json({ error: " جمع مبالغ پرداختی از مبلغ مورد نیاز بیشتر میشود " });
               }
           }else if(findRequest.CharityAccountId != null && findRequest.PaymentStatus == "پرداخت موفق" && getCashAssistanceDetail[0] != null){
+            requestApi.post({url: api.url +'/CharityAccounts/checkCharityAccounts', form: {CharityAccountId : findRequest.CharityAccountId
+            }},async function(err,res,body){
+              if ( await JSON.parse(body)[0] != null){
                 await paymentModel.ws_Payment(findRequest).then(result => 
                   response.json(result)
                   ).catch (error =>
                   response.json({error:"رکورد مورد نظر درج نشد"})
-                  )  
+                  )
+              }else{
+                response.json({ error: " خیریه چنین حسابی ندارد " });
+              }
+            })   
+            
+              
           }else{
             response.json({ error: " پرداخت موفق نیست " });
           }

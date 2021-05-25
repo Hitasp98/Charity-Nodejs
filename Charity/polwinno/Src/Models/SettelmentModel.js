@@ -180,7 +180,7 @@ async function ws_Settelment(findRequest) {
     value = await value.slice(0, -1);
   
     let insertTblPayment = await pool.request().query(
-      `INSERT INTO tblPayment  (DonatorId,CashAssistanceDetailId,PaymentPrice,PaymentGatewayId,PaymentDate,PaymentTime,PaymentStatus,SourceAccoutNumber,TargetAccountNumber,CharityAccountId,FollowCode,NeedyId)
+      `INSERT INTO tblPayment  (CashAssistanceDetailId,PaymentPrice,PaymentDate,PaymentStatus,SourceAccoutNumber,TargetAccountNumber,CharityAccountId,FollowCode,NeedyId,PaymentTime)
             VALUES (` +
         value +
         `)`
