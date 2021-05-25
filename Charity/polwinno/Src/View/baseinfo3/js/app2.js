@@ -6,7 +6,6 @@ function ws_loadCharity() {
     data: JSON.stringify({
       doc_id_msgs: $("#doct_id").val(),
       BaseTypeCode: "IkM",
-
     }),
     dataType: "json",
     success: function(data) {
@@ -14,165 +13,280 @@ function ws_loadCharity() {
       for (row of data) {
         //TODO append table
         $("#Charity").append(
-
-          "<tr onclick=EditRecordForEditDemo(this)><td>"+row.CharityAccountId+"</td><td>"+row.OwnerName+"</td><td>"+row.CardNumber+"</td><td>"+row.AccountName+"</td><td>"+row.AccountNumber+"</td><td>"+row.BranchName+"</td></tr>"
+          "<tr onclick=EditRecordForEditDemo(this)><td>" +
+            row.CharityAccountId +
+            "</td><td>" +
+            row.OwnerName +
+            "</td><td>" +
+            row.CardNumber +
+            "</td><td>" +
+            row.AccountName +
+            "</td><td>" +
+            row.AccountNumber +
+            "</td><td>" +
+            row.BranchName +
+            "</td></tr>"
         );
-       
       }
     },
   });
 }
 ws_loadCharity();
-
-//
-
-function btnnew() {
-  const BankId = document.getElementById("BankId").value;
-  const BranchName = document.getElementById("BranchName").value;
-  const OwnerName = document.getElementById("OwnerName").value;
-  const AccountNumber = document.getElementById("AccountNumber").value;
-  const CardNumber = document.getElementById("CardNumber").value;
-  const AccountName = document.getElementById("AccountName").value;
-  if (BankId == ""||BranchName==""||OwnerName==""||AccountNumber==""||CardNumber==""||AccountName=="") {
-    alert("عنوان خالی است");
-  } else {
-    $.ajax({
-      type: "POST",
-      url: "/CommonBaseType/insertCommonBaseType",
-      contentType: "application/json",
-      data: JSON.stringify({
-        BankId: BankId,
-        BranchName: BranchName,
-        OwnerName: OwnerName,
-        AccountNumber: AccountNumber,
-        CardNumber: CardNumber,
-        AccountName: AccountName,
-            }),
-      dataType: "json",
-      success: function(data) {
-        alert(JSON.stringify(data));
-      },  
-    });
-    location.reload();
-
-  }
+///
+function ws_loadBasedata() {
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8090/CommonBaseData/getCommonBaseData",
+    contentType: "application/json",
+    data: JSON.stringify({
+      doc_id_msgs: $("#doct_id").val(),
+    }),
+    dataType: "json",
+    success: function(data) {
+      console.log(data);
+      for (row of data) {
+        //TODO append table
+        $("#baseinfo2").append(
+          "<tr onclick=EditRecordForEditDemo1(this)><td>" +
+            row.BaseValue +
+            "</td><td>" +
+            row.CommonBaseDataId +
+            "</td></tr>"
+        );
+      }
+    },
+  });
 }
-
+ws_loadBasedata();
+function ws_loadBasedata1() {
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8090/CommonBaseData/getCommonBaseData",
+    contentType: "application/json",
+    data: JSON.stringify({
+      doc_id_msgs: $("#doct_id").val(),
+    }),
+    dataType: "json",
+    success: function(data) {
+      console.log(data);
+      for (row of data) {
+        //TODO append table
+        $("#baseinfo22").append(
+          "<tr onclick=EditRecordForEditDemo1(this)><td>" +
+            row.BaseValue +
+            "</td><td>" +
+            row.CommonBaseDataId +
+            "</td></tr>"
+        );
+      }
+    },
+  });
+}
+ws_loadBasedata1();
+//
+let rowJavascript1;
+let bankid;
+let rowjQuery1;
+function EditRecordForEditDemo1(element) {
+  rowJavascript1 = element.parentNode.parentNode;
+  rowjQuery1 = $(element).closest("tr");
+}
 let rowJavascript;
+let charityaccountid;
 let rowjQuery;
-let basetypecode
-let commonbasetypeid
 function EditRecordForEditDemo(element) {
   rowJavascript = element.parentNode.parentNode;
   rowjQuery = $(element).closest("tr");
 }
-function btnedit() {
-  try{
-  alert(rowjQuery[0].rowIndex-1)
-  const BaseTypeTitle = document.getElementById("BaseTypeTitle1").value;
-
-  
-  
-  $.ajax({
-    type: "POST",
-    url: "http://localhost:8090/CommonBaseType/getCommonBaseType",
-    contentType: "application/json",
-    data: JSON.stringify({
-      doc_id_msgs: $("#doct_id").val(),
-    }),
-    dataType: "json",
-    success: function(data) {
-      let i = 0;
-      for (row of data) {
-        if (i == rowjQuery[0].rowIndex-1) {
-          commonbasetypeid = row.CommonBaseTypeId;
-          basetypecode= row.BaseTypeCode
-          break;
+function btnnew() {
+  // const BankId = document.getElementById("BankId").value;
+  try {
+    const BranchName = document.getElementById("BranchName").value;
+    const OwnerName = document.getElementById("OwnerName").value;
+    const AccountNumber = document.getElementById("AccountNumber").value;
+    const CardNumber = document.getElementById("CardNumber").value;
+    const AccountName = document.getElementById("AccountName").value;
+    console.log(BranchName);
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8090/CommonBaseData/getCommonBaseData",
+      contentType: "application/json",
+      data: JSON.stringify({
+        doc_id_msgs: $("#doct_id").val(),
+      }),
+      dataType: "json",
+      success: function(data) {
+        let i = 0;
+        for (row of data) {
+          if (i == rowjQuery1[0].rowIndex - 1) {
+            bankid = row.CommonBaseDataId;
+            break;
+          }
+          i = i + 1;
         }
-        i = i + 1;
-      }
-      console.log(commonbasetypeid)
-      if (BaseTypeTitle == "") {
-        alert("عنوان خالی است");
-      } else if(commonbasetypeid==""||basetypecode==""){
-        alert("موردی انتخاب نشد");
+        console.log(bankid);
+        if (
+          BranchName == "" ||
+          OwnerName == "" ||
+          AccountNumber == "" ||
+          CardNumber == "" ||
+          AccountName == ""
+        ) {
+          alert("عنوان خالی است");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/CharityAccounts/insertCharityAccounts",
+            contentType: "application/json",
+            data: JSON.stringify({
+              BankId: bankid,
+              BranchName: BranchName,
+              OwnerName: OwnerName,
+              AccountNumber: AccountNumber,
+              CardNumber: CardNumber,
+              AccountName: AccountName,
+            }),
+            dataType: "json",
+            success: function(data) {
+              alert(JSON.stringify(data));
+            },
+          });
+          // location.reload();
+        }
+      },
+    });
+  } catch (err) {
+    alert("ورودي نداريم ");
+  }
+}
 
-      }
-      else {
+function btnedit() {
+  try {
+    const BranchName = document.getElementById("BranchName1").value;
+    const OwnerName = document.getElementById("OwnerName1").value;
+    const AccountNumber = document.getElementById("AccountNumber1").value;
+    const CardNumber = document.getElementById("CardNumber1").value;
+    const AccountName = document.getElementById("AccountName1").value;
+    console.log(BranchName);
+    $.ajax({
+      type: "POST",
+      url: "/CharityAccounts/getCharityAccounts",
+      contentType: "application/json",
+      data: JSON.stringify({
+        doc_id_msgs: $("#doct_id").val(),
+        BaseTypeCode: "IkM",
+      }),
+      dataType: "json",
+      success: function(data) {
+        console.log(data);
+        let j = 0;
+
+        for (row of data) {
+          //TODO append table
+          if (i == rowjQuery[0].rowIndex - 1) {
+            charityaccountid = row.CharityAccountId;
+            bankid = row.CommonBaseDataId;
+            break;
+          }
+          i = i + 1;
+        }
         $.ajax({
-          type: "PUT",
-          url: "/CommonBaseType/updateCommonBaseType",
+          type: "POST",
+          url: "http://localhost:8090/CommonBaseData/getCommonBaseData",
           contentType: "application/json",
           data: JSON.stringify({
-            BaseTypeTitle: BaseTypeTitle,
-            BaseTypeCode: basetypecode,
-            CommonBaseTypeId: commonbasetypeid,
+            doc_id_msgs: $("#doct_id").val(),
           }),
           dataType: "json",
           success: function(data) {
-            alert(JSON.stringify(data));
-            location.reload()
+            let i = 0;
+            for (row of data) {
+              if (i == rowjQuery1[0].rowIndex - 1) {
+                bankid = row.CommonBaseDataId;
+                break;
+              }
+              i = i + 1;
+            }
+            console.log(bankid);
+            if (
+              BranchName == "" ||
+              OwnerName == "" ||
+              AccountNumber == "" ||
+              CardNumber == "" ||
+              AccountName == ""
+            ) {
+              alert("عنوان خالی است");
+            } else {
+              $.ajax({
+                type: "POST",
+                url: "/CharityAccounts/updateCharityAccounts",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  CharityAccountId: charityaccountid,
+                  BankId: bankid,
+                  BranchName: BranchName,
+                  OwnerName: OwnerName,
+                  AccountNumber: AccountNumber,
+                  CardNumber: CardNumber,
+                  AccountName: AccountName,
+                }),
+                dataType: "json",
+                success: function(data) {
+                  alert(JSON.stringify(data));
+                },
+              });
+              // location.reload();
+            }
           },
         });
-      }
-    },
-  });
+      },
+    });
+  } catch (err) {
+    alert("ورودي نداريم ");
+  }
 }
-catch (err){
-  alert("موردی انتخاب نشد");
-
-}
-}
-
-
 
 function btndelete() {
-  try{
-  alert(rowjQuery[0].rowIndex-1)
+  try {
+    $.ajax({
+      type: "POST",
+      url: "/CharityAccounts/getCharityAccounts",
+      contentType: "application/json",
+      data: JSON.stringify({
+        doc_id_msgs: $("#doct_id").val(),
+        BaseTypeCode: "IkM",
+      }),
+      dataType: "json",
+      success: function(data) {
+        console.log(data);
+        let j = 0;
 
-  
-  
-  $.ajax({
-    type: "POST",
-    url: "http://localhost:8090/CommonBaseType/getCommonBaseType",
-    contentType: "application/json",
-    data: JSON.stringify({
-      doc_id_msgs: $("#doct_id").val(),
-    }),
-    dataType: "json",
-    success: function(data) {
-      let i = 0;
-      for (row of data) {
-        if (i == rowjQuery[0].rowIndex-1) {
-          commonbasetypeid = row.CommonBaseTypeId;
+        for (row of data) {
+          //TODO append table
+          if (i == rowjQuery[0].rowIndex - 1) {
+            charityaccountid = row.CharityAccountId;
+            break;
+          }
+          i = i + 1;
         
-          break;
-        }
-        i = i + 1;
-      }
-      console.log(commonbasetypeid)
-      if (commonbasetypeid == "") {
-        alert("شناسه یا ورودی انتخاب نشده");
-      } else {
         $.ajax({
-          type: "delete",
-          url: "/CommonBaseType/deleteCommonBaseType",
+          type: "POST",
+          url: "/CharityAccounts/deleteCharityAccounts",
           contentType: "application/json",
           data: JSON.stringify({
-            CommonBaseTypeId: commonbasetypeid,
+            doc_id_msgs: $("#doct_id").val(),
+            CharityAccountId:charityaccountid
           }),
           dataType: "json",
           success: function(data) {
-            alert(JSON.stringify(data));
-      
-            location.reload();
+            alert(data);
+          
           },
         });
       }
-    },
-  });
-}catch (err){
+      },
+    });
+  } catch (err) {
     alert("موردی انتخاب نشد");
-  
   }
 }

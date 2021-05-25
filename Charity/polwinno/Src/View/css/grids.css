@@ -9,7 +9,10 @@
 .row{
 	margin: 0 -15px;
 }
-
+#other-contant .container{
+	width: auto;
+	margin: 0 30px;
+}
 .col-xs-1,
 .col-xs-2,
 .col-xs-3,

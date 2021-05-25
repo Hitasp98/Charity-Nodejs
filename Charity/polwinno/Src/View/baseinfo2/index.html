@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <link rel="icon" href="../img/polwino.png"/>
+  <link rel="icon" href="../img/polwino.png" />
   <meta charset="UTF-8" />
   <title>baseinfo2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -106,7 +106,7 @@
         </tr>
       </thead>
       <tbody>
-       
+
       </tbody>
     </table>
   </div>
@@ -162,7 +162,7 @@
           <form>
 
             <div class="group">
-              <input type="text"  id="BaseTypeTitle1"required>
+              <input type="text" id="BaseTypeTitle1" required>
               <span class="highlight"></span>
               <span class="bar1"></span>
               <label>عنوان</label>
@@ -172,7 +172,7 @@
         </div>
         <div class="modal-footer">
 
-          <button id="btnedit"  onclick="btnedit()" class="btn1  green " aria-hidden="true">ذخیره</button>
+          <button id="btnedit" onclick="btnedit()" class="btn1  green " aria-hidden="true">ذخیره</button>
 
           <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
         </div>
@@ -189,8 +189,8 @@
         </div>
         <div class="modal-body">
           <div>
-          <h4>مطمئن هستید مورد نظر حذف شود؟ </h4>
-        </div>
+            <h4>مطمئن هستید مورد نظر حذف شود؟ </h4>
+          </div>
         </div>
         <div class="modal-footer">
           <button id="btndelete" onclick="btndelete()" class="btn1  green " aria-hidden="true">ذخیره</button>
@@ -200,7 +200,7 @@
       </div>
     </div>
   </div>
-<!-- /////////////////////////////////////////// -->
+  <!-- /////////////////////////////////////////// -->
 
   <h1>baseinfo2</h1>
 
@@ -216,99 +216,132 @@
       </tr>
     </thead>
     <tbody>
-    
+
     </tbody>
   </table>
-</div>
-<div>
-  <div id="buttons">
-    <a href="#myModal1" role="button" class="btn1  green btn-default" data-toggle="modal">مورد جدید</a>
-
-    <!-- <a href="#" class="btn1 green" >مورد جدید</a> -->
-    <a href="#myModal2" role="button" class="btn1 yellow" data-toggle="modal">ویرایش</a>
-    <a href="#myModal3" role="button" class="btn1 red" data-toggle="modal">حذف</a>
   </div>
+  <div>
+    <div id="buttons">
+      <a href="#myModal1" role="button" class="btn1  green btn-default" data-toggle="modal">مورد جدید</a>
 
-</div>
-<div id="myModal1" class="modal " data-easein="flipBounceXIn" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Modal header</h4>
-      </div>
-      <div class="modal-body">
-        <form>
+      <!-- <a href="#" class="btn1 green" >مورد جدید</a> -->
+      <a href="#myModal2" role="button" class="btn1 yellow" data-toggle="modal">ویرایش</a>
+      <a href="#myModal3" role="button" class="btn1 red" data-toggle="modal">حذف</a>
+    </div>
 
+  </div>
+  <div id="myModal1" class="modal " data-easein="flipBounceXIn" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Modal header</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div style="overflow:scroll;height:200px;">
 
+              <table id="baseinfo11" class="container" colspan="2">
+                <thead>
+                  <tr>
+                    <th>
+                      <h1>عنوان</h1>
+                    </th>
+                    <th>
+                      <h1>شناسه</h1>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
 
-          <div class="group">
-            <input type="text" id="basevalue"required>
-            <span class="highlight"></span>
-            <span class="bar1"></span>
-            <label>عنوان</label>
-          </div>
- 
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button id="btnnew1" onclick="btnNewInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
+                </tbody>
+              </table>
 
-        <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
+            </div>
+
+            <div class="group">
+              <input type="text" id="basevalue" required>
+              <span class="highlight"></span>
+              <span class="bar1"></span>
+              <label>عنوان</label>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="btnnew1" onclick="btnNewInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
+
+          <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div id="myModal2" class="modal" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Modal header</h4>
-      </div>
-      <div class="modal-body">
-        <form>
+  <div id="myModal2" class="modal" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Modal header</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div style="overflow:scroll;height:200px;">
+              <table id="baseinfo12" class="container" colspan="3">
+                <thead>
+                  <tr>
+                    <th>
+                      <h1>عنوان</h1>
+                    </th>
+                    <th>
+                      <h1>شناسه</h1>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
 
-          <div class="group">
-            <input type="text"  id="basevalue1"required>
-            <span class="highlight"></span>
-            <span class="bar1"></span>
-            <label>عنوان</label>
-          </div>
+                </tbody>
+              </table>
+            </div>
+            <div class="group">
+              <input type="text" id="basevalue1" required>
+              <span class="highlight"></span>
+              <span class="bar1"></span>
+              <label>عنوان</label>
+            </div>
 
-        </form>
-      </div>
-      <div class="modal-footer">
+          </form>
+        </div>
+        <div class="modal-footer">
 
-        <button id="btnEditInfo2"  onclick="btnEditInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
+          <button id="btnEditInfo2" onclick="btnEditInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
 
-        <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="myModal3" class="modal" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Modal header</h4>
-      </div>
-      <div class="modal-body">
-        <h4>مطمئن هستید مورد نظر حذف شود؟ </h4>
-
-      </div>
-      <div class="modal-footer">
-        <button id="btnDeleteInfo2" onclick="btnDeleteInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
-
-        <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
+          <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <div id="myModal3" class="modal" data-easein="flipBounceXIn" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Modal header</h4>
+        </div>
+        <div class="modal-body">
+          <h4>مطمئن هستید مورد نظر حذف شود؟ </h4>
+
+        </div>
+        <div class="modal-footer">
+          <button id="btnDeleteInfo2" onclick="btnDeleteInfo2()" class="btn1  green " aria-hidden="true">ذخیره</button>
+
+          <button class="btn1  red" data-dismiss="modal" aria-hidden="true">بستن</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
